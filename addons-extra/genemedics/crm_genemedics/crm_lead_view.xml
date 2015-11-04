@@ -1,0 +1,427 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+        
+        <!--Email template -->
+        <record id="email_template_crm_lead" model="mail.template">
+            <field name="name">New Lead - Send by Email</field>
+            <field name="email_from">info@genemedics.com</field>
+            <field name="subject">Welcome to Genemedics Health Institute</field>
+            <field name="partner_to"></field>
+		    <field name="email_to">${(object.email_from or '')|safe}</field>
+            <field name="model_id" ref="crm.model_crm_lead"/>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html"><![CDATA[
+<div style="font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 16px; color: rgb(34, 34, 34); background-color: #FFF; ">
+
+    <p><i>Hi,</i></p>
+    
+    <p><i>Congratulations!<br></br>
+    <br></br>
+You have just taken the first step towards a new, healthier and younger you!<br></br>
+<br></br>
+Our medically supervised programs have helped thousands of patients achieve amazing results
+and we are certain that with our customized plan, focusing on your unique and individual needs, you too
+will look and feel better than ever!<br></br>
+<br></br>
+Your highly trained clinical specialist is currently assessing your submission and will be contacting
+you soon to talk about how our program will help you!<br></br>
+<br></br>
+We look forward to working with you as your partner in achieving greater health and living a
+more vital life!
+</i></p>
+
+    <p><i>Regards,</i></p>
+    <p>${object.user_id.name}</p>
+</div>
+            ]]></field>
+        </record>
+
+        <record id="email_template_activity_date_alert" model="mail.template">
+            <field name="name">Activity date alert - Send by Email</field>
+            <field name="email_from">${(object.user_id.email or '')|safe}</field>
+            <field name="subject">Lead ${(object.name or '')|safe}</field>
+            <field name="partner_to"></field>
+		    <field name="email_to">${(object.user_id.email or '')|safe}</field>
+            <field name="model_id" ref="crm.model_crm_lead"/>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html"><![CDATA[
+<div style="font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; ">
+
+    <p>Hi ${object.user_id.name},</p>
+    
+    <p>Your Activity ${object.name} Expected Closing is ${object.date_deadline}. Please be alert.</p>
+
+</div>
+            ]]></field>
+        </record>
+
+		<record forcecreate="True" id="ir_cron_check_activity_date_action" model="ir.cron">
+		        <field name="name">Check Activity Date To Salesperson</field>
+		        <field name="user_id" ref="base.user_root"/>
+		        <field name="interval_number">1</field>
+		        <field name="interval_type">hours</field>
+		        <field name="numbercall">-1</field>
+		        <field eval="False" name="doall"/>
+		        <field eval="'crm.lead'" name="model"/>
+		        <field eval="'check_activity_date'" name="function"/>
+		        <field eval="'()'" name="args"/>
+		</record>
+
+        <record model="ir.ui.view" id="crm_case_form_view_leads_apagen">
+            <field name="name">CRM - Leads Form</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.crm_case_form_view_leads"/>
+            <field name="arch" type="xml">
+                
+                <field name="email_from" position="attributes">
+				    <attribute name="required">True</attribute>
+				</field>
+                <field name="priority" position="before">				
+                    <field name="last_activity_id" invisible="1"/>
+                    <label for="next_activity_id"/>
+                    <div>
+                        <div class="o_row">
+                            <field name="next_activity_id"
+                                   options="{'no_create': True, 'no_open': True}"
+                                   domain="['|',('team_id','=',False),('team_id','=',team_id)]"
+                                   on_change="onchange_next_activity_id(next_activity_id)"/>
+                            <span class="oe_form_field"
+                                  attrs="{'invisible': ['|', ('next_activity_id', '=', False), ('date_action', '=', False)]}">&#160;on&#160;</span>
+                            <field name="date_action" attrs="{'invisible': [('next_activity_id', '=', False)]}" placeholder="Choose a date..."/>
+                            <div attrs="{'invisible': ['|', ('last_activity_id', '=', False), ('next_activity_id', '!=', False)]}">
+                                <button name="log_next_activity_1" type="object" class="btn-link" attrs="{'invisible': [('next_activity_1','=',False)]}">
+                                    <field name="next_activity_1" readonly="1"/>
+                                </button>
+                                <span attrs="{'invisible': [('next_activity_2','=',False)]}">|</span>
+                                <button name="log_next_activity_2" type="object" class="btn-link" attrs="{'invisible': [('next_activity_2','=',False)]}">
+                                    <field name="next_activity_2" readonly="1"/>
+                                </button>
+                                <span attrs="{'invisible': [('next_activity_3','=',False)]}">|</span>
+                                <button name="log_next_activity_3" type="object" class="btn-link" attrs="{'invisible': [('next_activity_3','=',False)]}">
+                                    <field name="next_activity_3" readonly="1"/>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="o_row">
+                            <field name="title_action" placeholder="e.g. Discuss proposal"
+                                   attrs="{'invisible': [('next_activity_id', '=', False)]}"/>
+                            <div attrs="{'invisible': [('next_activity_id', '=', False)]}">
+                                <button name="log_next_activity_done" string="Done" type="object" class="btn-link"/>
+                                <button name="cancel_next_activity" string="Cancel" type="object" class="btn-link"/>
+                            </div>
+                        </div>
+                    </div>
+				</field>				
+                <xpath expr="//form/sheet/notebook" position="replace">
+                        <group>
+                            <group string="Marketing">
+                                <field name="campaign_id" />
+                                <field name="medium_id" />
+                                <field name="source_id" />
+                            </group>
+                            <group string="Email">
+                                <field name="opt_out"/>
+                                <field name="message_bounce" readonly="1" groups="base.group_no_one"/>
+                            </group>
+                        </group>
+						<label for="description" string="Internal Notes"/>                        
+	                    <field name="description"/>
+                        <field name="probability" groups="base.group_no_one" invisible="1"/>
+                        <field name="date_open" invisible="1"/>
+                        <field name="date_closed" invisible="1"/>
+                </xpath>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="crm_case_form_view_oppor_apagen">
+            <field name="name">CRM - Leads Form</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.crm_case_form_view_oppor"/>
+            <field name="arch" type="xml">
+                
+                <!--field name="date_action" position="replace">
+				    <field name="date_action" attrs="{'invisible': [('next_activity_id', '=', False)]}" 
+				            placeholder="Choose a date..."/>
+				</field-->
+				<field name="tag_ids" position="after">
+				    <field name="customer_goal" />
+				</field>
+            
+            </field>
+        </record>
+
+    <!-- CRM Lead Kanban View  -->
+        <record model="ir.ui.view" id="crm.crm_case_kanban_view_leads">
+            <field name="name">CRM - Leads Kanban</field>
+            <field name="model">crm.lead</field>
+            <field name="arch" type="xml">
+                <kanban default_group_by="stage_id" class="o_kanban_small_column">
+                    <field name="stage_id" options='{"group_by_tooltip": {"requirements": "Description", "legend_priority": "Use of stars"}}'/>
+                    <field name="color"/>
+                    <field name="priority"/>
+                    <field name="planned_revenue"/>
+                    <field name="user_email"/>
+                    <field name="user_id"/>
+                    <field name="partner_address_email"/>
+                    <field name="message_needaction_counter"/>
+                    <field name="tag_ids"/>
+                    <field name="partner_id"/>
+                    <field name="active"/>
+                    <field name="company_currency"/>
+                    <templates>
+                        <field name="date_deadline"/>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="#{kanban_color(record.color.raw_value)} oe_kanban_global_click">
+                                <div class="o_dropdown_kanban dropdown">
+
+                                    <a class="dropdown-toggle btn" data-toggle="dropdown" href="#" >
+                                        <span class="fa fa-bars fa-lg"/>
+                                    </a>
+                                    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                                        <t t-if="widget.editable"><li><a type="edit">Edit</a></li></t>
+                                        <t t-if="widget.deletable"><li><a type="delete">Delete</a></li></t>
+                                        <li t-if="! record.active.value"><a name="action_set_active" type="object">Unarchive</a></li>
+                                        <li t-if="record.active.value"><a name="action_set_unactive" type="object">Archive</a></li>
+                                        <li><ul class="oe_kanban_colorpicker" data-field="color"/></li>
+                                    </ul>
+                                </div>
+                                <div class="oe_kanban_content">
+                                    <div>
+                                        <strong><field name="contact_name"/></strong>
+                                        <strong><field name="email_from"/></strong>
+                                        <strong><field name="phone"/></strong>
+                                    </div>                                        
+                                    <div>                                                                            
+                                        <strong><field name="source_id"/></strong>
+                                    </div>
+                                    <div>                                    
+                                        <strong><field name="create_date"/></strong>
+                                    </div>                                        
+                                    <div class="text-muted">
+                                        <t t-if="record.planned_revenue.raw_value"><field name="planned_revenue" widget="monetary" options="{'currency_field': 'company_currency'}"/></t> <span t-if="record.partner_id.value"> - <t t-esc="record.partner_id.value"/></span>
+                                    </div>
+                                    <div class="text-muted">
+                                        <t t-if="record.date_deadline.raw_value and record.date_deadline.raw_value lt (new Date())" t-set="red">oe_kanban_text_red</t>
+                                        <span t-attf-class="#{red || ''}">
+                                            <field name="date_action"/>
+                                            <t t-if="record.date_action.raw_value"> : </t>
+                                        </span>
+                                    </div>
+                                    <div class="o_kanban_footer">
+                                        <field name="priority" widget="priority" groups="base.group_user"/>
+                                        <t t-if="record.message_needaction_counter.raw_value">
+                                            <span class='oe_kanban_mail_new' title='Important Messages'><i class='fa fa-comments'/><t t-raw="record.message_needaction_counter.raw_value"/></span>
+                                        </t>
+                                        <img t-att-src="kanban_image('res.users', 'image_small', record.user_id.raw_value)" t-att-title="record.user_id.value" width="24" height="24" class="oe_kanban_avatar pull-right"/>
+                                    </div>
+                                </div>
+                                <div class="oe_clear"></div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+	    <!--record id="action_set_source_as_az" model="ir.actions.server">
+	        <field name="name">Set Source as Arizona</field>
+	        <field name="model_id" ref="model_crm_lead"/>
+	        <field name="state">code</field>
+	        <field name="code">
+	            if context.get('active_model') == 'crm.lead' and context.get('active_ids'):
+	                self.case_mark_lost(cr, uid, context['active_ids'], context=context)
+	        </field>
+	    </record-->
+
+    <record model="ir.actions.act_window" id="crm.crm_lead_all_leads">
+        <field name="name">Leads</field>
+        <field name="res_model">crm.lead</field>
+        <field name="view_mode">kanban,tree,graph,pivot,calendar,form</field>
+        <field name="domain">['|', ('type','=','lead'), ('type','=',False)]</field>
+        <!--field name="view_id" ref="crm.crm_case_kanban_view_leads"/-->
+        <field name="search_view_id" ref="crm.view_crm_case_leads_filter"/>
+        <field name="context">{
+                'default_type':'lead',
+                'search_default_type': 'lead',
+                'stage_type':'lead',
+                'needaction_menu_ref': 'crm.menu_crm_opportunities',
+                'search_default_to_process':1,
+            }
+        </field>
+        <field name="help" type="html">
+            <p>
+                Use leads if you need a qualification step before creating an
+                opportunity or a customer. It can be a business card you received,
+                a contact form filled in your website, or a file of unqualified
+                prospects you import, etc.
+            </p><p>
+                Once qualified, the lead can be converted into a business
+                opportunity and/or a new customer in your address book.
+            </p>
+        </field>
+    </record>
+
+datetime
+    <record id="email_template_consultation_scheduled" model="mail.template">
+            <field name="name">Consultation scheduled</field>
+            <field name="email_from">${(object.user_id.email or '')|safe}</field>
+            <field name="subject">Appointment reminder</field>
+            <field name="partner_to"></field>
+		    <field name="email_to">${(object.email_from or '')|safe}</field>
+            <field name="model_id" ref="crm.model_crm_lead"/>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html"><![CDATA[
+<div style="font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 16px; color: rgb(34, 34, 34); background-color: #FFF; ">
+
+    <p><i>Hi</i></p>
+    
+    <p><i>Congratulations! You are on the right path towards a healthier life! <br></br>
+    <br></br>
+You are scheduled for your free consultation with ${object.user_id.name} at our Office Location ${object.street} ${object.street2 }
+${object.city } ${object.state_id.name } ${object.country_id.name } at date ${object.date_action }.<br></br>
+<br></br>
+Remember, lab testing is a critical part of our process in developing a customized plan for you.
+Please fast at least 12 hours prior to your appointment.<br></br>
+<br></br>
+If you have any questions, please do not hesitate to call me at ${object.phone}.<br></br>
+<br></br>
+I look forward to meeting you and helping you to start living a healthier life!
+</i></p>
+
+    <p><i>Regards,</i></p>
+    <p>${object.user_id.name}</p>
+</div>
+            ]]></field>
+        </record>
+
+
+    <record id="email_template_blood_work_scheduled" model="mail.template">
+            <field name="name">Blood work scheduled</field>
+            <field name="email_from">${(object.user_id.email or '')|safe}</field>
+            <field name="subject">Appointment reminder</field>
+            <field name="partner_to"></field>
+		    <field name="email_to">${(object.email_from or '')|safe}</field>
+            <field name="model_id" ref="crm.model_crm_lead"/>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html"><![CDATA[
+<div style="font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 16px; color: rgb(34, 34, 34); background-color: #FFF; ">
+
+    <p><i>Hi,</i></p>
+    
+    <p><i>Just a reminder...You are scheduled for your blood panel with location ${object.street} ${object.street2 }
+${object.city } ${object.state_id.name } ${object.country_id.name } at date ${object.date_action }.<br></br>
+<br></br>
+Remember, lab testing is a critical part of our process in developing a customized plan for you.
+Please fast at least 12 hours prior to your appointment.<br></br>
+<br></br>
+If you have any questions, please do not hesitate to call me at ${object.phone}.
+
+</i></p>
+
+    <p><i>Regards,</i></p>
+    <p>${object.user_id.name}</p>
+</div>
+            ]]></field>
+        </record>
+        
+        
+    <record id="email_template_medical_consultation" model="mail.template">
+                <field name="name">Medical Consultation</field>
+                <field name="email_from">${(object.user_id.email or '')|safe}</field>
+                <field name="subject">Appointment reminder</field>
+                <field name="partner_to"></field>
+		        <field name="email_to">${(object.email_from or '')|safe}</field>
+                <field name="model_id" ref="crm.model_crm_lead"/>
+                <field name="auto_delete" eval="True"/>
+                <field name="body_html"><![CDATA[
+    <div style="font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 16px; color: rgb(34, 34, 34); background-color: #FFF; ">
+
+        <p><i>Hi,</i></p>
+        
+        <p><i>Just a reminder... You are scheduled for your Medical Consultation with ${object.user_id.name} at our
+Office Location${object.street} ${object.street2 }
+${object.city } ${object.state_id.name } ${object.country_id.name } at date ${object.date_action }.<br></br>
+<br></br>
+Our doctors are currently building a customized plan to help you reach your specific health and
+fitness goals. I have no doubt that you are going to love what we come up with and start seeing results
+soon!<br></br>
+<br></br>
+If you have any questions, please do not hesitate to call me at ${object.phone}.
+
+
+    </i></p>
+
+       <p><i>Regards,</i></p>
+    <p>${object.user_id.name}</p>
+    </div>
+            ]]></field>
+        </record>
+
+  
+      <record id="email_template_first_attempt" model="mail.template">
+                <field name="name">First attempt to contact</field>
+                <field name="email_from">${(object.user_id.email or '')|safe}</field>
+                <field name="subject">Get started with Dr. Shanlikian</field>
+                <field name="partner_to"></field>
+		        <field name="email_to">${(object.email_from or '')|safe}</field>
+                <field name="model_id" ref="crm.model_crm_lead"/>
+                <field name="auto_delete" eval="True"/>
+                <field name="body_html"><![CDATA[
+    <div style="font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 16px; color: rgb(34, 34, 34); background-color: #FFF; ">
+
+        <p><i>Hi,</i></p>
+        
+        <p><i>Thank you for visiting www.genemedics.com and taking the first step towards a new, healthier
+and younger you! If you are available to speak with me now and are ready to get started, please call me
+at ${object.phone}. You may also reach me via e-mail at ${object.user_id.email},<br></br>
+<br></br>
+Getting started is simple! I will schedule your free consultation and order the labs necessary to
+complete your comprehensive health summary. Dr. Shanlikian will then review your blood work and our
+team will build a program that best suits your individual needs and get you the results you are looking for.<br></br>
+<br></br>
+I look forward to talking with you and helping you achieve exceptional health and wellness.
+
+    </i></p>
+
+       <p><i>Regards,</i></p>
+    <p>${object.user_id.name}</p>
+    </div>
+            ]]></field>
+        </record>
+  
+        <record id="email_template_after_in_office" model="mail.template">
+                <field name="name">After In-office consultation</field>
+                <field name="email_from">${(object.user_id.email or '')|safe}</field>
+                <field name="subject">Thank you</field>
+                <field name="partner_to"></field>
+		        <field name="email_to">${(object.email_from or '')|safe}</field>
+                <field name="model_id" ref="crm.model_crm_lead"/>
+                <field name="auto_delete" eval="True"/>
+                <field name="body_html"><![CDATA[
+    <div style="font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 16px; color: rgb(34, 34, 34); background-color: #FFF; ">
+
+        <p><i>Hi,</i></p>
+        
+        <p><i>Thank you for your time today. It was a pleasure to meet you and talk with you about how our
+customized programs at Genemedics Health Institute will help you feel and look better than ever!<br></br>
+<br></br>
+I realize that the details we discussed today can initially be a bit overwhelming, so please do not
+hesitate to contact me if you have any other questions or concerns.<br></br>
+<br></br>
+In the meantime, I will keep an eye out for your lab results and will contact you immediately to
+schedule your Medical Consultation with the Doctor and start building your customized plan.<br></br>
+<br></br>
+I look forward to working with you and being your partner in achieving ${object.customer_goal}!
+.
+
+    </i></p>
+
+       <p><i>Regards,</i></p>
+    <p>${object.user_id.name}</p>
+    </div>
+            ]]></field>
+        </record>
+        
+    </data>
+</openerp>

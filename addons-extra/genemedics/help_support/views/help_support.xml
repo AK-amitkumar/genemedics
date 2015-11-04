@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+	<data>
+	
+		<record model="ir.ui.view" id="priority_form_view">
+            <field name="name">priority.form</field>
+            <field name="model">help_support.priority</field>
+            <field name="arch" type="xml">
+                <form string="priority Form">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="description"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="priority_search_view">
+            <field name="name">priority.search</field>
+            <field name="model">help_support.priority</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <field name="description"/>
+                    
+                </search>
+            </field>
+        </record>
+        
+        
+        <!-- override the automatically generated list view for courses -->
+        <record model="ir.ui.view" id="priority_tree_view">
+            <field name="name">priority.tree</field>
+            <field name="model">help_support.priority</field>
+            <field name="arch" type="xml">
+                <tree string="priority Tree">
+                    <field name="name"/>
+                    <field name="description"/>
+                </tree>
+            </field>
+        </record>
+
+		<record model="ir.actions.act_window" id="priority_list_action">
+				<field name="name">Priority</field>
+				<field name="res_model">help_support.priority</field>
+				<field name="view_type">form</field>
+				<field name="view_mode">tree,form</field>
+	        	<field name="help" type="html">
+					<p class="oe_view_nocontent_create"> Create your first Priority for selection in ticket
+					</p>
+				</field>	
+			</record>
+
+        <record model="ir.ui.view" id="hsupport_form_view">
+            <field name="name">hsupport.form</field>
+            <field name="model">help_support.hsupport</field>
+            <field name="arch" type="xml">
+                <form string="Course Form">
+							<header>
+                        	<button name="action_open" type="object"
+                                string="Reset to open"
+                                states="pending,solved"/>
+                        	<button name="action_pending" type="object"
+                                string="Pending" states="open"
+                                class="oe_highlight"/>
+                        	<button name="action_solved" type="object"
+                                string="Mark as solved" states="open,pending"
+                                class="oe_highlight"/>
+                        	<field name="state" widget="statusbar" clickable="True"/>
+                    		</header>                    
+                    <sheet>
+                    		
+                    		
+                        <group>
+                           <field name="id_"/>
+                           <field name="name"/>
+                           <field name="description"/>
+                           <field name="email"/>
+                           <field name="responsible_id"/>
+                           <field name="priority_id"/>
+                  			
+                        </group>
+                        <notebook>
+                        <page string="Extra Info" >
+                            <group>
+                                <group string="Statistics">
+                                    <field name="create_date"/>
+                                    <field name="write_date"/>
+                                    <field name="closed_date"/>
+                                    <field name="pending_date"/>
+                                    <field name="re_open_date"/>
+                                    <field name="inactivity_days"/>
+                                    <field name="days_since_creation"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                    </sheet>
+                     <div class="oe_chatter">
+                    		<field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+           			  		<field name="message_ids" widget="mail_thread"/>
+           			  </div>
+                </form>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="hsupport_search_view">
+            <field name="name">support.search</field>
+            <field name="model">help_support.hsupport</field>
+            
+            <field name="arch" type="xml">
+                <search>
+                	 <filter name="open_tickets" string="Open Tickets" domain="[('state', '=', 'open')]"/>
+                	 <filter name="my_tickets" string="My Tickets" domain="[('responsible_id', '=', uid)]"/>
+                	  <field name="id_"/>
+                    <field name="name"/>
+                    <field name="description"/>
+                    <field name="responsible_id"/>
+                    <field name="email"/>
+                    <field name="state"/>
+                    <field name="priority_id"/>
+                </search>
+            </field>
+        </record>
+        
+        
+        <!-- override the automatically generated list view for courses -->
+        <record model="ir.ui.view" id="hsupport_tree_view">
+            <field name="name">support.tree</field>
+            <field name="model">help_support.hsupport</field>
+            <field name="arch" type="xml">
+                <tree string="Course Tree" colors="#000000:state=='open';#555555:state=='pending'#999999:state=='solved'">
+						  <field name="id_"/>
+                    <field name="create_date"/>
+                    <field name="name"/>
+                    <field name="email"/>
+                    <field name="responsible_id"/>
+                    <field name="priority_id"/>
+                    <field name="state"/>
+                    
+                </tree>
+            </field>
+        </record>
+
+        <!-- calendar view -->
+        <record model="ir.ui.view" id="hsupport_calendar_view">
+            <field name="name">session.calendar</field>
+            <field name="model">help_support.hsupport</field>
+            <field name="arch" type="xml">
+                <calendar string="Session Calendar" date_start="create_date"
+                          date_stop="closed_date"
+                          color="id_">
+                    <field name="id_"/>
+                    <field name="name"/>
+                    <field name="state"/>
+                </calendar>
+            </field>
+        </record>
+        
+		<record model="ir.ui.view" id="view_openacad_session_kanban">
+            <field name="name">openacad.session.kanban</field>
+            <field name="model">help_support.hsupport</field>
+            <field name="arch" type="xml">
+                <kanban default_group_by="state">
+                    <field name="color"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div
+                                    t-attf-class="oe_kanban_color_{{kanban_getcolor(record.color.raw_value)}}
+                                                  oe_kanban_global_click_edit oe_semantic_html_override
+                                                  oe_kanban_card 	{{record.group_fancy==1 ? 'oe_kanban_card_fancy' : ''}}">
+                                <div class="oe_dropdown_kanban">
+                                    <!-- dropdown menu -->
+                                    <div class="oe_dropdown_toggle">
+                                        <span class="oe_e">#</span>
+                                        <ul class="oe_dropdown_menu">
+                                            <li>
+                                                <a type="delete">Delete</a>
+                                            </li>
+                                            <li>
+                                                <ul class="oe_kanban_colorpicker"
+                                                    data-field="color"/>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="oe_clear"></div>
+                                </div>
+                                <div t-attf-class="oe_kanban_content">
+                                    <!-- title -->
+												Id:
+												<field name="id_"/>
+                                    <br/>
+												Date:
+												<field name="create_date"/>
+                                    <br/>                                    
+                                    Title:
+                                    <field name="name"/>
+                                    <br/>
+                                    From email:
+                                    <field name="email"/>
+                                    <br/>
+                                    Responsible:
+                                    <field name="responsible_id"/>
+                                    <br/>
+                                    State:
+                                    <field name="state"/>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>        
+        
+        <!-- window action -->
+        <!--
+            The following tag is an action definition for a "window action",
+            that is an action opening a view or a set of views
+        -->
+
+			<record model="ir.actions.act_window" id="hsupport_list_action">
+				<field name="name">Support</field>
+				<field name="res_model">help_support.hsupport</field>
+				<field name="view_type">form</field>
+				<field name="view_mode">tree,form,calendar,kanban</field>
+				<field name="context" eval="{'search_default_my_tickets': 'uid'}"/>
+				<field name="help" type="html">
+				<p class="oe_view_nocontent_create"> create very first ticket manually or it will auto import from support email
+				</p>
+				</field>
+				
+			</record>
+			
+			<!-- top level menu: no parent -->
+        <menuitem id="main_help_support_menu" name="Helpdesk"/>
+        <!-- A first level in the left side menu is needed
+             before using action= attribute -->
+        <menuitem id="help_support_menu" name="Help Desk"
+                  parent="main_help_support_menu"/>
+        <!-- the following menuitem should appear *after*
+             its parent openacademy_menu and *after* its
+             action course_list_action -->
+        <menuitem id="hsupport_menu" name="Support" parent="help_support_menu"
+                  action="hsupport_list_action" sequence="1"/>
+                  
+        <menuitem id="priority_menu" name="Priority List" parent="help_support_menu"
+                  action="priority_list_action" sequence="3"/>
+        <!-- Full id location:
+             action="openacademy.course_list_action"
+             It is not required when it is the same module -->
+			
+			
+	
+	</data>
+</openerp>

@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+    <!--
+        Document : poweremail_template_view.xml Created on : 22 July,
+        2009, 10:08 AM Author : Sharoon Thomas Description: View file
+        for templates
+    -->
+<openerp>
+<data>
+<!-- Power Email Template PReview -->
+<record model="ir.ui.view" id="poweremail_preview_form">
+    <field name="name">poweremail.preview.form</field>
+    <field name="model">poweremail.preview</field>
+    <field name="type">form</field>
+    <field name="arch" type="xml">
+        <form string="Power Email Preview">
+            <group>
+                <group>
+                    <field name="rel_model" />
+                </group>
+                <group>
+                    <field name="rel_model_ref" on_change="on_change_ref(rel_model_ref, context)" />
+                </group>
+            </group>
+            <group>
+                <field name="to" />
+                <field name="cc" />
+                <field name="bcc" />
+                <field name="subject" />
+                <field name="body_text" />
+                <field name="body_html" widget="text_html" />
+                <!--
+                    IF YOU NEED RAW HTML EDITING THEN UNCOMMENT THE
+                    FOLLOWING
+                -->
+                <!-- <field name="body_html"/>-->
+                <field name="report" />
+            </group>
+            <group>
+                <group>
+                    <button icon="gtk-ok" special="cancel"
+                        string="OK" />
+                </group>
+            </group>
+        </form>
+    </field>
+</record>
+
+<record id="wizard_poweremail_preview" model="ir.actions.act_window">
+    <field name="name">Template Preview</field>
+    <field name="res_model">poweremail.preview</field>
+    <field name="src_model">poweremail.templates</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">form</field>
+    <field name="auto_refresh" eval="1" />
+    <field name="target">new</field>
+    <field name="context">{'ids':active_id}</field>
+</record>
+<!--EMail client Form view  -->
+
+<record model="ir.ui.view" id="poweremail_template_form">
+    <field name="name">poweremail.templates.form</field>
+    <field name="model">poweremail.templates</field>
+    <field name="type">form</field>
+    <field name="arch" type="xml">
+        <form string="Power Email Templates">
+            <header>
+                <button name="%(wizard_poweremail_preview)d" string="Preview Template" type="action" target="new" class="oe_highlight"/>
+            </header>
+            <sheet>
+                <group>
+                    <group>
+                        <field name="name"/>
+                    </group>
+                    <group>
+                        <field name="object_name" required="1" on_change="change_model(object_name)" />
+                        <field name="model_int_name" invisible="1" />
+                    </group>
+                </group>
+                <notebook colspan="4">
+                    <page string="Mail Details">
+                        <group>
+                            <field name="def_to" required="1" />
+                            <field name="def_cc"/>
+                            <field name="def_bcc"/>
+                            <field name="single_email"/>
+                            <field name="def_subject" required="1" />
+                        </group>
+                        <group>
+                            <group>
+                                <field name="lang"/>
+                            </group>
+                            <group>
+                                <field name="use_sign"/>
+                            </group>
+                        </group>
+                        <separator colspan="3" string="Standard Body" />
+                        <separator colspan="1"
+                            string="Expression Builder" />
+                        <notebook>
+                            <page string="Body (Text)">
+                                <field name="def_body_text"
+                                    colspan="4" nolabel="1" />
+                            </page>
+                            <!--
+                                <page string="Body (Raw HTML)">
+                                <field name="def_body_html"
+                                colspan="4" nolabel="1" /> <label
+                                string="Note: This is Raw HTML."
+                                colspan="4" /> </page>
+                            -->
+                            <!--
+                                We should support markdown instead
+                                of expecting user to use html
+                            -->
+                            <!--
+                                I dont advice using the html widget
+                                because tinymce is interfering too
+                                much with the html generated 
+    
+                                Sunday,30 May 2010:Enabling HTML as
+                                community votes for it
+                            -->
+                            <page string="Body (HTML)">
+                                <field name="def_body_html"
+                                    colspan="4" nolabel="1" widget="text_html" />
+                                <label
+                                    string="Note: HTML body can't be edited with GTK desktop client."
+                                    colspan="4" />
+                            </page>
+                        </notebook>
+                            <group>
+                                <field name="template_language" on_change="onchange_null_value(model_object_field,sub_model_object_field,null_value,template_language,context)" />
+                            </group>
+                            <group></group>
+                            <notebook>
+                                <page string="Insert Simple Field">
+                                    <group>
+                                        <group>
+                                            <field name="model_object_field"
+                                                domain="[('model_id','=',object_name),('ttype','!=','one2many'),('ttype','!=','many2many')]"
+                                                on_change="onchange_model_object_field(model_object_field, template_language,context)"/>
+                                            <field name="null_value"
+                                                on_change="onchange_null_value(model_object_field,sub_model_object_field,null_value,template_language,context)" />
+                                            <field name="copyvalue"/>
+                                        </group>
+                                        <group>
+                                            <field name="sub_object"/>
+                                            <field name="sub_model_object_field"
+                                                domain="[('model_id','=',sub_object),('ttype','!=','one2many'),('ttype','!=','many2many')]"
+                                                attrs="{'readonly':[('sub_object','=',False)],'required':[('sub_object','!=',False)]}"
+                                                on_change="onchange_sub_model_object_field(model_object_field,sub_model_object_field,template_language,context)" />
+                                            
+                                        </group>
+                                    </group>
+                                </page>
+                                <page string="Insert Table">
+                                    <group>
+                                        <group>
+                                            <field
+                                                name="table_model_object_field"
+                                                domain="[('model_id','=',object_name),('ttype','in',['one2many','many2many'])]"
+                                                colspan="2"
+                                                on_change="onchange_table_model_object_field(table_model_object_field,template_language,context)" />
+                                        </group>
+                                        <group></group>
+                                        <field name="table_sub_object"
+                                            readonly="1" colspan="2" />
+                                        <field name="table_required_fields"
+                                            colspan="4" nolabel="1"
+                                            domain="[('model_id','=',table_sub_object),('ttype','!=','one2many'),('ttype','!=','many2many')]"
+                                            on_change="onchange_table_required_fields(table_model_object_field,table_required_fields,template_language,context)" />
+                                        <field name="table_html"
+                                            colspan="4" />
+                                    </group>
+                                </page>
+    
+                            </notebook>
+                    </page>
+                    <page string="Security">
+                        <separator colspan="4"
+                            string="Allowed User Groups" />
+                        <field name="allowed_groups" string="Allowed User Groups"
+                            nolabel="1" />
+                    </page>
+                    <page string="Advanced">
+                        <separator string="Automatic Email" colspan="4" />
+                        <group>
+                            <group>
+                                <field name="enforce_from_account" attrs="{'required':[('auto_email','=',True)]}" />
+                                <field name="auto_email"/>
+                                <field name="attached_wkf" domain="[('osv','=',model_int_name)]" attrs="{'required':[('auto_email','=',True)],'readonly':[('auto_email','=', False)]}" />
+                                <field name="attached_activity" domain="[('wkf_id', '=', attached_wkf)]" attrs="{'required':[('auto_email','=',True)],'readonly':[('auto_email','=', False)]}" />
+                            </group>
+                            <group>
+                                <field name="send_on_create" />
+                                <field name="send_on_write" />
+                                <field name="save_to_drafts" />
+                                <field name="use_filter" />
+                            </group>
+                        </group>
+                        <group string="Filter" colspan="4" attrs="{'invisible':[('use_filter','=',False)]}">
+                            <group colspan="3" col="1">
+                                <separator string="OpenObject Code Filter:"/>
+                                <field name="filter" nolabel="1"/>
+                            </group>
+                            <group colspan="1" col="1">
+                                <separator string="Available global variables:"/>
+                                <label string="o - current object"/>
+                                <label string="self - objects pointer"/>
+                                <label string="uid - current user ID"/>
+                                <label string="cr - database cursor"/>
+                                <label string="context - current context"/>
+                            </group>
+                        </group>
+                        <separator string="Email action and wizard" colspan="4" />
+                        <group>
+                            <field name="server_action" readonly="1" />
+                            <field name="ref_ir_act_window" />
+                            <field name="ref_ir_value" />
+                        </group>
+                        <group>
+                            <group string="Attachments (Report to attach)" >
+                                <field name="file_name"/>
+                                <field name="report_template" domain="[('model','=',model_int_name)]" />
+                            </group>
+                            <group string="Log partner events">
+                                <field name="partner_event" />
+                            </group>
+                        </group>
+                    </page>
+                </notebook>
+            </sheet>
+        </form>
+    </field>
+</record>
+
+<record model="ir.ui.view" id="poweremail_template_tree">
+    <field name="name">poweremail.templates.tree</field>
+    <field name="model">poweremail.templates</field>
+    <field name="type">tree</field>
+    <field name="arch" type="xml">
+        <tree string="Power Email Templates">
+            <field name="name" select="1" />
+            <field name="object_name" required="1" select="1" />
+            <field name="def_to" colspan="4" select="2" />
+            <field name="def_cc" colspan="4" select="2" />
+            <field name="def_bcc" colspan="4" select="2" />
+            <field name="def_subject" colspan="4" select="2" />
+            <field name="use_sign" colspan="4" select="2" />
+            <field name="file_name" colspan="4" />
+            <field name="enforce_from_account" />
+        </tree>
+    </field>
+</record>
+
+
+<record model="ir.actions.act_window" id="action_poweremail_template_tree_all">
+    <field name="name">Email Templates</field>
+    <field name="res_model">poweremail.templates</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">form,tree</field>
+    <field name="view_id" ref="poweremail_template_tree" />
+</record>
+
+<record model="ir.actions.act_window" id="action_poweremail_template_form">
+    <field name="name">Email Templates</field>
+    <field name="res_model">poweremail.templates</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">form,tree</field>
+    <field name="view_id" ref="poweremail_template_form" />
+</record>
+
+<menuitem name="Templates" id="menu_poweremail_templates" parent="menu_poweremail_administration_server" />
+
+<menuitem name="Email Templates" id="menu_poweremail_templates_all"
+    parent="menu_poweremail_templates" action="action_poweremail_template_tree_all" />
+</data>
+</openerp>

@@ -1,0 +1,7 @@
+
+.o_web_client .o_widgetonbutton {
+  color: #d9534f;
+}
+.o_web_client .o_widgetonbutton.o_has_value {
+  color: #5cb85c;
+}

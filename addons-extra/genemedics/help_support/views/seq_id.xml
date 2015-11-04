@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+	<data noupdate="1">
+	
+		<!--<record id="seq_unique_id" model="ir.sequence.type">
+        <field name="name">my_sequence</field>
+        <field name="code">sequence_code</field>
+    </record>-->
+
+    <record id="seq_unique_id2" model="ir.sequence">
+        <field name="name">my_sequence</field>
+        <field name="code">sequence_code</field>
+        <field name="prefix"></field>
+        <field name="padding">4</field>
+    </record>
+	</data>
+</openerp>
