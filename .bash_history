@@ -32,3 +32,50 @@ nano .gitignore
 ls -la
 git add .
 git status
+cd ~
+ls
+git reset
+git status
+cd  addons-extra
+ls
+cd  genemedics/
+ls
+cd  crm_
+crm_genemedics/
+ls
+ls -ls
+ls -la
+cd  crm_genemedics/
+ls -la
+git add cd ..
+cd ~
+git add addons-extra/genemedics/crm_genemedics/
+git status
+git add .
+git commit -a -m "First Commit [Add] GeneMedics Server Environment Files"
+git remote add origin https://github.com/NovaPointGroup/genemedics.git
+git push
+git branch
+git pull
+git branch --set-upstream-to=origin/maste master
+git branch --set-upstream-to=origin/master master
+git push -u
+ls
+git push
+git push -u origin master
+ls
+ls -la
+cd  genemedics-server/
+ls
+git status
+cd ..
+cd  genemedics-server/
+ls
+git log
+cd ..
+git submodule add odoo
+git submodule add https://github.com/odoo/odoo.git
+git status
+rm -R genemedics-server/
+rm -R -f  genemedics-server/
+exit
