@@ -1,5 +1,5 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-hsupport_manager,hsupport manager,model_help_support_hsupport,group_manager,1,1,1,1
-hsupport_read_all,hsupport all,model_help_support_hsupport,,1,0,0,0
-priority_manager,priority manager,model_help_support_priority,group_manager,1,0,0,0
-priority_read_all,priority all,model_help_support_priority,,1,0,0,0
+hsupport_manager,hsupport manager,model_help_support_hsupport,support_manager,1,1,1,1
+hsupport_read_all,hsupport all,model_help_support_hsupport,support_user,1,1,1,0
+priority_manager,priority manager,model_help_support_priority,support_manager,1,1,1,1
+priority_read_all,priority all,model_help_support_priority,support_user,1,1,1,0
