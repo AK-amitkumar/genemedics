@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <!-- Inherit Alias Form View -->
+        <record  model="ir.ui.view" id="view_mail_alias_form_inherit">
+            <field name="name">mail.alias.form.inherit</field>
+            <field name="model">mail.alias</field>
+            <field name="view_id" ref="mail.view_mail_alias_form"</field>
+            <field name="arch" type="xml">
+				<field name="alias_defaults" position="after">
+                  <field name="sub_model_object_field"
+                   domain="[('model_id','=',sub_object),('ttype','!=','one2many'),('ttype','!=','many2many')]"
+                   attrs="{'readonly':[('sub_object','=',False)],'required':[('sub_object','!=',False)]}"/>
+                 </field>
+            </field>
+        </record>
+    </data>
+</openerp>
