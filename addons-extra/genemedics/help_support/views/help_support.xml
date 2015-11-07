@@ -164,7 +164,7 @@
             <field name="model">help_support.hsupport</field>
             <field name="arch" type="xml">
                 <kanban default_group_by="state">
-                    <field name="color"/>
+                    <field name="color"/>roups="base.group_sale_salesman,base.group_sale_manager" sequence="6"
                     <templates>
                         <t t-name="kanban-box">
                             <div
@@ -234,7 +234,9 @@
 			</record>
 			
 			<!-- top level menu: no parent -->
-        <menuitem id="main_help_support_menu" name="Helpdesk"/>
+        <menuitem id="main_help_support_menu" name="Helpdesk" web_icon="help_support,images/help.jpg"
+		groups="base.group_sale_salesman,base.group_sale_manager" sequence="10"
+		 action="hsupport_list_action"/>
         <!-- A first level in the left side menu is needed
              before using action= attribute -->
         <menuitem id="help_support_menu" name="Help Desk"
