@@ -14,8 +14,19 @@
                                 string="Schedule Activity">
                         </button>
 				</button>
+				<field name="source_id" position="replace"/>
                 <field name="tag_ids" position="after">
 				    <field name="customer_goal" />
+				    <field name="source_id" required='1'/> 
+				</field>
+				<field name="email_from" position="attributes">
+					<attribute name="required">1</attribute>
+				</field>
+				<field name="phone" position="attributes">
+					<attribute name="required">1</attribute>
+				</field>
+				<field name="function" position="attributes">
+					<attribute name="invisible">1</attribute>
 				</field>
             
             </field>
@@ -37,8 +48,17 @@
 				</button>
                 <field name="tag_ids" position="after">
 				    <field name="customer_goal" />
+				    <field name="source_id" required='1'/> 
 				</field>
-				
+				<field name="email_from" position="attributes">
+					<attribute name="required">1</attribute>
+				</field>
+				<field name="phone" position="attributes">
+					<attribute name="required">1</attribute>
+				</field>
+				<field name="function" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</field>
 				<field name="team_id" position="after">
           			
                           <field name="last_activity_id" invisible="1"/>
@@ -77,10 +97,12 @@
                           </div>
                 	</field>
                 	
-                	<page name="extra" position='replace'></page>
                 	
-                	<xpath expr="//notebook" position="inside">
+                	<xpath expr="//notebook[last()]" position="replace"/>
+                
                 	
+                	<xpath expr="//sheet[last()]" position="inside">
+                		<notebook>
                 	    <page name="extra" string="Extra Info">
                             <group>
                                  <group string="Email">
@@ -91,7 +113,7 @@
                                     <field name="company_id"
                                         groups="base.group_multi_company"
                                         options="{'no_create': True}"/>
-                                    <field name="source_id" required='1'/>    
+                                       
                                     <field name="campaign_id" />
                                     <field name="medium_id"/>
                                     
@@ -106,6 +128,11 @@
                                 </group>
                             </group>
                         </page>
+                        <page string="Internal Notes">
+                            <field name="description"/>
+                        </page>
+                        
+                        </notebook>
                      </xpath>
             </field>
         </record>
