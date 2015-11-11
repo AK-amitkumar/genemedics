@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>   
+    
+   
+    <record model="ir.ui.view" id="crm_view_calendar_event_form_inh">
+        <field name="name">Meeting</field>
+        <field name="model">calendar.event</field>
+    	<field name="inherit_id" ref="calendar.view_calendar_event_form"/>
+    	<field name="arch" type="xml">
+    		<field name="location" position="after">
+    			<field name="opportunity_id"/>
+    			<field name="activity_id"/>
+    		</field>
+    	</field>
+    </record>
+    </data>
+</openerp>
+    	
+    
+    
+    

@@ -2,17 +2,17 @@
 # See LICENSE file for full copyright and licensing details.
 
 {
-    'name': ' ',
+    'name': 'Build Mail Alias Default ',
     'version': '1.0',
-    'category': '',
+    'category': 'Mail',
     'complexity': "easy",
     'category': 'Generic Modules/Others',
     'description': """
-    
+    Module to Build Filters on Aliases
     """,
     'author': 'NovaPoint Group Inc, Stephen Levenhagen',
     'website': 'www.novapointgroup.com',
-    'depends': [],
+    'depends': ['mail'],
     'init_xml': [],
     'data': [
         "views/view.xml",

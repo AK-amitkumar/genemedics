@@ -8,9 +8,8 @@
             <field name="view_id" ref="mail.view_mail_alias_form"</field>
             <field name="arch" type="xml">
 				<field name="alias_defaults" position="after">
-                  <field name="sub_model_object_field"
-                   domain="[('model_id','=',sub_object),('ttype','!=','one2many'),('ttype','!=','many2many')]"
-                   attrs="{'readonly':[('sub_object','=',False)],'required':[('sub_object','!=',False)]}"/>
+                       <field name="model_object_field"
+                       domain="[('model_id','=',alias_model_id)]"/>
                  </field>
             </field>
         </record>
