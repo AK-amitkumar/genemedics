@@ -9,6 +9,7 @@ class calendar_event(models.Model):
     _inherit = 'calendar.event'
     
     activity_id = fields.Many2one('crm.activity','Activity')
+    opportunity_id = fields.Many2one('crm.lead', 'Opportunity')
     
     @api.model
     def default_get(self, fields):

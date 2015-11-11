@@ -32,10 +32,7 @@ class crm_lead(models.Model):
         :return dict: dictionary value for created Meeting view
         """
         IrModelData = self.env['ir.model.data']
-        form_view = IrModelData.xmlid_to_res_id('calendar.view_calendar_event_form')
-        tree_view = IrModelData.xmlid_to_res_id('calendar.view_calendar_event_tree')
-        calendar_view = IrModelData.xmlid_to_res_id('calendar.view_calendar_event_calendar')
-        search_view = IrModelData.xmlid_to_res_id('calendar.view_calendar_event_search')
+        res = self.env['ir.actions.act_window'].for_xml_id('crm_genemedics', 'action_calendar_event_form')
         lead = self
         
         partner_ids = [self.user_id.partner_id.id]
@@ -51,7 +48,6 @@ class crm_lead(models.Model):
         
         context = self._context.copy()
         
-        context['search_default_opportunity_id'] = (lead.type == 'opportunity' and lead.id or False)
         context['default_opportunity_id'] = (lead.type == 'opportunity' and lead.id or False)
         context['default_partner_id'] = lead.partner_id and lead.partner_id.id or False
         context['default_partner_ids'] = partner_ids
@@ -60,19 +56,8 @@ class crm_lead(models.Model):
         context['default_activity_id'] = lead.next_activity_id and lead.next_activity_id.id or False
        
       
-        res = {
-            'view_type': 'form',
-            'view_mode': 'form',
-            'res_model': 'calendar.event',
-            'views': [(form_view, 'form'),
-                      (calendar_view, 'calendar'),
-                      (tree_view, 'tree')],
-            'search_view_id': search_view,
-            'view_id': False,
-            'type': 'ir.actions.act_window',
-            'target': 'new',
-            'context': context
-            }                           
+        res['context'] = context
+                        
                                    
                                    
         return res
