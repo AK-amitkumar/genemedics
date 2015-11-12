@@ -2,36 +2,9 @@
 <openerp>
     <data>
     
-		<record model="ir.ui.view" id="crm_case_form_view_leads_genemedics">
-            <field name="name">CRM - Leads Form</field>
-            <field name="model">crm.lead</field>
-            <field name="inherit_id" ref="crm.crm_case_form_view_oppor"/>
-            <field name="arch" type="xml">
-			    <button name="action_schedule_meeting" position="before">
-						<button	name="action_schedule_meeting_form" class="oe_stat_button" type="object"
-                                context="{'partner_id': partner_id}"
-                                icon="fa-calendar" 
-                                string="Schedule Activity">
-                        </button>
-				</button>
-				<field name="source_id" position="replace"/>
-                <field name="tag_ids" position="after">
-				    <field name="customer_goal" />
-				    <field name="source_id" required='1'/> 
-				</field>
-				<field name="email_from" position="attributes">
-					<attribute name="required">1</attribute>
-				</field>
-				<field name="phone" position="attributes">
-					<attribute name="required">1</attribute>
-				</field>
-				<field name="function" position="attributes">
-					<attribute name="invisible">1</attribute>
-				</field>
-            
-            </field>
-        </record>
+
  
+	<!-- Leads Form View -->
 
         <record model="ir.ui.view" id="crm_case_form_view_leads_genemedics">
             <field name="name">CRM - Leads Form</field>
@@ -48,7 +21,8 @@
 				</button>
                 <field name="tag_ids" position="after">
 				    <field name="customer_goal" />
-				    <field name="source_id" required='1'/> 
+				    <field name="source_id" required='1'/>
+				    <field name="age_days" />
 				</field>
 				<field name="email_from" position="attributes">
 					<attribute name="required">1</attribute>
@@ -137,6 +111,45 @@
             </field>
         </record>
         
+       <record model="ir.ui.view" id="crm_case_tree_view_leads_genemedics">
+            <field name="name">CRM - Leads Form</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.crm_case_tree_view_leads"/>
+            <field name="arch" type="xml">
+            	<field name="create_date" position="after">
+            		<field name="age_days"/>
+            	</field>
+            	
+            </field>
+        </record>
+        
+    <!-- Leads Search View -->
+    
+    
+    <record id="view_crm_case_leads_filter_genemedics" model="ir.ui.view">
+           <field name="name">CRM - Leads Search</field>
+           <field name="model">crm.lead</field>
+           <field name="inherit_id" ref="crm.view_crm_case_leads_filter"></field>
+           <field name="arch" type="xml">
+           		<field name="country_id" position="after">
+           			<field name="next_activity_id"/>
+           			<field name="age_days"/>
+           		</field>
+           		<filter name="unassigned" position="after">
+           			<filter string="Unassigned Over 24hr" name="unassigned_over_24"
+                            domain="[('user_id','=', False),('age_days','&gt;=',1)]"
+                            />
+               
+           			<filter string="Leads Over 5 days" name="lead_over_5"
+                            domain="[('age_days','&gt;', 5)]"
+                            />
+                </filter>
+                <separator />
+           		<filter name="groupby_stage" position="after">
+           			<filter string="Activity" context="{'group_by':'next_activity_id'}" name="groupby_activity"/>
+           		</filter>
+           </field>
+    </record>
 
     <!-- CRM Lead Kanban View  -->
         <record model="ir.ui.view" id="crm.crm_case_kanban_view_leads">
@@ -183,6 +196,9 @@
                                         <strong><field name="source_id"/></strong>
                                     </div>
                                     <div>                                    
+                                        <strong>Days <field name="age_days"/></strong>
+                                    </div> 
+                                    <div>                                    
                                         <strong><field name="create_date"/></strong>
                                     </div>                                        
                                     <div class="text-muted">
@@ -211,8 +227,8 @@
             </field>
         </record>
     
+    <!-- Opportunities Search View -->
     
-        <!-- Opportunities Search View -->
     <record id="view_crm_case_opportunities_filter_genemedics" model="ir.ui.view">
            <field name="name">CRM - Opportunities Search</field>
            <field name="model">crm.lead</field>
@@ -224,20 +240,53 @@
            </field>
     </record>
     
-       
-        <!-- Leads Search View -->
-    <record id="view_crm_case_leads_filter_genemedics" model="ir.ui.view">
-           <field name="name">CRM - Leads Search</field>
-           <field name="model">crm.lead</field>
-           <field name="inherit_id" ref="crm.view_crm_case_leads_filter"></field>
-           <field name="arch" type="xml">
-           		<field name="country_id" position="after">
-           			<field name="next_activity_id"/>
-           		</field>
-           		<filter name="groupby_stage" position="after">
-           			<filter string="Activity" context="{'group_by':'next_activity_id'}" name="groupby_activity"/>
-           		</filter>
-           </field>
+    <!-- Opportunities tree View -->  
+    
+    <record model="ir.ui.view" id="crm_case_tree_view_oppor_genemedics">
+            <field name="name">CRM - Leads Form</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.crm_case_tree_view_oppor"/>
+            <field name="arch" type="xml">
+            	<field name="create_date" position="after">
+            		<field name="age_days"/>
+            	</field>
+            	
+            </field>
     </record>
+    
+    <!-- Opportunities Form View --> 
+     
+    <record model="ir.ui.view" id="crm_case_form_view_leads_genemedics">
+            <field name="name">CRM - Leads Form</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.crm_case_form_view_oppor"/>
+            <field name="arch" type="xml">
+			    <button name="action_schedule_meeting" position="before">
+						<button	name="action_schedule_meeting_form" class="oe_stat_button" type="object"
+                                context="{'partner_id': partner_id}"
+                                icon="fa-calendar" 
+                                string="Schedule Activity">
+                        </button>
+				</button>
+				<field name="source_id" position="replace"/>
+                <field name="tag_ids" position="after">
+				    <field name="customer_goal" />
+				    <field name="source_id" required='1'/> 
+				    <field name="age_days" />
+				</field>
+				<field name="email_from" position="attributes">
+					<attribute name="required">1</attribute>
+				</field>
+				<field name="phone" position="attributes">
+					<attribute name="required">1</attribute>
+				</field>
+				<field name="function" position="attributes">
+					<attribute name="invisible">1</attribute>
+				</field>
+            
+            </field>
+        </record>
+       
+
 </data>
 </openerp>

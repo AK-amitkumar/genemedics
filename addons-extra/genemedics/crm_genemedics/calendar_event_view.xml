@@ -40,7 +40,7 @@
             <calendar string="Meetings" date_start="start" date_stop="stop" date_delay="duration" all_day="allday" 
                          display="[name]" color="color_partner_id" attendee="partner_ids" avatar_model="res.partner"
                          use_contacts="True" event_open_popup="%(calendar.view_calendar_event_form_popup)s"
-                         disable_quick_create="True">
+                         quick_add="False">
                 <field name="name"/>
                 <field name="user_id"/>
                 <field name="color_partner_id"/>
