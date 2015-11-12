@@ -24,7 +24,8 @@
     # always loaded
     'data': [
         'crm_lead_view.xml',
-        'calendar_event_view.xml'
+        'calendar_event_view.xml',
+        'crm_leads_menu.xml',
        
     ],
     # only loaded in demonstration mode

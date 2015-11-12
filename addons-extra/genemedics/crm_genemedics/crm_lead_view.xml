@@ -210,34 +210,34 @@
                 </kanban>
             </field>
         </record>
-
-
-    <record model="ir.actions.act_window" id="crm.crm_lead_all_leads">
-        <field name="name">Leads</field>
-        <field name="res_model">crm.lead</field>
-        <field name="view_mode">kanban,tree,graph,pivot,calendar,form</field>
-        <field name="domain">['|', ('type','=','lead'), ('type','=',False)]</field>
-        <!--field name="view_id" ref="crm.crm_case_kanban_view_leads"/-->
-        <field name="search_view_id" ref="crm.view_crm_case_leads_filter"/>
-        <field name="context">{
-                'default_type':'lead',
-                'search_default_type': 'lead',
-                'stage_type':'lead',
-                'needaction_menu_ref': 'crm.menu_crm_opportunities',
-                'search_default_to_process':1,
-            }
-        </field>
-        <field name="help" type="html">
-            <p>
-                Use leads if you need a qualification step before creating an
-                opportunity or a customer. It can be a business card you received,
-                a contact form filled in your website, or a file of unqualified
-                prospects you import, etc.
-            </p><p>
-                Once qualified, the lead can be converted into a business
-                opportunity and/or a new customer in your address book.
-            </p>
-        </field>
+    
+    
+        <!-- Opportunities Search View -->
+    <record id="view_crm_case_opportunities_filter_genemedics" model="ir.ui.view">
+           <field name="name">CRM - Opportunities Search</field>
+           <field name="model">crm.lead</field>
+           <field name="inherit_id" ref="crm.view_crm_case_opportunities_filter"></field>
+           <field name="arch" type="xml">
+           	<filter name="stage" position="after">
+           		<filter string="Activity" context="{'group_by':'next_activity_id'}" name="groupby_activity"/>
+           	</filter>
+           </field>
+    </record>
+    
+       
+        <!-- Leads Search View -->
+    <record id="view_crm_case_leads_filter_genemedics" model="ir.ui.view">
+           <field name="name">CRM - Leads Search</field>
+           <field name="model">crm.lead</field>
+           <field name="inherit_id" ref="crm.view_crm_case_leads_filter"></field>
+           <field name="arch" type="xml">
+           		<field name="country_id" position="after">
+           			<field name="next_activity_id"/>
+           		</field>
+           		<filter name="groupby_stage" position="after">
+           			<filter string="Activity" context="{'group_by':'next_activity_id'}" name="groupby_activity"/>
+           		</filter>
+           </field>
     </record>
 </data>
 </openerp>

@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <menuitem 
+            id="menu_crm_lead_management" parent="base.menu_base_partner"
+            name="Leads"
+            sequence="1" groups="base.group_sale_salesman,base.group_sale_manager"/>
+
+
+<!--  My  Leads menu -->
+
+    	<record model="ir.actions.act_window" id="crm_lead_my_leads_genemedics">
+	        <field name="name">My Leads</field>
+	        <field name="type">ir.actions.act_window</field>
+	        <field name="res_model">crm.lead</field>
+	        <field name="view_mode">kanban,tree,form,calendar,pivot,graph</field>
+	        <field name="domain">['|', ('type','=','lead'), ('type','=',False)]</field>
+	        <field name="view_id" ref="crm.crm_case_kanban_view_leads"/>
+	        <field name="search_view_id" ref="crm.view_crm_case_leads_filter"/>
+	        <field name="context">{
+	        		'search_default_groupby_activity':'1',
+	                'default_type':'lead',
+	                'stage_type':'lead',
+	                'default_user_id': uid,
+	                'search_default_assigned_to_me': 1,
+	            	}
+	        </field>
+	        <field name="help" type="html">
+	            <p>
+	                Use leads if you need a qualification step before creating an
+	                opportunity or a customer. It can be a business card you received,
+	                a contact form filled in your website, or a file of unqualified
+	                prospects you import, etc.
+	            </p><p>
+	                Once qualified, the lead can be converted into a business
+	                opportunity and/or a new customer in your address book.
+	            </p>
+	        </field>
+    	</record>
+
+	  	<menuitem name="My Leads" id="crm.menu_crm_my_leads" 
+	  		parent="menu_crm_lead_management" 
+            action="crm_lead_my_leads_genemedics" 
+            sequence="1"
+            groups="crm.group_use_lead"/>
+  
+   
+<!--  My   Opportunities menu -->	  
+	     
+	    <record model="ir.actions.act_window" id="crm_lead_opportunities_tree_view_genemedics">
+	        <field name="name">My Opportunity Pipeline</field>
+	        <field name="res_model">crm.lead</field>
+	        <field name="view_mode">kanban,tree,graph,pivot,form,calendar</field>
+	        <field name="domain">[('type','=','opportunity')]</field>
+	        <field name="context">{
+	        		'search_default_groupby_activity':'1',
+	                'stage_type': 'opportunity',
+	                'default_type': 'opportunity',
+	                'default_user_id': uid,
+	                'search_default_assigned_to_me': 1,
+					}</field>
+	        <field name="search_view_id" ref="crm.view_crm_case_opportunities_filter"/>
+	        <field name="help" type="html">
+	            <p>
+	                Odoo helps you keep track of your sales pipeline to follow
+	                up potential sales and better forecast your future revenues.
+	            </p><p>
+	                You will be able to plan meetings and phone calls from
+	                opportunities, convert them into quotations, attach related
+	                documents, track all discussions, and much more.
+	            </p>
+	        </field>
+	    </record>
+	    
+ 
+	    <menuitem name="My Opportunities" id="crm.menu_crm_opportunities" 
+	    	action="crm_lead_opportunities_tree_view_genemedics" 
+	    	parent="menu_crm_lead_management" 
+	    	sequence="2"/> 
+
+            
+<!--     All Leads menu -->	
+
+	    <record model="ir.actions.act_window" id="crm_lead_all_leads_genemedics">
+	        <field name="name">All Leads</field>
+	        <field name="res_model">crm.lead</field>
+	        <field name="view_mode">kanban,tree,graph,pivot,calendar,form</field>
+	        <!--field name="view_id" ref="crm.crm_case_kanban_view_leads"/-->
+	        <field name="search_view_id" ref="crm.view_crm_case_leads_filter"/>
+	        <field name="context">{
+	                'search_default_groupby_salesperson':'1',
+	                'needaction_menu_ref': 'crm.menu_crm_opportunities',
+	                'search_default_to_process':1,
+	            }
+	        </field>
+	        <field name="help" type="html">
+	            <p>
+	                Use leads if you need a qualification step before creating an
+	                opportunity or a customer. It can be a business card you received,
+	                a contact form filled in your website, or a file of unqualified
+	                prospects you import, etc.
+	            </p><p>
+	                Once qualified, the lead can be converted into a business
+	                opportunity and/or a new customer in your address book.
+	            </p>
+	        </field>
+	    </record>
+	    
+	    
+	    <menuitem name="All Leads" id="menu_crm_leads" 
+	    		sequence="3"
+	    		parent="menu_crm_lead_management" 
+       			action="crm_lead_all_leads_genemedics" 
+       			groups="crm.group_use_lead"/>
+
+
+	    	
+<!--All Activities Menu  -->   
+   
+	    <record id="crm_lead_action_activities_genemedics" model="ir.actions.act_window">
+	        <field name="name">All Activities</field>
+	        <field name="type">ir.actions.act_window</field>
+	        <field name="res_model">crm.lead</field>
+	        <field name="view_mode">kanban,tree,form,calendar,pivot,graph</field>
+	        <field name="search_view_id" ref="crm.view_crm_case_opportunities_filter"/>
+	        <field name="view_ids"
+	               eval="[(5, 0, 0),
+	               		(0, 0, {'view_mode': 'kanban'}),
+	                	(0, 0, {'view_mode': 'tree', 'view_id': ref('crm.crm_lead_view_tree_activity')}),
+	                    (0, 0, {'view_mode': 'form', 'view_id': ref('crm.crm_case_form_view_oppor')}),
+	                    (0, 0, {'view_mode': 'calendar'}), 
+	                    (0, 0, {'view_mode': 'pivot'}), 
+	                    (0, 0, {'view_mode': 'graph'})]"/>
+	        
+	        <field name="context">{
+	                'search_default_groupby_activity':'1',
+	            }
+	        </field>
+	        <field name="help" type="html">
+	            <p>
+	               Here is the list of your next activities. Those are linked to your Leads and opportunities.
+	               To set a next activity, go on an Lead and add one. It will then appear in this list.
+	            </p>
+	        </field>
+	    </record>  
+	            
+        <menuitem  name="All Activities" id="crm.crm_lead_menu_activities" 
+        		sequence="4"
+        		parent="menu_crm_lead_management" 
+        		action="crm_lead_action_activities_genemedics" />
+        
+
+    </data>
+</openerp>
