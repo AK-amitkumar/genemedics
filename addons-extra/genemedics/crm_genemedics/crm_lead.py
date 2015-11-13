@@ -10,14 +10,35 @@ class crm_lead(models.Model):
     """ CRM Lead Case """
     _inherit = "crm.lead"
 
+
     @api.one
     def _cal_age(self):
         
         delta = datetime.now() - datetime.strptime(self.create_date, DEFAULT_SERVER_DATETIME_FORMAT)
         self.age_days = int(delta.days)
+        
+    
+    def _search_cal_age(self, operator, value):
+        
+        try:
+            days = float(value)
+        except:
+            days = False
+         
+        assert operator in ('=', '!=', '<=','>=','<','>') and days , 'Operation not supported' 
+        
+        if operator == '<=': operator ='>='
+        if operator == '>=': operator ='<='
+        if operator == '<': operator ='>'
+        if operator == '>': operator ='<'
+        search_date = datetime.now() - timedelta(days=days)
+        search_date = datetime.strftime(search_date,DEFAULT_SERVER_DATETIME_FORMAT)
+        leads = self.env['crm.lead'].search([('create_date', operator, search_date)])
+        return [('id', 'in', leads.ids)]
+        
    
     customer_goal = fields.Char('Customer Goal', size = 32) 
-    age_days = fields.Integer(string = "Days Old",compute="_cal_age",store=False)
+    age_days = fields.Integer(string = "Days Old",compute="_cal_age",store=False, search='_search_cal_age')
     
     _order = 'create_date'
     

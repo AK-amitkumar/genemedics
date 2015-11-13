@@ -29,8 +29,8 @@
 	        <field name="view_ids"
 	               eval="[(5, 0, 0),
 	               		(0, 0, {'view_mode': 'kanban'}),
-	                	(0, 0, {'view_mode': 'tree', 'view_id': ref('crm.crm_case_tree_view_leads')}),
-	                    (0, 0, {'view_mode': 'form', 'view_id': ref('crm.crm_case_form_view_leads')}),
+	                	(0, 0, {'view_mode': 'tree', 'view_id': ref('crm_case_tree_view_leads_genemedics')}),
+	                    (0, 0, {'view_mode': 'form', 'view_id': ref('crm_case_form_view_leads_genemedics')}),
 	                    (0, 0, {'view_mode': 'calendar'}), 
 	                    (0, 0, {'view_mode': 'pivot'}), 
 	                    (0, 0, {'view_mode': 'graph'})]"/>
@@ -83,8 +83,8 @@
 	        <field name="view_ids"
 	               eval="[(5, 0, 0),
 	               		(0, 0, {'view_mode': 'kanban'}),
-	                	(0, 0, {'view_mode': 'tree', 'view_id': ref('crm.crm_case_tree_view_oppor')}),
-	                    (0, 0, {'view_mode': 'form', 'view_id': ref('crm.crm_case_form_view_oppor')}),
+	                	(0, 0, {'view_mode': 'tree', 'view_id': ref('crm_case_tree_view_oppor_genemedics')}),
+	                    (0, 0, {'view_mode': 'form', 'view_id': ref('crm_case_form_view_leads_genemedics')}),
 	                    (0, 0, {'view_mode': 'calendar'}), 
 	                    (0, 0, {'view_mode': 'pivot'}), 
 	                    (0, 0, {'view_mode': 'graph'})]"/>

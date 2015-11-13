@@ -1,8 +1,21 @@
 <?xml version="1.0"?>
 <openerp>
     <data>
+   
+    <!-- Leads tree View -->  
     
-
+    <record model="ir.ui.view" id="crm_case_tree_view_leads_genemedics">
+            <field name="name">CRM - Leads Form</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.crm_case_tree_view_leads"/>
+            <field name="arch" type="xml">
+            	<field name="create_date" position="after">
+            		<field name="age_days"/>
+            	</field>
+            	
+            </field>
+    </record>
+    
  
 	<!-- Leads Form View -->
 
@@ -16,7 +29,7 @@
 						<button	name="action_schedule_meeting_form" class="oe_stat_button" type="object"
                                 context="{'partner_id': partner_id}"
                                 icon="fa-calendar" 
-                                string="Schedule Call"/>
+                                string="Schedule Activity"/>
                         
 				</button>
                 <field name="tag_ids" position="after">
@@ -102,7 +115,7 @@
                                 </group>
                             </group>
                         </page>
-                        <page string="Internal Notes">
+                        <page name="notes" string="Internal Notes">
                             <field name="description"/>
                         </page>
                         
@@ -141,7 +154,7 @@
                             />
                
            			<filter string="Leads Over 5 days" name="lead_over_5"
-                            domain="[('age_days','&gt;', 5)]"
+                            domain="[('age_days','&gt;=', 5)]"
                             />
                 </filter>
                 <separator />
@@ -237,6 +250,11 @@
            	<filter name="stage" position="after">
            		<filter string="Activity" context="{'group_by':'next_activity_id'}" name="groupby_activity"/>
            	</filter>
+           	<filter name="lost" position="after">
+            	<filter string="Open over 14 days" name="oppor_over_14"
+                    domain="[('age_days','&gt;', 14),('date_closed','=',False)]"
+                            />
+            </filter>
            </field>
     </record>
     
@@ -256,7 +274,7 @@
     
     <!-- Opportunities Form View --> 
      
-    <record model="ir.ui.view" id="crm_case_form_view_leads_genemedics">
+    <record model="ir.ui.view" id="crm_case_form_view_oppor_genemedics">
             <field name="name">CRM - Leads Form</field>
             <field name="model">crm.lead</field>
             <field name="inherit_id" ref="crm.crm_case_form_view_oppor"/>
@@ -283,9 +301,58 @@
 				<field name="function" position="attributes">
 					<attribute name="invisible">1</attribute>
 				</field>
+				
+				<xpath expr="//notebook[last()]" position="replace"/>
+				
+				<xpath expr="//sheet[last()]" position="inside">
+					<notebook colspan="4">
+                     <page name="lead" string="Lead" groups="crm.group_use_lead">
+                            <group>
+                                <group>
+                                    <field name="partner_name"/>
+                                    <label for="street" string="Address"/>
+                                    <div class="o_address_format">
+                                        <field name="street" placeholder="Street..." class="o_address_street"/>
+                                        <field name="street2" placeholder="Street 2..." class="o_address_street"/>
+                                        <field name="city" placeholder="City" class="o_address_city"/>
+                                        <field name="state_id" class="o_address_state" placeholder="State" options='{"no_open": True}' on_change="onchange_state(state_id)"/>
+                                        <field name="zip" placeholder="ZIP" class="o_address_zip"/>
+                                        <field name="country_id" placeholder="Country" class="o_address_country" options='{"no_open": True, "no_create": True}'/>
+                                    </div>
+                                </group>
+
+                                <group>
+                                    <label for="contact_name"/>
+                                    <div class="o_row">
+                                        <field name="contact_name"/>
+                                        <field name="title" placeholder="Title" domain="[]" options='{"no_open": True}'/>
+                                    </div>
+                                    <field name="function"/>
+                                    <field name="mobile"/>
+                                    <field name="fax"/>
+                                    <field name="opt_out"/>
+                                </group>
+                                <group string="Marketing">
+                                    <field name="campaign_id" />
+                                    <field name="medium_id" />
+                                </group>
+                                <group string="Misc" name="Misc">
+                                    <field name="day_open" groups="base.group_no_one"/>
+                                    <field name="day_close" groups="base.group_no_one"/>
+                                    <field name="referred"/>
+                                    <field name="type" invisible="1"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page name="notes" string="Internal Notes">
+                            <field name="description"/>
+                        </page>
+                        </notebook>
+                  </xpath>
             
             </field>
         </record>
+        
        
 
 </data>
