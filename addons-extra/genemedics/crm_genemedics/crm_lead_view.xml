@@ -10,7 +10,8 @@
             <field name="inherit_id" ref="crm.crm_case_tree_view_leads"/>
             <field name="arch" type="xml">
             	<field name="create_date" position="after">
-            		<field name="age_days"/>
+            		<field name="age_lead"/>
+            		<field name="age_stage" />
             	</field>
             	
             </field>
@@ -35,7 +36,8 @@
                 <field name="tag_ids" position="after">
 				    <field name="customer_goal" />
 				    <field name="source_id" required='1'/>
-				    <field name="age_days" />
+				    <field name="age_lead" />
+				    <field name="age_stage" />
 				</field>
 				<field name="email_from" position="attributes">
 					<attribute name="required">1</attribute>
@@ -130,7 +132,8 @@
             <field name="inherit_id" ref="crm.crm_case_tree_view_leads"/>
             <field name="arch" type="xml">
             	<field name="create_date" position="after">
-            		<field name="age_days"/>
+            		<field name="age_lead"/>
+            		<field name="age_stage" />
             	</field>
             	
             </field>
@@ -146,15 +149,19 @@
            <field name="arch" type="xml">
            		<field name="country_id" position="after">
            			<field name="next_activity_id"/>
-           			<field name="age_days"/>
+           			<field name="age_lead"/>
+           			<field name="age_stage" />
            		</field>
            		<filter name="unassigned" position="after">
            			<filter string="Unassigned Over 24hr" name="unassigned_over_24"
-                            domain="[('user_id','=', False),('age_days','&gt;=',1)]"
+                            domain="[('user_id','=', False),('age_lead','&gt;=',1)]"
                             />
                
            			<filter string="Leads Over 5 days" name="lead_over_5"
-                            domain="[('age_days','&gt;=', 5)]"
+                            domain="[('age_lead','&gt;=', 5)]"
+                            />
+                    <filter string="Stage over 5 days" name="stage_over_5"
+                    domain="[('stage_age','&gt;', 5),('date_closed','=',False)]"
                             />
                 </filter>
                 <separator />
@@ -200,6 +207,8 @@
                                     </ul>
                                 </div>
                                 <div class="oe_kanban_content">
+                                
+                                
                                     <div>
                                         <strong><field name="contact_name"/></strong>
                                         <strong><field name="email_from"/></strong>
@@ -209,7 +218,10 @@
                                         <strong><field name="source_id"/></strong>
                                     </div>
                                     <div>                                    
-                                        <strong>Days <field name="age_days"/></strong>
+                                        <strong>Days <field name="age_lead"/></strong>
+                                    </div> 
+                                    <div>                                    
+                                        <strong>Stage Age <field name="age_stage"/></strong>
                                     </div> 
                                     <div>                                    
                                         <strong><field name="create_date"/></strong>
@@ -251,8 +263,11 @@
            		<filter string="Activity" context="{'group_by':'next_activity_id'}" name="groupby_activity"/>
            	</filter>
            	<filter name="lost" position="after">
-            	<filter string="Open over 14 days" name="oppor_over_14"
-                    domain="[('age_days','&gt;', 14),('date_closed','=',False)]"
+            	<filter string="Leads over 14 days" name="oppor_over_14"
+                    domain="[('age_lead','&gt;', 14),('date_closed','=',False)]"
+                            />
+               <filter string="Stage over 5 days" name="stage_over_5"
+                    domain="[('stage_age','&gt;', 5),('date_closed','=',False)]"
                             />
             </filter>
            </field>
@@ -266,7 +281,8 @@
             <field name="inherit_id" ref="crm.crm_case_tree_view_oppor"/>
             <field name="arch" type="xml">
             	<field name="create_date" position="after">
-            		<field name="age_days"/>
+            		<field name="age_lead"/>
+            		<field name="age_stage" />
             	</field>
             	
             </field>
@@ -290,7 +306,8 @@
                 <field name="tag_ids" position="after">
 				    <field name="customer_goal" />
 				    <field name="source_id" required='1'/> 
-				    <field name="age_days" />
+				    <field name="age_lead" />
+				    <field name="age_stage" />
 				</field>
 				<field name="email_from" position="attributes">
 					<attribute name="required">1</attribute>

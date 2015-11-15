@@ -10,15 +10,39 @@ class crm_lead(models.Model):
     """ CRM Lead Case """
     _inherit = "crm.lead"
 
+    @api.one
+    def _cal_stage_age(self):
+        
+        delta = datetime.now() - datetime.strptime(self.date_last_stage_update, DEFAULT_SERVER_DATETIME_FORMAT)
+        self.last_stage_age = int(delta.days)
+        
+        
+    def _search_stage_age(self, operator, value):
+        
+        try:
+            days = float(value)
+        except:
+            days = False
+         
+        assert operator in ('=', '!=', '<=','>=','<','>') and days , 'Operation not supported' 
+        
+        if operator == '<=': operator ='>='
+        if operator == '>=': operator ='<='
+        if operator == '<': operator ='>'
+        if operator == '>': operator ='<'
+        search_date = datetime.now() - timedelta(days=days)
+        search_date = datetime.strftime(search_date,DEFAULT_SERVER_DATETIME_FORMAT)
+        leads = self.env['crm.lead'].search([('date_last_stage_update', operator, search_date)])
+        return [('id', 'in', leads.ids)]
 
     @api.one
-    def _cal_age(self):
+    def _cal_lead_age(self):
         
         delta = datetime.now() - datetime.strptime(self.create_date, DEFAULT_SERVER_DATETIME_FORMAT)
-        self.age_days = int(delta.days)
+        self.age_lead = int(delta.days)
         
     
-    def _search_cal_age(self, operator, value):
+    def _search_lead_age(self, operator, value):
         
         try:
             days = float(value)
@@ -38,9 +62,30 @@ class crm_lead(models.Model):
         
    
     customer_goal = fields.Char('Customer Goal', size = 32) 
-    age_days = fields.Integer(string = "Days Old",compute="_cal_age",store=False, search='_search_cal_age')
+    age_lead = fields.Integer(string = "Lead Age",compute="_cal_lead_age",store=False, search='_search_lead_age')
+    age_stage = fields.Integer(string = "Stage Age" ,compute="_cal_stage_age",store=False, search='_search_stage_age')
     
     _order = 'create_date'
+    
+    @api.model
+    def _user_groups(self, present_ids, domain, **kwargs):
+        
+        model_data = self.env['ir.model.data'].search( [('name','=','group_sale_salesman')])
+        group = self.env['res.groups'].browse(model_data.res_id or [])
+        users = group and group.users and group.users.name_get() or [] 
+        return users, None
+
+    @api.model
+    def _stages(self, present_ids, domain, **kwargs):
+        
+        stages =  self.env['crm.stage'].search([]).name()
+        return stages
+    
+    _group_by_full = {
+                      'user_id':_user_groups,
+                      'stage_id':_stages
+                      }
+    
     
     @api.multi
     def action_schedule_meeting(self):
@@ -85,10 +130,7 @@ class crm_lead(models.Model):
         context['default_team_id'] = lead.team_id and lead.team_id.id or False
         context['default_name'] =  name
         context['default_activity_id'] = lead.next_activity_id and lead.next_activity_id.id or False
-       
-      
+     
         res['context'] = context
-                        
-                                   
                                    
         return res

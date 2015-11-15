@@ -7,6 +7,7 @@ from openerp import api, fields, models, _
 class calendar_event(models.Model):
     """ Model for Calendar Event """
     _inherit = 'calendar.event'
+    _inherits = {'crm.lead': 'opportunity_id'}
     
     activity_id = fields.Many2one('crm.activity','Activity')
     opportunity_id = fields.Many2one('crm.lead', 'Opportunity')
