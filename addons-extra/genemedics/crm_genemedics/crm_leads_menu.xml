@@ -20,8 +20,6 @@
 	        <field name="search_view_id" ref="crm.view_crm_case_leads_filter"/>
 	        <field name="context">{
 	        		'search_default_groupby_activity':'1',
-	                'default_type':'lead',
-	                'stage_type':'lead',
 	                'default_user_id': uid,
 	                'search_default_assigned_to_me': 1,
 	            	}
@@ -30,7 +28,7 @@
 	               eval="[(5, 0, 0),
 	               		(0, 0, {'view_mode': 'kanban'}),
 	                	(0, 0, {'view_mode': 'tree', 'view_id': ref('crm_case_tree_view_leads_genemedics')}),
-	                    (0, 0, {'view_mode': 'form', 'view_id': ref('crm_case_form_view_leads_genemedics')}),
+	                    (0, 0, {'view_mode': 'form', 'view_id': ref('crm_case_form_view_genemedics')}),
 	                    (0, 0, {'view_mode': 'calendar'}), 
 	                    (0, 0, {'view_mode': 'pivot'}), 
 	                    (0, 0, {'view_mode': 'graph'})]"/>
@@ -51,22 +49,54 @@
 	  		parent="menu_crm_lead_management" 
             action="crm_lead_my_leads_genemedics" 
             sequence="1"
-            groups="crm.group_use_lead"/>
+            groups="base.group_sale_salesman"/>
   
    
 <!--  My   Opportunities menu -->	  
 	     	    
  
+ 		   	<record model="ir.actions.act_window" id="crm_lead_my_oppor_genemedics">
+	        <field name="name">My Opportunities</field>
+	        <field name="type">ir.actions.act_window</field>
+	        <field name="res_model">crm.lead</field>
+	        <field name="view_mode">kanban,tree,form,calendar,pivot,graph</field>
+	        <field name="domain">[('type','=','opportunity')]</field>
+	        <field name="view_id" ref="crm.crm_case_kanban_view_leads"/>
+	        <field name="search_view_id" ref="crm.view_crm_case_opportunities_filter"/>
+	        <field name="context">{
+	        		'search_default_groupby_activity':'1',
+	                'default_user_id': uid,
+	                'search_default_assigned_to_me': 1,
+	            	}
+	        </field>
+	        <field name="view_ids"
+	               eval="[(5, 0, 0),
+	               		(0, 0, {'view_mode': 'kanban'}),
+	                	(0, 0, {'view_mode': 'tree', 'view_id': ref('crm_case_tree_view_oppor_genemedics')}),
+	                    (0, 0, {'view_mode': 'form', 'view_id': ref('crm_case_form_view_genemedics')}),
+	                    (0, 0, {'view_mode': 'calendar'}), 
+	                    (0, 0, {'view_mode': 'pivot'}), 
+	                    (0, 0, {'view_mode': 'graph'})]"/>
+	        <field name="help" type="html">
+				<p>
+	                Once qualified, the lead can be converted into a business
+	                opportunity and/or a new customer in your address book.
+	            </p>
+	        </field>
+    	</record>
+ 		
+ 
 	    <menuitem name="My Opportunities" id="crm.menu_crm_opportunities" 
-	    	action="crm.action_your_pipeline"
+	    	action="crm_lead_my_oppor_genemedics"
 	    	parent="menu_crm_lead_management" 
-	    	sequence="2"/> 
+	    	sequence="2"
+	    	groups="base.group_sale_salesman"/> 
 
             
 <!--     All Leads menu -->	
 
 	    <record model="ir.actions.act_window" id="crm_lead_all_leads_genemedics">
-	        <field name="name">All Leads</field>
+	        <field name="name">All Sales People</field>
 	        <field name="res_model">crm.lead</field>
 	        <field name="view_mode">kanban,tree,graph,pivot,calendar,form</field>
 	        <!--field name="view_id" ref="crm.crm_case_kanban_view_leads"/-->
@@ -84,7 +114,7 @@
 	               eval="[(5, 0, 0),
 	               		(0, 0, {'view_mode': 'kanban'}),
 	                	(0, 0, {'view_mode': 'tree', 'view_id': ref('crm_case_tree_view_oppor_genemedics')}),
-	                    (0, 0, {'view_mode': 'form', 'view_id': ref('crm_case_form_view_leads_genemedics')}),
+	                    (0, 0, {'view_mode': 'form', 'view_id': ref('crm_case_form_view_genemedics')}),
 	                    (0, 0, {'view_mode': 'calendar'}), 
 	                    (0, 0, {'view_mode': 'pivot'}), 
 	                    (0, 0, {'view_mode': 'graph'})]"/>
@@ -102,11 +132,11 @@
 	    </record>
 	    
 	    
-	    <menuitem name="All Leads" id="menu_crm_leads" 
+	    <menuitem name="All Sales People" id="menu_crm_leads" 
 	    		sequence="3"
 	    		parent="menu_crm_lead_management" 
        			action="crm_lead_all_leads_genemedics" 
-       			groups="crm.group_use_lead"/>
+       			groups="base.group_sale_manager"/>
 
 
 	    	
@@ -122,7 +152,7 @@
 	               eval="[(5, 0, 0),
 	               		(0, 0, {'view_mode': 'kanban'}),
 	                	(0, 0, {'view_mode': 'tree', 'view_id': ref('crm.crm_lead_view_tree_activity')}),
-	                    (0, 0, {'view_mode': 'form', 'view_id': ref('crm.crm_case_form_view_oppor')}),
+	                    (0, 0, {'view_mode': 'form', 'view_id': ref('crm_case_form_view_genemedics')}),
 	                    (0, 0, {'view_mode': 'calendar'}), 
 	                    (0, 0, {'view_mode': 'pivot'}), 
 	                    (0, 0, {'view_mode': 'graph'})]"/>
@@ -139,10 +169,46 @@
 	        </field>
 	    </record>  
 	            
-        <menuitem  name="All Activities" id="crm.crm_lead_menu_activities" 
+        <menuitem  name="Next Activities" id="crm.crm_lead_menu_activities" 
         		sequence="4"
         		parent="menu_crm_lead_management" 
-        		action="crm_lead_action_activities_genemedics" />
+        		action="crm_lead_action_activities_genemedics"
+        		groups="base.group_sale_manager" />
+        
+<!--All Stages Menu  -->   
+   
+	    <record id="crm_lead_action_stages_genemedics" model="ir.actions.act_window">
+	        <field name="name">All Activities</field>
+	        <field name="type">ir.actions.act_window</field>
+	        <field name="res_model">crm.lead</field>
+	        <field name="view_mode">kanban,tree,form,calendar,pivot,graph</field>
+	        <field name="search_view_id" ref="crm.view_crm_case_opportunities_filter"/>
+	        <field name="view_ids"
+	               eval="[(5, 0, 0),
+	               		(0, 0, {'view_mode': 'kanban'}),
+	                	(0, 0, {'view_mode': 'tree', 'view_id': ref('crm.crm_lead_view_tree_activity')}),
+	                    (0, 0, {'view_mode': 'form', 'view_id': ref('crm_case_form_view_genemedics')}),
+	                    (0, 0, {'view_mode': 'calendar'}), 
+	                    (0, 0, {'view_mode': 'pivot'}), 
+	                    (0, 0, {'view_mode': 'graph'})]"/>
+	        
+	        <field name="context">{
+	                'search_default_groupby_stage':'1',
+	            }
+	        </field>
+	        <field name="help" type="html">
+	            <p>
+	               Here is the list of your next activities. Those are linked to your Leads and opportunities.
+	               To set a next activity, go on an Lead and add one. It will then appear in this list.
+	            </p>
+	        </field>
+	    </record>  
+	            
+        <menuitem  name="Stages" id="crm_lead_menu_stages_genmedics" 
+        		sequence="5"
+        		parent="menu_crm_lead_management" 
+        		action="crm_lead_action_stages_genemedics"
+        		groups="base.group_sale_manager"/>
         
 
     </data>

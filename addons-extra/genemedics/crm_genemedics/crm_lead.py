@@ -11,13 +11,13 @@ class crm_lead(models.Model):
     _inherit = "crm.lead"
 
     @api.one
-    def _cal_stage_age(self):
+    def _cal_age_stage(self):
         
         delta = datetime.now() - datetime.strptime(self.date_last_stage_update, DEFAULT_SERVER_DATETIME_FORMAT)
-        self.last_stage_age = int(delta.days)
+        self.age_stage = int(delta.days)
         
         
-    def _search_stage_age(self, operator, value):
+    def _search_age_stage(self, operator, value):
         
         try:
             days = float(value)
@@ -36,13 +36,13 @@ class crm_lead(models.Model):
         return [('id', 'in', leads.ids)]
 
     @api.one
-    def _cal_lead_age(self):
+    def _cal_age_lead(self):
         
         delta = datetime.now() - datetime.strptime(self.create_date, DEFAULT_SERVER_DATETIME_FORMAT)
         self.age_lead = int(delta.days)
         
     
-    def _search_lead_age(self, operator, value):
+    def _search_age_lead(self, operator, value):
         
         try:
             days = float(value)
@@ -62,8 +62,8 @@ class crm_lead(models.Model):
         
    
     customer_goal = fields.Char('Customer Goal', size = 32) 
-    age_lead = fields.Integer(string = "Lead Age",compute="_cal_lead_age",store=False, search='_search_lead_age')
-    age_stage = fields.Integer(string = "Stage Age" ,compute="_cal_stage_age",store=False, search='_search_stage_age')
+    age_lead = fields.Integer(string = "Lead Age",compute="_cal_age_lead",store=False, search='_search_age_lead')
+    age_stage = fields.Integer(string = "Stage Age" ,compute="_cal_age_stage",store=False, search='_search_age_stage')
     
     _order = 'create_date'
     
@@ -78,8 +78,8 @@ class crm_lead(models.Model):
     @api.model
     def _stages(self, present_ids, domain, **kwargs):
         
-        stages =  self.env['crm.stage'].search([]).name()
-        return stages
+        stages =  self.env['crm.stage'].search([]).name_get()
+        return stages, None
     
     _group_by_full = {
                       'user_id':_user_groups,
@@ -102,13 +102,13 @@ class crm_lead(models.Model):
         return res
     
     @api.multi
-    def action_schedule_meeting_lead(self):
+    def action_schedule_activity(self):
         """
         Open meeting's calendar view to schedule meeting on current opportunity.
         :return dict: dictionary value for created Meeting view
         """
         IrModelData = self.env['ir.model.data']
-        res = self.env['ir.actions.act_window'].for_xml_id('crm_genemedics', 'action_calendar_event_calendar')
+        res = self.env['ir.actions.act_window'].for_xml_id( 'calendar', 'action_calendar_event')
         lead = self
         
         partner_ids = [self.user_id.partner_id.id]
@@ -124,7 +124,7 @@ class crm_lead(models.Model):
         
         context = self._context.copy()
         
-        context['default_opportunity_id'] = (lead.type == 'opportunity' and lead.id or False)
+        context['default_opportunity_id'] = (lead.id or False)
         context['default_partner_id'] = lead.partner_id and lead.partner_id.id or False
         context['default_partner_ids'] = partner_ids
         context['default_team_id'] = lead.team_id and lead.team_id.id or False
