@@ -99,7 +99,7 @@
                             	   			name="action_schedule_activity"  type="object"
                                 			context="{'partner_id': partner_id,'activity_id':next_activity_id}"
                                 			icon="fa-calendar" 
-                                			string="Schedule Activity"
+                                			string="Schedule"
                                 			attrs="{'invisible': [('next_activity_id', '=', False)]}"/>
                                             <button name="log_next_activity_1" type="object" class="btn-link" attrs="{'invisible': [('next_activity_1','=',False)]}">
                                                 <field name="next_activity_1" readonly="1"/>
@@ -134,7 +134,7 @@
                                     </div>
                                 </div>
                                
-                           		<field name="date_action" readonly="1" />
+                           		<field name="date_action" readonly="0" />
                                 <field name="title_action" placeholder="e.g. Discuss proposal"
                                                attrs="{'invisible': [('next_activity_id', '=', False)]}"/>
                                 <field name="date_deadline"/>

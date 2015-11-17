@@ -132,6 +132,7 @@ class crm_lead(models.Model):
         context['default_team_id'] = lead.team_id and lead.team_id.id or False
         context['default_name'] =  name
         context['default_activity_id'] = lead.next_activity_id and lead.next_activity_id.id or False
+        context['default_start_date'] = lead.date_action
      
         res['context'] = context
                                    
