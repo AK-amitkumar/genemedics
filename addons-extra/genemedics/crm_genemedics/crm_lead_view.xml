@@ -10,7 +10,7 @@
             <field name="arch" type="xml">
                 <form string="Opportunities">
                     <header>
-                    	<h1><field name="type"/></h1>
+                    	<h1><field name="type" readonly="1"></field></h1>
                     	<button name="%(crm.action_crm_lead2opportunity_partner)d" string="Convert to Opportunity" type="action"
                             	help="Convert to Opportunity" class="oe_highlight"
                              	attrs="{'invisible': [('type','=','opportunity')]}"/>
@@ -93,8 +93,7 @@
                                                on_change="onchange_next_activity_id(next_activity_id)"/>
                                         
                                         
-                                        <field name="date_action" 
-                                        		 readonly="1" nolabel="0"/>
+
                                         <div attrs="{'invisible': ['|', ('last_activity_id', '=', False), ('next_activity_id', '!=', False)]}">
                                         	<button 
                             	   			name="action_schedule_activity"  type="object"
@@ -114,8 +113,7 @@
                                                 <field name="next_activity_3" readonly="1"/>
                                             </button>
                                         </div>
-                                        <field name="title_action" placeholder="e.g. Discuss proposal"
-                                               attrs="{'invisible': [('next_activity_id', '=', False)]}"/>
+                                        
                                     </div>
                                     
                                     
@@ -135,6 +133,10 @@
                                         </div>
                                     </div>
                                 </div>
+                               
+                           		<field name="date_action" readonly="1" />
+                                <field name="title_action" placeholder="e.g. Discuss proposal"
+                                               attrs="{'invisible': [('next_activity_id', '=', False)]}"/>
                                 <field name="date_deadline"/>
                                
 

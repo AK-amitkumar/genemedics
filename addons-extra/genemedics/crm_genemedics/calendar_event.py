@@ -3,6 +3,9 @@
 
 from openerp import api, fields, models, _     
 from cgi import FieldStorage
+from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT 
+from openerp.tools import DEFAULT_SERVER_DATE_FORMAT
+from datetime import datetime, timedelta  
 
 
 class calendar_event(models.Model):
@@ -29,13 +32,13 @@ class calendar_event(models.Model):
     @api.multi
     def action_set_lead_next_activity(self):
         
-        if  self.start_date  and self.opportunity_id and \
-            self.opportunity.date_action  and \
-            (self.opportunity_id.date_action > self.start_date or self.opportunity_id.date_action == False):
+        start_date = self.start and datetime.strftime(datetime.strptime( self.start,DEFAULT_SERVER_DATETIME_FORMAT),DEFAULT_SERVER_DATE_FORMAT)
+        if  start_date and self.opportunity_id and \
+            (self.opportunity_id.date_action > start_date or self.opportunity_id.date_action == False):
         
             self.opportunity_id.write({
                     'next_activity_id': self.activity_id.id,
-                    'date_action': self.start_date,
+                    'date_action': start_date,
                     'title_action': self.name,
                     })
     
@@ -52,6 +55,8 @@ class calendar_event(models.Model):
         body_html = self.pool['mail.template'].render_template(cr, uid, body_html, 'crm.lead', lead.id, context=context)
         msg_id = lead.message_post(body_html, subtype_id=self.activity_id.subtype_id.id)
         to_clear_ids.append(lead.id)
+        
+        
         self.opportunity_id.write(cr, uid, [lead.id], {'last_activity_id': lead.next_activity_id.id}, context=context)
 
         return True
@@ -65,16 +70,7 @@ class calendar_event(models.Model):
             'title_action': False,
         }, context=context)
         
-    
-    @api.model   
-    def create(self,vals): 
-        
-        event = super(calendar_event,self).create(vals)
-        
-        if self.opportunity_id and self.activity_id:
-            self.action_set_lead_next_activity()
-            
-        return event
+
     
     @api.multi
     def write(self, vals):

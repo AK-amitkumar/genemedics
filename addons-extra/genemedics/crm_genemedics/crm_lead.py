@@ -4,6 +4,8 @@
 from openerp import api, fields, models, _ 
 from datetime import datetime, timedelta  
 from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT 
+from openerp.tools import DEFAULT_SERVER_DATE_FORMAT
+
 from __builtin__ import False
 
 class crm_lead(models.Model):
