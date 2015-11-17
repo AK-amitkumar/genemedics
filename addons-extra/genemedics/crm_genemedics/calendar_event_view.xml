@@ -1,35 +1,16 @@
 <?xml version="1.0"?>
 <openerp>
     <data>   
-    
-     <record id="action_calendar_event_form" model="ir.actions.act_window">
-        <field name="name">Meetings</field>
-        <field name="res_model">calendar.event</field>
-        <field name="view_mode">form,calendar,tree</field>
-        <field name="view_id" ref="calendar.view_calendar_event_form"/>
-        <field name="search_view_id" ref="calendar.view_calendar_event_search"/>
-        <field name="help" type="html">
-          <p class="oe_view_nocontent_create">
-            Click to schedule a new meeting.
-          </p><p>
-            The calendar is shared between employees and fully integrated with
-            other applications such as the employee holidays or the business
-            opportunities.
-          </p>
-        </field>
-    </record>
-    
+
     <record model="ir.ui.view" id="view_calendar_event_form_calendar_genemedic">
         <field name="name">Meeting</field>
         <field name="model">calendar.event</field>
     	<field name="inherit_id" ref="calendar.view_calendar_event_form"/>
     	<field name="arch" type="xml">
     		<field name="location" position="after">
-    			<field name="color_partner_id"/>
     			<field name="opportunity_id" invisible='0'/>
     			<field name="activity_id" string="Lead Activity"
     			/>
-                
 				<button name="action_set_lead_activity_done" string="Activity Done" type="object" />
 				<button name="cancel_next_activity" string="Activity Cancel" type="object" />
                 
