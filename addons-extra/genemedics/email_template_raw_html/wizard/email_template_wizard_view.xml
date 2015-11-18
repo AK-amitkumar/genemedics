@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+    
+    <record id="email_template_wizard_view" model="ir.ui.view" >
+            <field name="name">email.wizard.view.form</field>
+            <field name="model">email.wizard.view</field>
+            <field name="arch" type="xml">
+            	<form string="Email Wizard template">
+            		<sheet string="Email Wizard template">
+            		<group colspan="2" col="2">
+            	 		<field name="txt_temp" />
+            	 	</group>
+            	 	<footer>
+            	 	<button name="return_to_form" type="object" class="oe_highlight" string="Save"/>      
+            	 	</footer>   
+            	 	</sheet>
+            	</form>
+            </field>
+    </record>
+    
+    <record id="action_wizard_email_template_preview_inherited" model="ir.actions.act_window">
+        <field name="name">Email Wizard Template</field>
+        <field name="res_model">email.wizard.view</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="email_template_wizard_view"/>
+        <field name="target">new</field>
+    </record>
+    
+    
+       
+    </data>
+</openerp>
