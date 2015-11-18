@@ -2,15 +2,15 @@
 <openerp>
     <data>   
 
-    <record model="ir.ui.view" id="view_calendar_event_form_calendar_genemedic">
+    <record model="ir.ui.view" id="view_calendar_event_form_genemedic">
         <field name="name">Meeting</field>
         <field name="model">calendar.event</field>
     	<field name="inherit_id" ref="calendar.view_calendar_event_form"/>
     	<field name="arch" type="xml">
     		<field name="location" position="after">
     			<field name="opportunity_id" invisible='0'/>
-    			<field name="activity_id" string="Lead Activity"
-    			/>
+    			<field name="activity_id" string="Lead Activity"/>
+    			<field name="color_partner_id"/>
 				<button name="action_set_lead_activity_done" string="Activity Done" type="object" />
 				<button name="cancel_next_activity" string="Activity Cancel" type="object" />
                 
@@ -19,15 +19,15 @@
     </record>
     
         <!-- CRM Meeting Calendar -->
-    <record model="ir.ui.view" id="calendar.view_calendar_event_calendar">
+    <record model="ir.ui.view" id="view_calendar_genemedics">
         <field name="name">Meeting</field>
         <field name="model">calendar.event</field>
         <field name="priority" eval="2"/>
         <field name="arch" type="xml">
             <calendar string="Meetings" date_start="start" date_stop="stop" date_delay="duration" all_day="allday" 
-                         display="[name]" color="color_partner_id" attendee="partner_ids" avatar_model="res.partner"
+                         display="[name]" color="user_id" attendee="partner_ids" avatar_model="res.partner"
                          use_contacts="True" event_open_popup="%(calendar.view_calendar_event_form_popup)s"
-                         quick_add="False">
+                         quick_add="False" mode="day" current_day="activity_date">
                 <field name="name"/>
                 <field name="user_id"/>
                 <field name="color_partner_id"/>
@@ -36,6 +36,41 @@
         </field>
     </record>
     
+   <record id="action_calendar_event_genemedics" model="ir.actions.act_window">
+        <field name="name">Meetings</field>
+        <field name="res_model">calendar.event</field>
+        <field name="view_mode">calendar, tree, form, </field>
+        <field name="view_id" ref="view_calendar_genemedics"/>
+        <field name="search_view_id" ref="calendar.view_calendar_event_search"/>
+        <field name="help" type="html">
+          <p class="oe_view_nocontent_create">
+            Click to schedule a new meeting.
+          </p><p>
+            The calendar is shared between employees and fully integrated with
+            other applications such as the employee holidays or the business
+            opportunities.
+          </p>
+        </field>
+    </record>
+    <record model="ir.actions.act_window.view" id="action_view_calendar_event_calendar_gen">
+        <field name="act_window_id" ref="action_calendar_event_genemedics"/>
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">calendar</field>
+        <field name="view_id" ref="view_calendar_genemedics"/>
+    </record>
+    <record model="ir.actions.act_window.view" id="action_view_calendar_event_tree_gen">
+        <field name="act_window_id" ref="action_calendar_event_genemedics"/>
+        <field name="sequence" eval="2"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="calendar.view_calendar_event_tree"/>
+    </record>
+    <record model="ir.actions.act_window.view" id="action_view_calendar_event_form_gen">
+        <field name="act_window_id" ref="action_calendar_event_genemedics"/>
+        <field name="sequence" eval="3"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_calendar_event_form_genemedic"/>
+    </record>
+
     
 
     </data>

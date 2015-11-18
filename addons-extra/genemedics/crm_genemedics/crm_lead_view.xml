@@ -375,6 +375,8 @@
                     <filter string="Stage over 5 days" name="stage_over_5"
                     domain="[('age_stage','&gt;', 5),('date_closed','=',False)]"
                             />
+                   <filter name="stage_lead" string="Lead Stages" context="{'group_by':'stage_id','stage_type_domain':'['type','=','lead']'}"
+              				/>
                 </filter>
                 <separator />
            		<filter name="groupby_stage" position="after">
@@ -481,6 +483,8 @@
                <filter string="Stage over 5 days" name="stage_over_5"
                     domain="[('age_stage','&gt;', 5),('date_closed','=',False)]"
                             />
+               <filter name="stage_oppor" string="Opportunity Stages" context="{'group_by':'stage_id','stage_type_domain':'['type','=','opportunity']'}"
+              			/>
             </filter>
            </field>
     </record>

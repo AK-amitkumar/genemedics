@@ -72,11 +72,11 @@
                     		</header>                    
                     <sheet>
                     		
-                    		
                         <group>
                            <field name="id_"/>
                            <field name="name"/>
                            <field name="description"/>
+                           <field name="partner_id"/>
                            <field name="email"/>
                            <field name="responsible_id"/>
                            <field name="priority_id"/>

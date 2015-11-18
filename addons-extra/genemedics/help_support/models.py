@@ -9,6 +9,7 @@ from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
 
 class priority(models.Model):
 	_name = 'help_support.priority'
+	_description = "Helpdesk Priority"
 	name = fields.Char(string="Title",required=True)
 	description = fields.Text() 
 
@@ -29,10 +30,12 @@ class priority(models.Model):
 
 class hsupport(models.Model):
 	_name = 'help_support.hsupport'
-	_inherit = ['mail.thread', 'ir.needaction_mixin']	
+	_inherit = ['mail.thread', 'ir.needaction_mixin']
+	_description = "Helpdesk"	
 	name = fields.Char(string="Title")
 	description = fields.Html()
 	email = fields.Char(string="Email")
+	partner_id = fields.Many2one('res.partner', ondelete='set null', string = 'Customer', track_visibility='onchange')
 	date_ = fields.Date()
 	active = fields.Boolean(default=True)
 	priority_id = fields.Many2one('help_support.priority', ondelete='cascade', string="Priority")
@@ -129,6 +132,7 @@ class hsupport(models.Model):
         	    data['name'] = msg_dict.get('subject', '')
         	    data['email'] = msg_dict.get('from')
         	    data['description'] = msg_dict.get('body')
+        	    data['partner_id'] = msg_dict.get('author_id', False)
         	res_id = model_pool.create(cr, uid, data, context=context)
         	return res_id
 

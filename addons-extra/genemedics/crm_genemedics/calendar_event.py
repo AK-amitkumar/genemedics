@@ -15,6 +15,8 @@ class calendar_event(models.Model):
     
     activity_id = fields.Many2one('crm.activity','Activity')
     opportunity_id = fields.Many2one('crm.lead', 'Opportunity')
+    activity_done = fields.Boolean('Activity Complete')
+    activity_date = fields.Date('Activity Planned')
 
     @api.model
     def default_get(self, fields):
@@ -27,25 +29,34 @@ class calendar_event(models.Model):
         res['team_id'] = context.get('default_team_id',False)
         res['name'] = context.get('default_name',False)
         res['activity_id'] =  context.get('default_activity_id',False)
+        res['activity_date'] = context.get('default_activity_date',False)
+        res['user_id'] = context.get('default_user_id', False)
+        res['all_day'] = context.get('default_all_day', False)
         return res 
         
     @api.multi
     def action_set_lead_next_activity(self):
         
+        lead = self.opportunity_id
         start_date = self.start and datetime.strftime(datetime.strptime( self.start,DEFAULT_SERVER_DATETIME_FORMAT),DEFAULT_SERVER_DATE_FORMAT)
         if  start_date and self.opportunity_id and \
-            (self.opportunity_id.date_action > start_date or self.opportunity_id.date_action == False):
+            (lead.date_action > start_date or lead.date_action == False):
         
-            self.opportunity_id.write({
+            
+            if self.search([('opportunity_id', '=', lead.id),('activity_done','=',False),('start','<',lead.date_action_next)]) :
+                return # already Active Activity which is sheduled before this activity don't update lead next activity
+            else:
+                lead.write({
                     'next_activity_id': self.activity_id.id,
                     'date_action': start_date,
+                    'date_action_next': self.start,
                     'title_action': self.name,
                     })
     
     @api.multi
     def action_set_lead_activity_done(self):
         
-
+        lead = self.opportunity_id
         if not self.activity_id:
             return
         body_html = """<div><b> Schduled Activity %s</b></div>
@@ -57,9 +68,11 @@ class calendar_event(models.Model):
         to_clear_ids.append(lead.id)
         
         
-        self.opportunity_id.write(cr, uid, [lead.id], {'last_activity_id': lead.next_activity_id.id}, context=context)
+        self.opportunity_id.write({'last_activity_id': lead.next_activity_id.id, 'date_action_last': strftime(datetime.now(),DEFAULT_SERVER_DATETIME_FORMAT)})
+        
+        self.activity_done = True
 
-        return True
+        return true
     
     
     def cancel_next_activity(self, cr, uid, ids, context=None):

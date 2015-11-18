@@ -67,6 +67,7 @@ class crm_lead(models.Model):
     age_lead = fields.Integer(string = "Lead Age",compute="_cal_age_lead",store=False, search='_search_age_lead')
     age_stage = fields.Integer(string = "Stage Age" ,compute="_cal_age_stage",store=False, search='_search_age_stage')
     
+    
     _order = 'create_date'
     
     @api.model
@@ -79,8 +80,8 @@ class crm_lead(models.Model):
 
     @api.model
     def _stages(self, present_ids, domain, **kwargs):
-        
-        stages =  self.env['crm.stage'].search([]).name_get()
+        search_domain = self.env.context.get('stage_type_domain',[])
+        stages =  self.env['crm.stage'].search(search_domain).name_get()
         return stages, None
     
     _group_by_full = {
@@ -101,6 +102,7 @@ class crm_lead(models.Model):
             name = lead.name
         res['context']['default_name'] =  name
         res['context']['default_activity_id'] = lead.next_activity_id and lead.next_activity_id.id or False
+        res['context']['default_user_id'] = lead.user_id.id or lead.env.uid
         return res
     
     @api.multi
@@ -109,8 +111,7 @@ class crm_lead(models.Model):
         Open meeting's calendar view to schedule meeting on current opportunity.
         :return dict: dictionary value for created Meeting view
         """
-        IrModelData = self.env['ir.model.data']
-        res = self.env['ir.actions.act_window'].for_xml_id( 'calendar', 'action_calendar_event')
+        res = self.env['ir.actions.act_window'].for_xml_id( 'crm_genemedics', 'action_calendar_event_genemedics')
         lead = self
         
         partner_ids = [self.user_id.partner_id.id]
@@ -124,16 +125,18 @@ class crm_lead(models.Model):
         else: 
             name = lead.name
         
-        context = self._context.copy()
+        res['context'] = {}
         
-        context['default_opportunity_id'] = (lead.id or False)
-        context['default_partner_id'] = lead.partner_id and lead.partner_id.id or False
-        context['default_partner_ids'] = partner_ids
-        context['default_team_id'] = lead.team_id and lead.team_id.id or False
-        context['default_name'] =  name
-        context['default_activity_id'] = lead.next_activity_id and lead.next_activity_id.id or False
-        context['default_start_date'] = lead.date_action
+        res['context']['search_default_opportunity_id'] = (lead.id or False)
+        res['context']['default_opportunity_id'] =  lead.id or False,
+        res['context']['default_partner_id'] = lead.partner_id and lead.partner_id.id or False
+        res['context']['default_partner_ids'] = partner_ids
+        res['context']['default_team_id'] = lead.team_id and lead.team_id.id or False
+        res['context']['default_name'] =  name
+        res['context']['default_activity_id'] = lead.next_activity_id and lead.next_activity_id.id or False
+        res['context']['default_activity_date'] = lead.date_action
+        res['context']['default_user_id'] = lead.user_id.id or lead.env.uid
+ #       context['default_all_day'] = True
      
-        res['context'] = context
                                    
         return res
