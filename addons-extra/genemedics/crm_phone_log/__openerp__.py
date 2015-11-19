@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "CRM Genemedics",
+    'name': "CRM Phone Logs",
 
     'summary': """
         module for CRM""",
 
     'description': """
-        Leads CRM customization for  Genemedics Health Institute
+        Leads CRM custimization Logging Phone Calls
     """,
 
     'author': "Novapoint Group Inc, Stephen Levenhagen",
@@ -23,13 +23,12 @@
 
     # always loaded
     'data': [
-        'crm_lead_view.xml',
-        'calendar_event_view.xml',
-        'crm_leads_menu.xml',
+        'views/crm_phonecall_data.xml',
+        'views/crm_phonecall_menu.xml',
+        'views/crm_report_view.xml',
        
-    ],
+        ],
     # only loaded in demonstration mode
     'demo': [
-        'demo.xml',
-    ],
+             ],
 }

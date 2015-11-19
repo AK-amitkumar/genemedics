@@ -28,7 +28,7 @@
 	               eval="[(5, 0, 0),
 	               		(0, 0, {'view_mode': 'kanban'}),
 	                	(0, 0, {'view_mode': 'tree', 'view_id': ref('crm_case_tree_view_leads_genemedics')}),
-	                    (0, 0, {'view_mode': 'form', 'view_id': ref('crm_case_form_view_genemedics')}),
+	                    (0, 0, {'view_mode': 'form', 'view_id': ref('crm.crm_case_form_view_oppor')}),
 	                    (0, 0, {'view_mode': 'calendar'}), 
 	                    (0, 0, {'view_mode': 'pivot'}), 
 	                    (0, 0, {'view_mode': 'graph'})]"/>
@@ -73,7 +73,7 @@
 	               eval="[(5, 0, 0),
 	               		(0, 0, {'view_mode': 'kanban'}),
 	                	(0, 0, {'view_mode': 'tree', 'view_id': ref('crm_case_tree_view_oppor_genemedics')}),
-	                    (0, 0, {'view_mode': 'form', 'view_id': ref('crm_case_form_view_genemedics')}),
+	                    (0, 0, {'view_mode': 'form', 'view_id': ref('crm.crm_case_form_view_oppor')}),
 	                    (0, 0, {'view_mode': 'calendar'}), 
 	                    (0, 0, {'view_mode': 'pivot'}), 
 	                    (0, 0, {'view_mode': 'graph'})]"/>
@@ -114,7 +114,7 @@
 	               eval="[(5, 0, 0),
 	               		(0, 0, {'view_mode': 'kanban'}),
 	                	(0, 0, {'view_mode': 'tree', 'view_id': ref('crm_case_tree_view_oppor_genemedics')}),
-	                    (0, 0, {'view_mode': 'form', 'view_id': ref('crm_case_form_view_genemedics')}),
+	                    (0, 0, {'view_mode': 'form', 'view_id': ref('crm.crm_case_form_view_oppor')}),
 	                    (0, 0, {'view_mode': 'calendar'}), 
 	                    (0, 0, {'view_mode': 'pivot'}), 
 	                    (0, 0, {'view_mode': 'graph'})]"/>
@@ -132,7 +132,7 @@
 	    </record>
 	    
 	    
-	    <menuitem name="All Sales People" id="menu_crm_leads" 
+	    <menuitem name="All Sales Leads" id="crm.menu_crm_leads" 
 	    		sequence="3"
 	    		parent="menu_crm_lead_management" 
        			action="crm_lead_all_leads_genemedics" 
@@ -152,7 +152,7 @@
 	               eval="[(5, 0, 0),
 	               		(0, 0, {'view_mode': 'kanban'}),
 	                	(0, 0, {'view_mode': 'tree', 'view_id': ref('crm.crm_lead_view_tree_activity')}),
-	                    (0, 0, {'view_mode': 'form', 'view_id': ref('crm_case_form_view_genemedics')}),
+	                    (0, 0, {'view_mode': 'form', 'view_id': ref('crm.crm_case_form_view_oppor')}),
 	                    (0, 0, {'view_mode': 'calendar'}), 
 	                    (0, 0, {'view_mode': 'pivot'}), 
 	                    (0, 0, {'view_mode': 'graph'})]"/>
@@ -187,7 +187,7 @@
 	               eval="[(5, 0, 0),
 	               		(0, 0, {'view_mode': 'kanban'}),
 	                	(0, 0, {'view_mode': 'tree', 'view_id': ref('crm.crm_lead_view_tree_activity')}),
-	                    (0, 0, {'view_mode': 'form', 'view_id': ref('crm_case_form_view_genemedics')}),
+	                    (0, 0, {'view_mode': 'form', 'view_id': ref('crm.crm_case_form_view_oppor')}),
 	                    (0, 0, {'view_mode': 'calendar'}), 
 	                    (0, 0, {'view_mode': 'pivot'}), 
 	                    (0, 0, {'view_mode': 'graph'})]"/>
@@ -204,7 +204,7 @@
 	        </field>
 	    </record>  
 	            
-        <menuitem  name="Stages" id="crm_lead_menu_stages_genmedics" 
+        <menuitem  name="Leads by Stages" id="crm_lead_menu_stages_genmedics" 
         		sequence="5"
         		parent="menu_crm_lead_management" 
         		action="crm_lead_action_stages_genemedics"
