@@ -2,4 +2,3 @@
 	path = odoo
 	url = https://github.com/odoo/odoo.git
 	branch = 9.0
-	checkout = f376d7495b0e94c9bb153269856fc016972b0ac8
