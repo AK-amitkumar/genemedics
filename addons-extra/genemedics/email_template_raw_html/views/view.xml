@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+    
+    <record model="ir.ui.view" id="email_template_inheritd">
+            <field name="name">email.template.form.inherit</field>
+            <field name="model">mail.template</field>
+            <field name="inherit_id" ref="mail.email_template_form"/>
+            <field name="arch" type="xml">
+            	<field name="attachment_ids" position="before">
+					<button name="%(action_wizard_email_template_preview_inherited)d" type="action" class="oe_highlight"  string="View Row HTML"/>                
+				</field>
+            </field>
+    </record>
+       
+    </data>
+</openerp>

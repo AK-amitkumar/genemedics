@@ -19,7 +19,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','crm'],
+    'depends': ['base','crm','calendar'],
 
     # always loaded
     'data': [
@@ -29,7 +29,7 @@
        
     ],
     # only loaded in demonstration mode
-    'demo': [
-        'demo.xml',
-    ],
+#     'demo': [
+#         'demo.xml',
+#     ],
 }
