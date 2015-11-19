@@ -26,6 +26,7 @@
         'crm_lead_view.xml',
         'calendar_event_view.xml',
         'crm_leads_menu.xml',
+        'views/web_calendar.xml'
        
     ],
     # only loaded in demonstration mode
