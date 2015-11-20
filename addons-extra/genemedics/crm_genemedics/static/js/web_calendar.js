@@ -131,7 +131,7 @@ var CalendarView = View.extend({
         this.activity_date = this.dataset.context['default_' + attrs.activity_date];
         if (!isNullOrUndef(this.activity_date)) {
         		var date = moment(this.activity_date, 'YYYY-MM-DD')
-        		this.day =  date.day();
+        		this.day =  date.date();
         		this.month = date.month();
         		this.year = date.year();
         }

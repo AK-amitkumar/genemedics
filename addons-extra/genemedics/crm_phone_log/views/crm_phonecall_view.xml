@@ -97,7 +97,7 @@
                         <div>
                         	<field name="duration" widget="float_time" class="oe_inline" style="vertical-align:baseline"/> <b> min(s)</b>
                         </div>
-                        <field name="section_id" colspan="1" widget="selection"
+                        <field name="team_id" colspan="1" widget="selection"
                                 groups="base.group_multi_salesteams"/>
                         <field name="partner_id" on_change="on_change_partner_id(partner_id)"/>
                         <field name="categ_id" widget="selection"
@@ -174,7 +174,7 @@
                 <field name="date"/>
                 <field name="state"/>
                 <filter string="My Phonecalls" domain="[('user_id', '=', uid)]"/>
-                <filter string="My Team" domain="[('section_id.user_id', '=', uid)]"/>
+                <filter string="My Team" domain="[('team_id.user_id', '=', uid)]"/>
                 <filter string="Unassigned" domain="[('user_id','=',False)]"/>
                 <separator/>
                 <filter string="To Do" name="current" domain="[('state','in',('open','pending'))]"/>
@@ -184,7 +184,7 @@
                 <field name="partner_id" operator="child_of"/>
                 <field name="user_id"/>
                 <field name="opportunity_id"/>
-                <field name="section_id" string="Sales Team"
+                <field name="team_id" string="Sales Team"
                         groups="base.group_multi_salesteams"/>
                 <group expand="0" string="Group By">
                     <filter string="Partner" domain="[]" context="{'group_by':'partner_id'}"/>

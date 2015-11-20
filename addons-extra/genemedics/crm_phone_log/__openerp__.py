@@ -23,9 +23,12 @@
 
     # always loaded
     'data': [
-        'views/crm_phonecall_data.xml',
-        'views/crm_phonecall_menu.xml',
+        'views/crm_phonecall_data.xml', 
         'views/crm_report_view.xml',
+        'views/crm_phonecall_view.xml',
+        'wizard/crm_phonecall_to_meeting_view.xml',
+        'wizard/crm_phonecall_to_phonecall_view.xml',
+        'views/crm_phonecall_menu.xml',
        
         ],
     # only loaded in demonstration mode

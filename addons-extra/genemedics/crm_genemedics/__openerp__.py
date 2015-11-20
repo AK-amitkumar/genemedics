@@ -19,7 +19,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','crm','calendar'],
+    'depends': ['base','crm','calendar','web_calendar'],
 
     # always loaded
     'data': [
@@ -29,8 +29,5 @@
         'views/web_calendar.xml'
        
     ],
-    # only loaded in demonstration mode
-#     'demo': [
-#         'demo.xml',
-#     ],
-}
+     'js': ['static/js/web_calendar.js',],
+     }
