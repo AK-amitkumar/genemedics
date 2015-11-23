@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data noupdate="0">
+
+    <record model="ir.module.category" id="module_sale_crm">
+        <field name="name">Sales and CRM Settings</field>
+        <field name="sequence">0</field>
+        <field name="visible" eval="0" />
+    </record>
+
+    <record id="group_dashboard_all" model="res.groups">
+        <field name="name">Sales Manager Dashboard</field>
+        <field name="category_id" ref="crm_genemedics.module_sale_crm"/>
+        <field name="help">Will remove current user Fitler on Sales Leads Dashboard for manager to see all leads and Opportunities. </field>
+    </record>
+    
+    <record id="crm.group_use_lead" model="res.groups">
+        <field name="name">Show Lead Menu</field>
+        <field name="category_id" ref="crm_genemedics.module_sale_crm"/>
+    </record>
+    
+    <record id="sale.group_delivery_invoice_address" model="res.groups">
+        <field name="name">Addresses in Sales Orders</field>
+        <field name="category_id" ref="crm_genemedics.module_sale_crm"/>
+    </record>
+    
+	<record id="product.group_sale_pricelist" model="res.groups">
+        <field name="name">Sales Pricelists</field>
+        <field name="category_id" ref="crm_genemedics.module_sale_crm"/>
+    </record>
+    
+    <record id="sale.group_display_incoterm" model="res.groups">
+        <field name="name">Display incoterms on Sales Order and related invoices</field>
+        <field name="category_id" ref="crm_genemedics.module_sale_crm"/>
+    </record>
+    
+    
+</data>
+</openerp>
+    

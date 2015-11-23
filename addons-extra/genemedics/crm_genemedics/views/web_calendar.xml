@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
-    <data>
-        <template id="assets_backend" name="genemedic_web_calendar assets" inherit_id="web.assets_backend">
-           
-			<xpath expr="." position="inside">
-                <script type="text/javascript" src="/crm_genemedics/static/js/web_calendar.js"></script>
-           </xpath>
-           
-        </template>
-    </data>
+
+    
+    <odoo>
+    <template id="assets_backend" name="calendar assets" inherit_id="web.assets_backend">
+        <xpath expr="." position="inside">
+            <link rel="stylesheet" href="/calendar/static/src/less/calendar.less"/>
+            <script type="text/javascript" src="/crm_genemedics/static/js/web_calendar.js"></script>
+        </xpath>
+    </template>
+</odoo>
 </openerp>

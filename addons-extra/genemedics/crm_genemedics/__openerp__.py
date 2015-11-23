@@ -23,11 +23,15 @@
 
     # always loaded
     'data': [
+        'views/sale_dashboard.xml',
+        'views/web_calendar.xml',
+        'security/genemedics_security.xml',    
         'crm_lead_view.xml',
         'calendar_event_view.xml',
         'crm_leads_menu.xml',
-        'views/web_calendar.xml'
-       
+      
     ],
-     'js': ['static/js/web_calendar.js',],
+     'js': ['static/js/web_calendar.js',
+            ],
+     'qweb':['static/src/xml/sales_manager_dashboard.xml'],
      }

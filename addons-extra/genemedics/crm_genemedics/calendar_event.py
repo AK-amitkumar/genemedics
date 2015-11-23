@@ -42,7 +42,7 @@ class calendar_event(models.Model):
         cal_event_start = self.start and datetime.strptime(self.start,DEFAULT_SERVER_DATETIME_FORMAT ) or False
         lead_action_date = lead.date_action and datetime.strptime(lead.date_action,DEFAULT_SERVER_DATE_FORMAT) or False
         if   self.opportunity_id and cal_event_start  and\
-            (lead_action_date > cal_event_start or lead_action_date == False):
+            not lead_action_date or (lead_action_date > cal_event_start ):
         
             if self.search([('opportunity_id','=',lead.id), ('activity_done','=',False), ('start','<',self.start)]):
                 return

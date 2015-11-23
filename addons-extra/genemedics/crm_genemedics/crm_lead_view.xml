@@ -2,7 +2,18 @@
 <openerp>
     <data>
    
-
+	<record id="crm_lead_view_tree_activity" model="ir.ui.view">
+            <field name="name">crm.lead.next.activity.tree</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.crm_lead_view_tree_activity" />
+            <field name="arch" type="xml">
+                <field name="name" position="before">
+            		<field name="type"/>
+            		<field name="age_lead"/>
+            		<field name="age_stage" />
+            	</field>
+            </field>
+     </record>
     <!-- Leads tree View -->  
     
     <record model="ir.ui.view" id="crm_case_tree_view_leads_genemedics">
@@ -11,8 +22,12 @@
             <field name="inherit_id" ref="crm.crm_case_tree_view_leads"/>
             <field name="arch" type="xml">
             	<field name="create_date" position="after">
+            		<field name="type"/>
             		<field name="age_lead"/>
             		<field name="age_stage" />
+            	</field>
+            	<field name="name" postion="attributes">
+            		<attribute name="string">Name</attribute>
             	</field>
             	
             </field>
@@ -76,6 +91,8 @@
                     <field name="partner_id"/>
                     <field name="active"/>
                     <field name="company_currency"/>
+                    <field name="date_action"/>
+                    <field name="next_activity_id"/>
                     <templates>
                         <field name="date_deadline"/>
                         <t t-name="kanban-box">
@@ -111,7 +128,7 @@
                                         <strong>Stage Age <field name="age_stage"/></strong>
                                     </div> 
                                     <div>                                    
-                                        <strong><field name="create_date"/></strong>
+                                        <strong>Created <field name="create_date"/></strong>
                                     </div>                                        
                                     <div class="text-muted">
                                         <t t-if="record.planned_revenue.raw_value"><field name="planned_revenue" widget="monetary" options="{'currency_field': 'company_currency'}"/></t> <span t-if="record.partner_id.value"> - <t t-esc="record.partner_id.value"/></span>
@@ -119,7 +136,7 @@
                                     <div class="text-muted">
                                         <t t-if="record.date_deadline.raw_value and record.date_deadline.raw_value lt (new Date())" t-set="red">oe_kanban_text_red</t>
                                         <span t-attf-class="#{red || ''}">
-                                            <field name="date_action"/>
+                                            <strong>Next Activity <field name="date_action"/></strong>
                                             <t t-if="record.date_action.raw_value"> : </t>
                                         </span>
                                     </div>
@@ -177,8 +194,13 @@
             <field name="inherit_id" ref="crm.crm_case_tree_view_oppor"/>
             <field name="arch" type="xml">
             	<field name="create_date" position="after">
+            		<field name="type"/>
             		<field name="age_lead"/>
             		<field name="age_stage" />
+            	</field>
+            	
+            	<field name="name" postion="attributes">
+            		<attribute name="string">Name</attribute>
             	</field>
             	
             </field>
