@@ -220,3 +220,232 @@ sudo nano /etc/init.d/genemedics-server
 exit
 nano odoo-genemedics.conf 
 exit
+psql -d postgres
+cd ~
+ls
+cd odoo/
+ls
+cd ..
+;s
+;s
+ls
+ls -ls
+ls -la
+git clone -b 9.0 https//:github/odoo/odoo
+cd odoo
+ls
+ls -la
+git pull
+cd ..
+rm odoo
+rm -R  odoo
+git clone -b 9.0 https//:github/odoo/odoo
+git clone -b 9.0 https//:github.com/odoo/odoo
+git clone -b 9.0 https://github.com/odoo/odoo.git
+./odoo/odoo.py -c cmd-odoo-genemedics.conf 
+exit
+cd ~
+./odoo/odoo.py -c cmd-odoo-genemedics.conf 
+sudo apt-get install lxml
+./odoo/odoo.py -c cmd-odoo-genemedics.conf 
+./odoo/odoo.py -c cmd-odoo-genemedics.conf 
+./odoo/odoo.py -c cmd-odoo-genemedics.conf 
+./odoo/odoo.py -c cmd-odoo-genemedics.conf 
+./odoo/odoo.py -c cmd-odoo-genemedics.conf 
+cd odoo
+;s
+ls
+./odoo/odoo.py -c cmd-odoo-genemedics.conf 
+cd ..
+./odoo/odoo.py -c cmd-odoo-genemedics.conf 
+nano /etc/odoo-genemedics.conf 
+service /etc/init.d/genemedics-server start
+exit
+exit
+ls
+cd ~
+ls
+cd odoo/
+git log
+cd ..
+git pull
+exit
+cd~
+cd ~
+nano odoo/addons/crm/__openerp__.py 
+exit
+ls
+cd ~
+./odoo/odoo.py -c cmd-odoo-genemedics.conf -u all
+exit
+cd ~
+ls
+git pull
+exit
+cd ~
+./odoo/odoo.py -c cmd-odoo-genemedics.conf -u all
+exit
+ls
+cd ~
+git pull
+exit
+ls
+cd ~
+cd  odoo/
+git pull
+cd cd  addons/web_calendar/static/js
+cd cd  addons/web_calendar/static/
+cd cd  addons/web_calendar/static
+cd  addons/web_calendar/static/src/js/
+ls
+nano web_calendar.js 
+nano  -c web_calendar.js 
+cd ~
+cd odoo
+git status
+git diff
+git commit
+git add .
+git status
+git commit -a -m " change to calendar.js for open on specific day and crm to not load lead stages"
+ls
+cd ..
+ls
+ls
+nano .gitmodules 
+cd ..
+cp -R  genemedics/ genemedics2/
+cp -R  genemedics/ genemedics2/
+exit
+ls
+cd ~/addons-extra/genemedics/crm_genemedics/
+ls
+nano __openerp__.py 
+exit 
+cd ~
+./odoo/odoo.py -c cmd-odoo-genemedics.conf 
+exit
+ls
+cd ~
+ls
+cd ..
+ls
+cd 
+ls
+cd addons-extra/genemedics/crm_
+cd addons-extra/genemedics/crm_genemedics/
+ls
+cd views
+ls
+cd ..
+nano __openerp__.py 
+ls
+cd static/
+ls
+cd js/
+ls
+mv web_calendar.js web_calendar.js2
+cd ~
+./odoo/odoo.py -c cmd-odoo-genemedics.conf 
+nano addons-extra/genemedics/crm_genemedics/__openerp__.py 
+./odoo/odoo.py -c cmd-odoo-genemedics.conf 
+cd ..odoo
+cd ood
+odoo
+cd odoo/
+sudo git log
+git log
+git checkout commit 3b5e7feb161563cbb2f5cc8187a4c6687f65068d
+git checkout 3b5e7feb161563cbb2f5cc8187a4c6687f65068d
+cd ..
+cd addons-extra/genemedics/crm_genemedics/
+ls
+nano __openerp__.py 
+cd ~
+./odoo/odoo.py -c cmd-odoo-genemedics.conf 
+ls
+ls
+ls
+nano
+ls
+ps aux | grep python
+kill -9 14789
+./odoo/odoo.py -c cmd-odoo-genemedics.conf 
+cd~
+cd ~
+nano cmd-odoo-genemedics.conf 
+./odoo/odoo.py -c cmd-odoo-genemedics.conf 
+ps aux | grep python
+kill 32583
+kill 14805
+ls
+ps aux | grep python
+./odoo/odoo.py -c cmd-odoo-genemedics.conf 
+exit
+psql
+cd ~
+ls
+nano cmd-odoo-genemedics.conf 
+nano /etc/odoo-genemedics.conf 
+chmod /etc/odoo-genemedics.conf 700
+chmod 700 /etc/odoo-genemedics.conf
+./odoo/odoo.py -c cmd-odoo-genemedics.conf 
+./odoo/odoo.py -c cmd-odoo-genemedics.conf 
+./odoo/odoo.py -c cmd-odoo-genemedics.conf 
+ps aux | grep python
+nano cmd-odoo-genemedics.conf 
+./odoo/odoo.py -c cmd-odoo-genemedics.conf 
+nano cmd-odoo-genemedics.conf 
+./odoo/odoo.py -c cmd-odoo-genemedics.conf 
+./odoo/odoo.py -c cmd-odoo-genemedics.conf  --save
+sudo swapon -s
+exit
+cd ~
+ls
+cd  odoo/
+ls
+git log
+git pull
+cd ~
+nano /etc/odoo-genemedics.conf 
+exit
+cd~
+cd ~
+ls
+cd  od
+cd odoo
+git log
+git pull
+git checkout 9.0
+git pull
+git log
+cd ..
+ls
+cd configs/
+ls
+cd ..
+cp /etc/odoo-genemedics.conf cmd-odoo.conf
+ls
+nano cmd-odoo.conf 
+./odoo/odoo.py -c cmd-odoo.conf -u all
+exit
+cd ~
+ls
+cd d..
+cd ..
+ls
+cd genemedics
+ls
+cd addons-extra/genemedics/
+ls
+cd crm_genemedics/
+ls
+nano __init__.py
+exit
+ls
+cd .git/config 
+nano .git/config 
+git push
+git push origin master
+exit
+exit

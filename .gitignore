@@ -1,1 +1,4 @@
 *.pyc 
+.local/share/Odoo/sessions/*
+.psql_history
+.bash_history
