@@ -1,0 +1,38 @@
+
+.o_website_form_flex {
+  display: flex;
+  flex-wrap: wrap;
+}
+.o_website_form_flex_item {
+  flex-basis: 33%;
+}
+@media (max-width: 991px) {
+  .o_website_form_flex_item {
+    flex-basis: 50%;
+  }
+}
+@media (max-width: 767px) {
+  .o_website_form_flex_item {
+    flex-basis: 100%;
+  }
+}
+.o_website_form_field_hidden {
+  display: none;
+}
+.editor_enable .o_website_form_field_hidden {
+  display: block;
+  opacity: 0.5;
+}
+.editor_enable .s_website_form .form-field select {
+  pointer-events: none;
+}
+.o_website_form_required .control-label:after,
+.o_website_form_required_custom .control-label:after {
+  content: ' *';
+}
+#editable_select.form-control {
+  height: 100%;
+}
+.form-field input[type=file].form-control {
+  height: 100%;
+}

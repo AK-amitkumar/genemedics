@@ -1,0 +1,243 @@
+
+.o_mail_thread .o_mail_thread_date_separator,
+.o_mail_thread .o_mail_thread_message {
+  margin: auto;
+}
+.o_mail_thread .o_mail_thread_date_separator .o_mail_thread_date_wrapper {
+  border-bottom: solid #eeeeee 2px;
+  margin-bottom: 15px;
+}
+.o_mail_thread .o_mail_thread_date_separator .o_mail_thread_date_wrapper .o_mail_thread_date_separator_title {
+  display: table;
+  position: relative;
+  top: 10px;
+  margin: 0 auto;
+  padding: 0 10px 0 10px;
+  font-weight: bold;
+  background: white;
+}
+.o_mail_thread .o_mail_thread_message {
+  display: -ms-flexbox;
+  display: -moz-box;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  margin: 10px 0;
+}
+.o_mail_thread .o_mail_thread_message .o_mail_thread_message_avatar {
+  -ms-flex: 0 0 50px;
+  -moz-flex: 0 0 50px;
+  -webkit-box-flex: 0;
+  -webkit-flex: 0 0 50px;
+  flex: 0 0 50px;
+  margin-right: 10px;
+}
+@media (max-width: 767px) {
+  .o_mail_thread .o_mail_thread_message .o_mail_thread_message_avatar {
+    -ms-flex: 0 0 25px;
+    -moz-flex: 0 0 25px;
+    -webkit-box-flex: 0;
+    -webkit-flex: 0 0 25px;
+    flex: 0 0 25px;
+  }
+}
+.o_mail_thread .o_mail_thread_message .o_mail_thread_message_avatar .o_mail_thread_avatar {
+  display: block;
+  margin: 0 auto;
+  max-width: 50px;
+}
+@media (max-width: 767px) {
+  .o_mail_thread .o_mail_thread_message .o_mail_thread_message_avatar .o_mail_thread_avatar {
+    max-width: 25px;
+  }
+}
+.o_mail_thread .o_mail_thread_message .o_mail_thread_message_core {
+  -ms-flex: 1 1 auto;
+  -moz-flex: 1 1 auto;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 1 auto;
+  flex: 1 1 auto;
+}
+.o_mail_thread .o_mail_thread_message .o_mail_thread_message_core > p {
+  margin: 0 0 9px;
+}
+.o_mail_thread .o_mail_thread_message .o_mail_thread_message_core .o_mail_body_long {
+  display: none;
+}
+.o_mail_thread .o_mail_thread_message .o_mail_thread_message_star,
+.o_mail_thread .o_mail_thread_message .o_mail_thread_message_needaction {
+  cursor: pointer;
+  opacity: 0.5;
+}
+.o_mail_thread .o_mail_thread_message .o_mail_thread_message_star:hover,
+.o_mail_thread .o_mail_thread_message .o_mail_thread_message_needaction:hover {
+  opacity: 1;
+}
+.o_mail_thread .o_mail_thread_message .o_mail_thread_message_star.o_mail_message_starred {
+  color: gold;
+}
+.o_mail_thread .o_mail_thread_message .o_mail_redirect {
+  cursor: pointer;
+}
+.o_mail_thread .o_mail_thread_show_more {
+  text-align: center;
+}
+.o_mail_chat_composer_wrapper .o_mail_compose_message {
+  display: -ms-flexbox;
+  display: -moz-box;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+}
+.o_mail_chat_composer_wrapper .o_mail_compose_message .o_mail_compose_message_input {
+  -ms-flex: 1 1 auto;
+  -moz-flex: 1 1 auto;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 1 auto;
+  flex: 1 1 auto;
+}
+.o_mail_chat_composer_wrapper .o_mail_compose_message .o_mail_compose_message_buttons {
+  -ms-flex: 0 0 auto;
+  -moz-flex: 0 0 auto;
+  -webkit-box-flex: 0;
+  -webkit-flex: 0 0 auto;
+  flex: 0 0 auto;
+}
+.o_mail_compose_message {
+  width: 100%;
+}
+.o_mail_compose_message input.o_mail_compose_message_input {
+  border: none;
+  padding: 5px;
+  margin-right: 5px;
+}
+.o_mail_compose_message textarea.o_mail_compose_message_input {
+  width: 100%;
+  margin: 5px 0;
+}
+.o_mail_mention_partner_tags {
+  margin-top: 5px;
+  text-align: justify;
+}
+.o_mail_attachments_list .o_mail_chat_im_attachment_files {
+  margin-top: 5px;
+  text-align: justify;
+}
+.o_mail_compose_message_emoji .o_mail_compose_message_emoji_img > img {
+  cursor: pointer;
+  height: 26px;
+}
+@-webkit-keyframes oe_mail_attach_loading_anim {
+  0% {
+    background: #337ab7;
+  }
+  50% {
+    background: #285f8f;
+  }
+  100% {
+    background: #337ab7;
+  }
+}
+@-moz-keyframes oe_mail_attach_loading_anim {
+  0% {
+    background: #337ab7;
+  }
+  50% {
+    background: #285f8f;
+  }
+  100% {
+    background: #337ab7;
+  }
+}
+@-o-keyframes oe_mail_attach_loading_anim {
+  0% {
+    background: #337ab7;
+  }
+  50% {
+    background: #285f8f;
+  }
+  100% {
+    background: #337ab7;
+  }
+}
+@keyframes oe_mail_attach_loading_anim {
+  0% {
+    background: #337ab7;
+  }
+  50% {
+    background: #285f8f;
+  }
+  100% {
+    background: #337ab7;
+  }
+}
+.o_mail_attachment {
+  position: relative;
+  width: 120px;
+  display: inline-block;
+  height: 50px;
+  text-align: center;
+  margin-bottom: 15px;
+}
+.o_mail_attachment .o_image {
+  position: absolute;
+  top: 0;
+  left: 30px;
+  bottom: auto;
+  right: auto;
+  width: 60px;
+  height: 60px;
+}
+.o_mail_attachment .o_mail_attachment_name {
+  display: inline-block;
+  max-width: 100%;
+  margin-top: 60px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #555555;
+}
+.o_mail_attachment.o_mail_uploading .o_mail_attachment_progress_bar {
+  display: block;
+  position: absolute;
+  top: 18px;
+  left: 16px;
+  bottom: auto;
+  right: 16px;
+  height: 17px;
+  line-height: 13px;
+  color: white;
+  border-radius: 4px;
+  border: solid 1px grey;
+  box-shadow: 0px 1px 10px #303030;
+  -webkit-animation: oe_mail_attach_loading_anim 1s linear 0s infinite normal none running;
+  -moz-animation: oe_mail_attach_loading_anim 1s linear 0s infinite normal none running;
+  -o-animation: oe_mail_attach_loading_anim 1s linear 0s infinite normal none running;
+  animation: oe_mail_attach_loading_anim 1s linear 0s infinite normal none running;
+}
+.o_mail_attachment.o_mail_uploading .o_mail_attachment_delete {
+  display: none;
+}
+.o_mail_attachment .o_mail_attachment_progress_bar {
+  display: none;
+}
+.o_mail_attachment .o_mail_attachment_delete {
+  position: absolute;
+  top: 0;
+  left: auto;
+  bottom: auto;
+  right: 0;
+  color: #555555;
+  cursor: pointer;
+  opacity: 0;
+  -webkit-transition: opacity 0.2s linear 0s;
+  -moz-transition: opacity 0.2s linear 0s;
+  -o-transition: opacity 0.2s linear 0s;
+  transition: opacity 0.2s linear 0s;
+}
+.o_mail_attachment:hover .o_mail_attachment_delete {
+  opacity: 1;
+  -webkit-transition: opacity 0.2s linear 0s;
+  -moz-transition: opacity 0.2s linear 0s;
+  -o-transition: opacity 0.2s linear 0s;
+  transition: opacity 0.2s linear 0s;
+}
