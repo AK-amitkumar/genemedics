@@ -196,7 +196,7 @@ class crm_lead(models.Model):
             'last_month': 0,
             },
         
-            'nb_opportunities': 0,
+            'nb_opportunities': 1,
         }
         group_id = self.pool.get('ir.model.data').xmlid_to_res_id(cr,uid,'crm_genemedics.group_dashboard_all')
         group = self.pool.get('res.groups').browse(cr,uid,group_id,context=context)

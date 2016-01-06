@@ -1,8 +1,19 @@
-odoo.define('crm_genemedics.dashboard', function (require) {
+odoo.define('crm_genemedics.sale_dashboard_enhanced', function (require) {
 "use strict";
 
 var SalesTeamDashboardView = require('sales_team.dashboard');
 var Model = require('web.Model');
+var core = require('web.core');
+var formats = require('web.formats');
+var Model = require('web.Model');
+var session = require('web.session');
+var KanbanView = require('web_kanban.KanbanView');
+
+var QWeb = core.qweb;
+
+var _t = core._t;
+var _lt = core._lt;
+
 
 SalesTeamDashboardView.include({
 
@@ -36,7 +47,8 @@ SalesTeamDashboardView.include({
             } else if (action_extra === 'overdue') {
                 additional_context['search_default_overdue'] = 1;
             }
-
+        }
+        
         new Model("ir.model.data")
             .call("xmlid_to_res_id", [action_name])
             .then(function(data) {
@@ -46,4 +58,5 @@ SalesTeamDashboardView.include({
             });
 	}
 });
+
 });
