@@ -34,7 +34,7 @@ Adds CRM partner history page on partners form view as it exists on odoo v6.1
     'images': [
     ],
     'depends': [
-        'crm',
+        'crm', 'crm_phone_log'
     ],
     'data': [
         'partner_view.xml',
