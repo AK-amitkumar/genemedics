@@ -6,7 +6,7 @@
         module for CRM""",
 
     'description': """
-        Leads CRM custimization Logging Phone Calls
+        Leads CRM customization Logging Phone Calls
     """,
 
     'author': "Novapoint Group Inc, Stephen Levenhagen",
@@ -24,7 +24,7 @@
     # always loaded
     'data': [
 #        'views/crm_phonecall_data.xml', 
-        'views/crm_report_view.xml',
+#        'views/crm_report_view.xml',
         'security/phone_log_security.xml',
         'wizard/crm_phonecall_to_meeting_view.xml',
         'wizard/crm_phonecall_to_phonecall_view.xml',
