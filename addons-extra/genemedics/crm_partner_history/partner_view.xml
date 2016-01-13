@@ -31,11 +31,11 @@
             	<xpath expr="//div[@name='button_box']" position="inside">
             		<button class="oe_inline oe_stat_button" type="action"
                             name="%(crm_mail_message_partner)d" icon="fa-star">
-                            <div>E-mails</div>
+                            <field name="emails_count" widget="statinfo" string="E-mails" help="Emails"/>
                         </button>
                          <button class="oe_inline oe_stat_button" type="action"
                             name="%(crm_phone_logs_partner)d" icon="fa-phone">
-                            <div>Calls</div>
+                            <field name="calls_count" widget="statinfo" string="Calls" help="Calls"/>
                         </button>
             	</xpath>
                 <notebook>
