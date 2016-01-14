@@ -2,6 +2,7 @@ eclipse.preferences.version=1
 encoding//crm_genemedics/__init__.py=utf-8
 encoding//crm_genemedics/__openerp__.py=utf-8
 encoding//crm_genemedics/crm_lead.py=utf-8
+encoding//crm_helpdesk_features/__openerp__.py=utf-8
 encoding//crm_partner_history/__openerp__.py=utf-8
 encoding//crm_partner_history/partner.py=utf-8
 encoding//crm_phone_log/models/crm_phonecall.py=utf-8
