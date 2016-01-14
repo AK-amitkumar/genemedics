@@ -8,6 +8,10 @@ from lxml import etree
 class helpdesk_issue(osv.osv):
     _inherit = "project.issue"
     
+    _columns = {
+                'stage_seq':fields.related('stage_id','sequence',type='integer',store=True,string="Stage sequence")
+                }
+    
     def self_assign(self, cr, uid, ids, context={}):
         for iss in self.browse(cr,uid, ids, context):
             iss.write({'user_id':uid})
