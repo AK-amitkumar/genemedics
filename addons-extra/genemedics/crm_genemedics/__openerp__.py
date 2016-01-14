@@ -19,7 +19,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','crm','calendar','web_calendar'],
+    'depends': ['base','crm','calendar','web_calendar','sale', 'crm_project_issue'],
 
     # always loaded
     'data': [
@@ -29,6 +29,7 @@
         'crm_lead_view.xml',
         'calendar_event_view.xml',
         'crm_leads_menu.xml',
+        'helpdesk_issue_view.xml'
       
     ],
 #     'js': ['static/js/web_calendar.js',
