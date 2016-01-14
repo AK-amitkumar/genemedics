@@ -18,12 +18,13 @@
                     <field name="stage_id" domain="[]"/>
                     <filter string="My Issues" domain="[('user_id','=',uid)]"/>
                     <filter string="Issues more than 30 mins old" domain="['&amp;', ('write_date', '&lt;=', (context_today()-datetime.timedelta(minutes=30)).strftime('%Y-%m-%d')),
-                    ('stage_id.sequence', '&gt;=', 5)]"/>
+                    ('stage_id.sequence', '&lt;', 5)]"/>
                     <filter string="Issues more than 2 hours old" domain="['&amp;', ('write_date', '&lt;=', (context_today()-datetime.timedelta(hours=2)).strftime('%Y-%m-%d')),
-                    ('stage_id.sequence', '&gt;=', 5)]"/>
-                    <filter string="Issues earlier than 2 Hrs" domain="['&amp;', ('write_date', '&gt;=', (context_today()-datetime.timedelta(hours=2)).strftime('%Y-%m-%d')), ('stage_id.sequence', '&gt;=', 5)]"/>
+                    ('stage_id.sequence', '&lt;', 5)]"/>
+                    <filter string="Issues earlier than 2 Hrs" domain="['&amp;', ('write_date', '&gt;=', (context_today()-datetime.timedelta(hours=2)).strftime('%Y-%m-%d')), ('stage_id.sequence', '&lt;', 5)]"/>
+                    
                     <filter string="Issues older than 30 mins and earlier than 2 Hrs" domain="['&amp;', '&amp;', ('write_date', '&lt;=', (context_today()-datetime.timedelta(minutes=30)).strftime('%Y-%m-%d')),
-                    ('write_date', '&gt;=', (context_today()-datetime.timedelta(hours=2)).strftime('%Y-%m-%d')), ('stage_id.sequence', '&gt;=', 5)]"/>
+                    ('write_date', '&gt;=', (context_today()-datetime.timedelta(hours=2)).strftime('%Y-%m-%d')), ('stage_id.sequence', '&lt;', 5)]"/>
                     <filter string="Done" name="Done" domain="[('stage_id.sequence', '&gt;=', 5)]"/>
                     <filter string="Unassigned" name="unassigned" domain="[('user_id', '=', False)]"/>
                     <separator/>
@@ -50,15 +51,18 @@
             <field name="name">Help Desk Issue</field>
             <field name="model">project.issue</field>
             <field name="arch" type="xml">
-                <tree string="Helpdesk Issue" decoration-bf="message_needaction==True">
+                <tree decoration-danger="stage_seq &lt; 5" 
+                	colors="blue:'stage_seq', '&lt;', 5, 'and', 'write_date', '&lt;=', (context_today()-timedelta(minutes=30)).strftime('%Y-%m-%d'), 'and', 'write_date', '&gt;=', (context_today()-timedelta(hours=2)).strftime('%Y-%m-%d')" string="Helpdesk Issue" decoration-bf="message_needaction==True">
+                    <field name="write_date" string="Last Modified" invisible="0"/>
                     <field name="id"/>
-                    <button name="self_assign" attrs="{'invisible':[('user_id','!=',False)]}" type="object" string="Self Assign" help="Self Assign" icon="gtk-go-forward"/>
+                    <button name="self_assign" attrs="{'invisible':['|', ('user_id','!=',False), ('stage_seq', '&gt;=', 5)]}" type="object" string="Self Assign" help="Self Assign" icon="gtk-go-forward"/>
                     <field name="message_needaction" invisible="1"/>
                     <field name="name" string="Feature description"/>
                     <field name="partner_id"/>
                     <field name="priority" string="Priority"/>
                     <field name="user_id"/>
                     <field name="stage_id" widget="selection" readonly="1"/>
+                    <field name="stage_seq" invisible="1"/>
                 </tree>
             </field>
         </record>
@@ -68,7 +72,7 @@
 	        <field name="type">ir.actions.act_window</field>
 	        <field name="res_model">project.issue</field>
 	        <field name="view_mode">tree,form,kanban</field>
-	        <field name="context">{'default_user_id':uid}}</field>
+	        <field name="context">{'default_user_id':uid,'search_default_unassigned':True}}</field>
 	        <field name="search_view_id" ref="gene_project_issue_filter"/>  
 	        <field name="view_id" ref="helpdesk_genmedics_issue_tree_view"/>        
 	    </record>  
