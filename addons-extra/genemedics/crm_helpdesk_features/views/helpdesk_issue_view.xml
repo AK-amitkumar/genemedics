@@ -16,15 +16,14 @@
                     <field name="project_id"/>
                     <field name="tag_ids"/>
                     <field name="stage_id" domain="[]"/>
+                    <field name="age_issue" />
+                    <field name="age_since_update" />
                     <filter string="My Issues" domain="[('user_id','=',uid)]"/>
-                    <filter string="Issues more than 30 mins old" domain="['&amp;', ('write_date', '&lt;=', (context_today()-datetime.timedelta(minutes=30)).strftime('%Y-%m-%d')),
-                    ('stage_id.sequence', '&lt;', 5)]"/>
-                    <filter string="Issues more than 2 hours old" domain="['&amp;', ('write_date', '&lt;=', (context_today()-datetime.timedelta(hours=2)).strftime('%Y-%m-%d')),
-                    ('stage_id.sequence', '&lt;', 5)]"/>
-                    <filter string="Issues earlier than 2 Hrs" domain="['&amp;', ('write_date', '&gt;=', (context_today()-datetime.timedelta(hours=2)).strftime('%Y-%m-%d')), ('stage_id.sequence', '&lt;', 5)]"/>
+                    <filter string="Issues more than 30 mins old" domain="[('age_issue', '&gt;=', 0.5)]"/>
+                    <filter string="Issues more than 2 hours old" domain="[('age_issue', '&gt;=', 2.0)]"/>
+                    <filter string="Issues earlier than 2 Hrs" domain="[('age_issue', '&lt;', 2.0)]"/>
                     
-                    <filter string="Issues older than 30 mins and earlier than 2 Hrs" domain="['&amp;', '&amp;', ('write_date', '&lt;=', (context_today()-datetime.timedelta(minutes=30)).strftime('%Y-%m-%d')),
-                    ('write_date', '&gt;=', (context_today()-datetime.timedelta(hours=2)).strftime('%Y-%m-%d')), ('stage_id.sequence', '&lt;', 5)]"/>
+                    <filter string="Issues older than 30 mins and earlier than 2 Hrs" domain="['&amp;',('age_issue', '&gt;=', 0.5), ('age_issue', '&lt;=', 2.0)]"/>
                     <filter string="Done" name="Done" domain="[('stage_id.sequence', '&gt;=', 5)]"/>
                     <filter string="Unassigned" name="unassigned" domain="[('user_id', '=', False)]"/>
                     <separator/>
@@ -51,9 +50,12 @@
             <field name="name">Help Desk Issue</field>
             <field name="model">project.issue</field>
             <field name="arch" type="xml">
-                <tree decoration-danger="stage_seq &lt; 5" 
-                	colors="blue:'stage_seq', '&lt;', 5, 'and', 'write_date', '&lt;=', (context_today()-timedelta(minutes=30)).strftime('%Y-%m-%d'), 'and', 'write_date', '&gt;=', (context_today()-timedelta(hours=2)).strftime('%Y-%m-%d')" string="Helpdesk Issue" decoration-bf="message_needaction==True">
+                <tree  
+                	colors="green: age_since_update &lt; 0.5 ;blue: age_since_update &gt;= 0.5 and age_since_update &lt; 2.0 
+                	;red: age_since_update &gt;= 2.0" string="Helpdesk Issue" decoration-bf="message_needaction==True">
                     <field name="write_date" string="Last Modified" invisible="0"/>
+                    <field name="age_issue" />
+                    <field name="age_since_update" />
                     <field name="id"/>
                     <button name="self_assign" attrs="{'invisible':['|', ('user_id','!=',False), ('stage_seq', '&gt;=', 5)]}" type="object" string="Self Assign" help="Self Assign" icon="gtk-go-forward"/>
                     <field name="message_needaction" invisible="1"/>
@@ -72,7 +74,8 @@
 	        <field name="type">ir.actions.act_window</field>
 	        <field name="res_model">project.issue</field>
 	        <field name="view_mode">tree,form,kanban</field>
-	        <field name="context">{'default_user_id':uid,'search_default_unassigned':True}}</field>
+	        <field name="context">{'default_user_id':uid,
+	        	'search_default_unassigned':True, 'search_default_project_id':27}</field>
 	        <field name="search_view_id" ref="gene_project_issue_filter"/>  
 	        <field name="view_id" ref="helpdesk_genmedics_issue_tree_view"/>        
 	    </record>  
