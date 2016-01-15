@@ -19,11 +19,11 @@
                     <field name="age_issue" />
                     <field name="age_since_update" />
                     <filter string="My Issues" domain="[('user_id','=',uid)]"/>
-                    <filter string="Issues more than 30 mins old" domain="[('age_issue', '&gt;=', 0.5)]"/>
-                    <filter string="Issues more than 2 hours old" domain="[('age_issue', '&gt;=', 2.0)]"/>
-                    <filter string="Issues earlier than 2 Hrs" domain="[('age_issue', '&lt;', 2.0)]"/>
+                    <filter string="Issues more than 30 mins old" domain="[('age_since_update', '&gt;=', 0.5)]"/>
+                    <filter string="Issues more than 2 hours old" domain="[('age_since_update', '&gt;=', 2.0)]"/>
+                    <filter string="Issues earlier than 2 Hrs" domain="[('age_since_update', '&lt;', 2.0)]"/>
                     
-                    <filter string="Issues older than 30 mins and earlier than 2 Hrs" domain="['&amp;',('age_issue', '&gt;=', 0.5), ('age_issue', '&lt;=', 2.0)]"/>
+                    <filter string="Issues older than 30 mins and earlier than 2 Hrs" domain="['&amp;',('age_since_update', '&gt;=', 0.5), ('age_issue', '&lt;=', 2.0)]"/>
                     <filter string="Done" name="Done" domain="[('stage_id.sequence', '&gt;=', 5)]"/>
                     <filter string="Unassigned" name="unassigned" domain="[('user_id', '=', False)]"/>
                     <separator/>

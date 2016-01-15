@@ -62,5 +62,5 @@ class project_issue(models.Model):
         issues = self.env['project.issue'].search([('write_date', rev_operator, search_date)])
         return [('id', 'in', issues.ids)]
         
-    age_issue = fields.Float(string = "Hours Since Created",compute="_cal_age_issue",store=False, search='_search_age_issue', help="Issue Age in Hours")
-    age_since_update = fields.Float(string = "Hours Since Update",compute="_cal_update_age_issue",store=False, search='_search_update_age_issue', help="Issue Age Since las Update")
+    age_issue = fields.Float(string = "Hours Since Created",compute="_cal_age_issue",store=False, search='_search_age_issue', help="Issue Age since Create in Hours")
+    age_since_update = fields.Float(string = "Hours Since Update",compute="_cal_update_age_issue",store=False, search='_search_update_age_issue', help="Issue Age Since Last Update")
