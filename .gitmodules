@@ -2,3 +2,11 @@
 	path = odoo
 	url = https://github.com/odoo/odoo.git
 	branch = 9.0
+[submodule "addons-extra/web"]
+	path = addons-extra/web
+	url = https://github.com/OCA/web.git
+	branch = 9.0
+[submodule "addons-extra/server-tools"]
+	path = addons-extra/server-tools
+	url = https://github.com/OCA/server-tools.git
+	branch = 9.0
