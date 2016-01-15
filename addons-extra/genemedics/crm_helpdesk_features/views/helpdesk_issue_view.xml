@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+    
+<!--    Menu Helpdesk Issues   -->
+
+		<record id="gene_project_issue_filter" model="ir.ui.view">
+            <field name="name">Project Issue Tracker Search</field>
+            <field name="model">project.issue</field>
+            <field name="arch" type="xml">
+                <search string="Issue Tracker Search">
+                    <field name="name" string="Issue" filter_domain="['|', '|', '|', ('partner_id','child_of',self), ('description','ilike',self),('email_from','ilike',self),('name','ilike',self)]"/>
+                    <field name="id"/>
+                    <field name="partner_id" operator="child_of"/>
+                    <field name="user_id"/>
+                    <field name="project_id"/>
+                    <field name="tag_ids"/>
+                    <field name="stage_id" domain="[]"/>
+                    <filter string="My Issues" domain="[('user_id','=',uid)]"/>
+                    <filter string="Issues more than 30 mins old" domain="['&amp;', ('write_date', '&lt;=', (context_today()-datetime.timedelta(minutes=30)).strftime('%Y-%m-%d')),
+                    ('stage_id.sequence', '&lt;', 5)]"/>
+                    <filter string="Issues more than 2 hours old" domain="['&amp;', ('write_date', '&lt;=', (context_today()-datetime.timedelta(hours=2)).strftime('%Y-%m-%d')),
+                    ('stage_id.sequence', '&lt;', 5)]"/>
+                    <filter string="Issues earlier than 2 Hrs" domain="['&amp;', ('write_date', '&gt;=', (context_today()-datetime.timedelta(hours=2)).strftime('%Y-%m-%d')), ('stage_id.sequence', '&lt;', 5)]"/>
+                    
+                    <filter string="Issues older than 30 mins and earlier than 2 Hrs" domain="['&amp;', '&amp;', ('write_date', '&lt;=', (context_today()-datetime.timedelta(minutes=30)).strftime('%Y-%m-%d')),
+                    ('write_date', '&gt;=', (context_today()-datetime.timedelta(hours=2)).strftime('%Y-%m-%d')), ('stage_id.sequence', '&lt;', 5)]"/>
+                    <filter string="Done" name="Done" domain="[('stage_id.sequence', '&gt;=', 5)]"/>
+                    <filter string="Unassigned" name="unassigned" domain="[('user_id', '=', False)]"/>
+                    <separator/>
+                    <filter string="New" name="draft" domain="[('stage_id.sequence', '=', 1)]"/>
+                    <separator/>
+                    <filter string="Important Messages" name="message_needaction" domain="[('message_needaction','=',True)]"/>
+                    <filter string="Archived" name="inactive" domain="[('active','=',False)]"/>
+                    <group expand="0" string="Group By" >
+                        <filter string="Assigned to" name="Responsible" context="{'group_by':'user_id'}" />
+                        <filter string="Project" name="project" context="{'group_by':'project_id'}" />
+                        <filter string="Task" context="{'group_by':'task_id'}"/>
+                        <filter string="Priority" context="{'group_by':'priority'}" />
+                        <filter string="Stage" context="{'group_by':'stage_id'}"/>
+                        <filter string="Company" context="{'group_by':'company_id'}" groups="base.group_multi_company"/>
+                        <separator/>
+                        <filter string="Create Day" context="{'group_by':'create_date:day'}" help="Create Date"/>
+                        <filter string="Last Message" name="group_message_last_post" context="{'group_by':'message_last_post:week'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+		
+		<record model="ir.ui.view" id="helpdesk_genmedics_issue_tree_view">
+            <field name="name">Help Desk Issue</field>
+            <field name="model">project.issue</field>
+            <field name="arch" type="xml">
+                <tree decoration-danger="stage_seq &lt; 5" 
+                	colors="blue:'stage_seq', '&lt;', 5, 'and', 'write_date', '&lt;=', (context_today()-timedelta(minutes=30)).strftime('%Y-%m-%d'), 'and', 'write_date', '&gt;=', (context_today()-timedelta(hours=2)).strftime('%Y-%m-%d')" string="Helpdesk Issue" decoration-bf="message_needaction==True">
+                    <field name="write_date" string="Last Modified" invisible="0"/>
+                    <field name="id"/>
+                    <button name="self_assign" attrs="{'invisible':['|', ('user_id','!=',False), ('stage_seq', '&gt;=', 5)]}" type="object" string="Self Assign" help="Self Assign" icon="gtk-go-forward"/>
+                    <field name="message_needaction" invisible="1"/>
+                    <field name="name" string="Feature description"/>
+                    <field name="partner_id"/>
+                    <field name="priority" string="Priority"/>
+                    <field name="user_id"/>
+                    <field name="stage_id" widget="selection" readonly="1"/>
+                    <field name="stage_seq" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+	 
+ 		 <record id="crm_helpdesk_issues_genemedics" model="ir.actions.act_window">
+	        <field name="name">Help Desk Issue</field>
+	        <field name="type">ir.actions.act_window</field>
+	        <field name="res_model">project.issue</field>
+	        <field name="view_mode">tree,form,kanban</field>
+	        <field name="context">{'default_user_id':uid,'search_default_unassigned':True}}</field>
+	        <field name="search_view_id" ref="gene_project_issue_filter"/>  
+	        <field name="view_id" ref="helpdesk_genmedics_issue_tree_view"/>        
+	    </record>  
+         <menuitem  name="Help Desk Issues" id="crm.crm_lead_menu_activities" 
+        		sequence="2"
+        		action="crm_helpdesk_issues_genemedics"
+        		groups="base.group_user" />
+  
+    </data>
+</openerp>

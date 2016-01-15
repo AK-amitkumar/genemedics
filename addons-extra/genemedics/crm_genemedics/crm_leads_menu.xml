@@ -264,10 +264,6 @@
         <field name="code">action = self.action_all_pipeline(cr, uid, context=context)</field>
         <field eval="True" name="condition"/>
     </record>
-        
- 
- 
-        
-  
+    
     </data>
 </openerp>
