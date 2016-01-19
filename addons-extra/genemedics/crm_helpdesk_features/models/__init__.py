@@ -21,3 +21,4 @@
 
 import helpdesk_issue
 import project_issue
+import base_action_rule

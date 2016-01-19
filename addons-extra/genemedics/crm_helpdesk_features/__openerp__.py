@@ -35,6 +35,7 @@
     'init_xml': [],
     'data': [
         "views/helpdesk_issue_view.xml",
+        "views/base_action_rule_view.xml"
         ],
     'demo_xml': [],
     'test': [],
