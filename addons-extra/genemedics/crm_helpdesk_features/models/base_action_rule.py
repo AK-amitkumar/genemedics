@@ -17,25 +17,25 @@ class base_action_rule(osv.Model):
         If no calendar is found, fallback on the default behavior. """
 
         
-        if action.trg_date_calendar_id and action.trg_date_range_type in ['day','hours','minutes'] and action.trg_date_resource_field_id:
+        if action.trg_date_calendar_id and action.trg_date_range_type == 'hour' and action.trg_date_resource_field_id:
             user = record[action.trg_date_resource_field_id.name]
             if user.employee_ids and user.employee_ids[0].contract_id \
                     and user.employee_ids[0].contract_id.working_hours:
                 calendar = user.employee_ids[0].contract_id.working_hours
                 start_dt = get_datetime(record_dt)
                 resource_id = user.employee_ids[0].resource_id.id
-                action_dt = self.pool['resource.calendar'].schedule_days_get_date(
-                    cr, uid, calendar.id, action.trg_date_range,
-                    day_date=start_dt, compute_leaves=True, resource_id=resource_id,
+                action_dt = self.pool['resource.calendar'].schedule_hours_get_date(
+                    cr, uid,action.trg_date_calendar_id.id, hours= action.trg_date_range,
+                    day_dt=start_dt, compute_leaves=True, resource_id=resource_id,
                     context=context
                 )
                 return action_dt
             
-        elif action.trg_date_calendar_id and action.trg_date_range_type in ['day','hours','minutes']:
+        elif action.trg_date_calendar_id and action.trg_date_range_type == 'hour':
             start_dt = get_datetime(record_dt)
-            action_dt = self.pool['resource.calendar'].schedule_days_get_date(
+            action_dt = self.pool['resource.calendar'].schedule_hours_get_date(
                 cr, uid, action.trg_date_calendar_id.id, action.trg_date_range,
-                day_date=start_dt, compute_leaves=True, context=context
+                day_dt=start_dt, compute_leaves=True, context=context
             )    
             return action_dt
         

@@ -8,12 +8,12 @@
             <field name="inherit_id" ref="hr_contract.view_base_action_rule_form_resource"/>
             <field name="arch" type="xml">
             	<xpath expr="//field[@name='trg_date_calendar_id']" position="attributes">
-                     <attribute name="attrs">{'invisible':['|', ('trg_date_id','=',False), ('trg_date_range_type', 'not in', ('day','hour','minutes'))]}</attribute>
+                     <attribute name="attrs">{'invisible':['|', ('trg_date_id','=',False), ('trg_date_range_type', 'not in', ('day','hour'))]}</attribute>
                 </xpath>
             	
                 <xpath expr="//field[@name='trg_date_resource_field_id']" position="attributes">
                     
-                     <attribute name="attrs">{'invisible': ['|', ('trg_date_id','=',False), ('trg_date_range_type', 'not in', ('day','hour','minutes'))]}</attribute>
+                     <attribute name="attrs">{'invisible': ['|', ('trg_date_id','=',False), ('trg_date_range_type', 'not in', ('day','hour'))]}</attribute>
                 </xpath>
             </field>
         </record>
