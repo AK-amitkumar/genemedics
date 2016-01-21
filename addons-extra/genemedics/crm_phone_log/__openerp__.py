@@ -26,6 +26,7 @@
 #        'views/crm_phonecall_data.xml', 
 #        'views/crm_report_view.xml',
         'security/phone_log_security.xml',
+        'security/ir.model.access.csv',
         'wizard/crm_phonecall_to_meeting_view.xml',
         'wizard/crm_phonecall_to_phonecall_view.xml',
         'views/crm_phonecall_view.xml',
