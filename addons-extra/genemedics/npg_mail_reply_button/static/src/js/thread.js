@@ -62,7 +62,6 @@ ChatThread.include({
             if (!config.device.touch) {
                 self.composer.focus();
             }
-            alert("Hellwwwo");
             self.composer.on('post_message', self, self.on_post_message);
             self.composer.on('need_refresh', self, self.refresh_followers);
         });
@@ -70,8 +69,6 @@ ChatThread.include({
        },
        
      refresh_followers: function () {
-     	alert("Hello");
-        alert(this.followers);
         if (this.followers) {
             this.followers.read_value();
         }
