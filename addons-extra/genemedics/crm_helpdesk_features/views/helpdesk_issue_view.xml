@@ -50,10 +50,11 @@
             <field name="name">Help Desk Issue</field>
             <field name="model">project.issue</field>
             <field name="arch" type="xml">
-                <tree  
+                <tree  default_order="write_date"
                 	colors="green: age_since_update &lt; 0.5 ;blue: age_since_update &gt;= 0.5 and age_since_update &lt; 2.0 
                 	;red: age_since_update &gt;= 2.0" string="Helpdesk Issue" decoration-bf="message_needaction==True">
-                    <field name="write_date" string="Last Modified" invisible="0"/>
+                    <field name="create_date" string="Created on" invisible="0"/>
+                    <field name="write_date" string="Last Modified" invisible="1"/>
                     <field name="age_issue" />
                     <field name="age_since_update" />
                     <field name="id"/>

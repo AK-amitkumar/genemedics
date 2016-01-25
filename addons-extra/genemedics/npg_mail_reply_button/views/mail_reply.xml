@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <template id="mail_reply" name="mail reply" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                <script type="text/javascript" src="/npg_mail_reply_button/static/src/js/thread.js"></script>
+            </xpath>
+        </template>
+    </data>
+</openerp>
