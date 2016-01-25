@@ -51,8 +51,8 @@
             <field name="model">project.issue</field>
             <field name="arch" type="xml">
                 <tree  default_order="write_date"
-                	colors="green: age_since_update &lt; 0.5 ;blue: age_since_update &gt;= 0.5 and age_since_update &lt; 2.0 
-                	;red: age_since_update &gt;= 2.0" string="Helpdesk Issue" decoration-bf="message_needaction==True">
+                	colors="green: age_since_update &gt; 2.0 ;blue: age_since_update &lt;= 0.5 and age_since_update &lt; 2.0 
+                	;red: priority = 2" string="Helpdesk Issue" decoration-bf="message_needaction==True">
                     <field name="create_date" string="Created on" invisible="0"/>
                     <field name="write_date" string="Last Modified" invisible="1"/>
                     <field name="age_issue" />
@@ -76,7 +76,7 @@
 	        <field name="res_model">project.issue</field>
 	        <field name="view_mode">tree,form,kanban</field>
 	        <field name="context">{'default_user_id':uid,
-	        	'search_default_unassigned':True, 'search_default_project_id':27}</field>
+	        	'search_default_project_id':27}</field>
 	        <field name="search_view_id" ref="gene_project_issue_filter"/>  
 	        <field name="view_id" ref="helpdesk_genmedics_issue_tree_view"/>        
 	    </record>  
