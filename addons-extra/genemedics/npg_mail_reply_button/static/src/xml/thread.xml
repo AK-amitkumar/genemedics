@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+	<t t-extend="mail.ChatThread.Message">
+            <t t-jquery="span.pull-right" t-operation="replace">
+
+                   <span class="pull-right">
+                   	<i t-if="message.message_type != 'notification'" t-att-class="'fa fa-lg o_thread_message_reply fa-mail-reply'"
+                        t-att-data-message-id="message.id" t-att-title="_t('Reply')"/>
+                    <i t-if="message.is_needaction &amp;&amp; options.display_needactions"
+                       class="fa fa-check o_thread_message_needaction"
+                       t-att-data-message-id="message.id" t-att-title="_t('Mark as Done')"/>
+                    <i t-if="options.display_stars &amp;&amp; message.message_type != 'notification'"
+                        t-att-class="'fa fa-lg o_thread_message_star ' + (message.is_starred ? 'fa-star' : 'fa-star-o')"
+                        t-att-data-message-id="message.id" t-att-title="_t('Mark as Todo')"/>
+                </span>
+
+            </t>
+	</t>
+            
+           
+
+</templates>
