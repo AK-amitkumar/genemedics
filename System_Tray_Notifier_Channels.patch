@@ -1,0 +1,71 @@
+diff --git a/addons/mail/static/src/js/chat_manager.js b/addons/mail/static/src/js/chat_manager.js
+index 0596b53..17462d8 100644
+--- a/addons/mail/static/src/js/chat_manager.js
++++ b/addons/mail/static/src/js/chat_manager.js
+@@ -60,7 +60,6 @@ function notify_incoming_message (msg, options) {
+     if (bus.is_odoo_focused()) {
+         if (!options.is_displayed) {
+             web_client.do_notify(title, content);
+-            beep();
+         }
+     } else {
+         global_unread_counter++;
+@@ -128,7 +127,7 @@ function inline (node, transform_children) {
+ //----------------------------------------------------------------------------------
+ 
+ // options: channel_id, silent
+-function add_message(data, options) {
++function add_message (data, options) {
+     options = options || {};
+     var msg = _.findWhere(messages, { id: data.id });
+ 
+@@ -151,7 +150,7 @@ function add_message(data, options) {
+                     if (options.increment_unread) {
+                         update_channel_unread_counter(channel, channel.unread_counter+1);
+                     }
+-                    if (options.show_notification) {
++                    if (channel.is_chat && options.show_notification) {
+                         var query = {is_displayed: false};
+                         chat_manager.bus.trigger('anyone_listening', channel, query);
+                         notify_incoming_message(msg, query);
+@@ -417,7 +416,7 @@ function fetch_from_channel (channel, options) {
+         cache.loaded = true;
+ 
+         _.each(msgs, function (msg) {
+-            add_message(msg, {channel_id: channel.id, silent: false, domain: options.domain});
++            add_message(msg, {channel_id: channel.id, silent: true, domain: options.domain});
+         });
+         var channel_cache = get_channel_cache(channel, options.domain || []);
+         return channel_cache.messages;
+@@ -450,10 +449,10 @@ function fetch_document_messages (ids, options) {
+ }
+ 
+ function update_channel_unread_counter (channel, counter) {
+-  if (!channel.mass_mailing) {
++    if (channel.is_chat) {
+         chat_unread_counter = chat_unread_counter - channel.unread_counter + counter;
+-  }
+-  channel.unread_counter = counter;
++    }
++    channel.unread_counter = counter;
+     chat_manager.bus.trigger("update_channel_unread_counter", channel);
+ }
+ 
+@@ -507,7 +506,7 @@ function on_channel_notification (message) {
+         def = $.when();
+     }
+     def.then(function () {
+-        add_message(message, { show_notification: true, increment_unread: true, silent: false });
++        add_message(message, { show_notification: true, increment_unread: true });
+         invalidate_caches(message.channel_ids);
+     });
+ }
+@@ -662,7 +661,7 @@ var chat_manager = {
+                 context: data.context,
+                 message_type: data.message_type,
+                 subtype: data.subtype,
+-                subtype_id: data.subtype_id,  
++                subtype_id: data.subtype_id,
+             });
+ 
+             var model = new Model(options.model);
