@@ -31,11 +31,13 @@
     """,
     'author': 'NovaPoint Group Inc',
     'website': 'www.novapointgroup.com',
-    'depends': ['base','crm', 'sale', 'project_issue', 'crm_project_issue'],
+    'depends': ['base','crm', 'sale', 'project_issue', 'crm_project_issue','mail'],
     'init_xml': [],
     'data': [
         "views/helpdesk_issue_view.xml",
-        "views/base_action_rule_view.xml"
+        "views/base_action_rule_view.xml",
+#TODO: fix code in javascript override of notification and count methods        
+#        "views/helpdesk_chat_manager.xml", 
         ],
     'demo_xml': [],
     'test': [],

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    
+    <odoo>      
+       
+       <!-- add css / js -->
+        <template id="assets_backend" name="helpdesk_chat_manager" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                <script type="text/javascript" src="/crm_helpdesk_features/static/src/js/chat_manager.js"></script>
+            </xpath>
+        </template>
+        
+    </odoo>
+</openerp>
