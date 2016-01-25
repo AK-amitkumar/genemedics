@@ -31,7 +31,9 @@
     """,
     'author': 'NovaPoint Group Inc',
     'website': 'www.novapointgroup.com',
-    'depends': ['base','crm', 'sale', 'project_issue', 'mail'],
+
+    'depends': ['base','crm', 'sale', 'project_issue', 'mail','hr_contract'],
+
     'init_xml': [],
     'data': [
         "views/helpdesk_issue_view.xml",

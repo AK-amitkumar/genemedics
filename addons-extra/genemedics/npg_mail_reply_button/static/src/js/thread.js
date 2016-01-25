@@ -22,9 +22,16 @@ ChatThread.include({
 
     on_click_o_thread_message_reply: function(event) {
         var self = this;
-        this.open_composer();
+       // this.open_composer();
        // var message_id = $(event.currentTarget).data('message-id');
        // this.trigger("open_composer", message_id);
+      // var $thread = this.$('.o_followers_list');
+      this.$el.html(qweb.render('mail.chatter.ChatComposer',  {
+            messages: msgs,
+            options: _.extend({}, this.options, options),
+            ORDER: ORDER,
+        })).appendTo(this);
+       
     },
     
     init: function(parent, dataset, options) {
