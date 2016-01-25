@@ -51,8 +51,8 @@
             <field name="model">project.issue</field>
             <field name="arch" type="xml">
                 <tree  default_order="write_date desc"
-                	colors="green: age_since_update &gt; 2.0 ;blue: age_since_update &lt;= 0.5 
-                	;red: priority = 2" string="Helpdesk Issue" decoration-bf="message_needaction==True">
+                	colors="red: priority = '2' ; green: age_since_update &gt; 2.0 ;blue: age_since_update &lt;= 0.5 
+                	" string="Helpdesk Issue" decoration-bf="message_needaction==True">
                     <field name="create_date" string="Created on" invisible="0"/>
                     <field name="write_date" string="Last Modified" invisible="1"/>
                     <field name="age_issue" />
