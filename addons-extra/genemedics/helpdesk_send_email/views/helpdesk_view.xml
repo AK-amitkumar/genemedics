@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+       <record model="ir.ui.view" id="project_issue_helpdesk_form_view">
+            <field name="name">Project Issue Tracker Form</field>
+            <field name="model">project.issue</field>
+            <field name="inherit_id" ref="project_issue.project_issue_form_view" />
+            <field name="arch" type="xml">
+            	<xpath expr="//field[@name='stage_id']" position="before">
+            		<button name="send_private_mail" string="Send Private Email" type="object" class="btn-primary"/>
+            	</xpath>
+            </field>
+       </record>
+    </data>
+</openerp>

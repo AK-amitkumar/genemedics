@@ -10,4 +10,6 @@ encoding//crm_phone_log/models/crm_phonecall.py=utf-8
 encoding//help_support/__openerp__.py=utf-8
 encoding//help_support/controllers.py=utf-8
 encoding//help_support/models.py=utf-8
+encoding//helpdesk_send_email/__openerp__.py=utf-8
+encoding//helpdesk_send_email/helpdesk.py=utf-8
 encoding//npg_mail_reply_button/__openerp__.py=utf-8
