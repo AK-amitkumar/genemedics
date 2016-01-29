@@ -44,13 +44,14 @@ class HelpDeskIssues(models.Model):
         except ValueError:
             compose_form_id = False
         ctx = dict()
-        print template_id,compose_form_id,self.ids[0]
+        default_partner_ids = self.partner_id and [(6,0,[self.partner_id.id])] or False
         ctx.update({
             'default_model': 'project.issue',
             'default_res_id': self.ids[0],
             'default_use_template': bool(template_id),
             'default_template_id': template_id,
             'default_composition_mode': 'comment',
+            'default_partner_ids':default_partner_ids
         })
         return {
             'type': 'ir.actions.act_window',
