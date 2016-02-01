@@ -4,18 +4,24 @@ odoo.define('npg_mail_reply_button.ChatThread', function(require) {
     var ChatThread = require('mail.ChatThread');
     var chat_manager = require('mail.chat_manager');
     var composer = require('mail.composer');
+    var Model = require('web.Model');
 
     var Dialog = require('web.Dialog');
     var form_common = require('web.form_common');
     var config = require('web.config');
     var core = require('web.core');
+    var QWeb = core.qweb;
+    var session = require('web.session');
+    var MessageModel = new Model('mail.message', session.context);
+    var ChannelModel = new Model('mail.channel', session.context);
+    var UserModel = new Model('res.users', session.context);
     var _t = core._t;
     var qweb = core.qweb;
     var ORDER = {
         ASC: 1,
         DESC: -1,
     };
-
+// stuff related chatcomposer ,duplicate 
 var ChatterComposer = composer.BasicComposer.extend({
     template: 'mail.chatter.ChatComposer',
 
@@ -314,9 +320,46 @@ var ChatterComposer = composer.BasicComposer.extend({
             });
 
         },
+        render: function (messages, options) {
+            var msgs = _.map(messages, this._preprocess_message.bind(this));
+            if (this.options.display_order === ORDER.DESC) {
+                msgs.reverse();
+            }
+            options = _.extend({}, this.options, options);
+
+            // Hide avatar and info of a message if that message and the previous
+            // one are both comments wrote by the same author at the same minute
+            var prev_msg;
+            _.each(msgs, function (msg) {
+                if (!prev_msg || (Math.abs(msg.date.diff(prev_msg.date)) > 60000) ||
+                    prev_msg.message_type !== 'comment' || msg.message_type !== 'comment' ||
+                    (prev_msg.author_id[0] !== msg.author_id[0])) {
+                    msg.display_author = true;
+                } else {
+                    msg.display_author = !options.squash_close_messages;
+                }
+                prev_msg = msg;
+            });
+
+            var final_msg = []
+            _.each(msgs, function(msg) {
+                if (!msg.reply_parent_id) {
+                    msg.child_ids = msgs.filter(function(obj){return obj.reply_parent_id == msg.id})
+                    final_msg.push(msg);
+                }
+
+            });
+            this.$el.html(QWeb.render('mail.ChatThread', {
+                messages: final_msg,
+                options: options,
+                ORDER: ORDER,
+            }));
+       
+        },
         open_composer: function (message_id) {
             var self = this;
             var old_composer = this.composer;
+            this.message_id = message_id
             this.composer = new ChatterComposer(this._parent_data, this._parent_data.view.dataset, {
                 context: this._parent_data.context,
                 input_min_height: 50,
@@ -342,13 +385,13 @@ var ChatterComposer = composer.BasicComposer.extend({
 
         },
         on_post_message: function (message) {
-            console.log(this);
-            var options = {model: this._parent_data.model, res_id: this._parent_data.res_id};
+            var options = {model: this._parent_data.model, res_id: this._parent_data.res_id, reply_parent_id: this.message_id};
             chat_manager
                 .post_message(message, options)
                 .fail(function () {
                 // todo: display notification
-            });
+                });
+  
         },
     });
 
