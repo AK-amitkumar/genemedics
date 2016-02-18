@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!--Medication Email template -->
+        <record id="email_template_medication" model="mail.template">
+            <field name="name">MEDICATION MANAGEMENT / PRESCRIPTION REFILLS</field>
+            <field name="email_from">m.saleh.serpentcs@gmail.com</field>
+            <field name="subject">MEDICATION MANAGEMENT / PRESCRIPTION REFILLS</field>
+            <field name="email_to">m.saleh.serpentcs@gmail.com</field>
+            <field name="model_id" ref="crm.model_crm_lead" />
+            <field name="auto_delete" eval="True" />
+            <field name="lang">${object.partner_id.lang}</field>
+            <field name="body_html"><![CDATA[
+<div style="font-family: 'Lucida Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; ">
+    <p>Hello,</p>
+    <p>This is Genemedics Health Institute calling to let you know that our records indicate that one or more of your medications are due to be refilled and will be shipped from the pharmacy on (7 days prior to run-out date).</p>
+    <p>You may press one to speak to a clinic representative or log into your patient portal to delay or cancel your order.  Thank you for your continued business with Genemedics.</p>
+    <p>Have a great day!</p>
+</div>
+            ]]></field>
+        </record>
+
+        <!--LABS DUE Email template -->
+        <record id="email_template_labs_due" model="mail.template">
+            <field name="name">LABS DUE</field>
+            <field name="email_from">${object.email_from}</field>
+            <field name="subject">LABS DUE</field>
+            <field name="email_to">${object.email_from}</field>
+            <field name="model_id" ref="crm.model_crm_lead" />
+            <field name="auto_delete" eval="True" />
+            <field name="lang">${object.partner_id.lang}</field>
+            <field name="body_html"><![CDATA[
+<div style="font-family: 'Lucida Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; ">
+    <p>Hello,</p>
+    <p>This is Genemedics Health Institute calling to let you know that you are due for lab work on ${object.labs_due_date}</p>
+    <p>You may press one to speak to a clinic representative or log into your patient portal to obtain your lab order and schedule an appointment.</p>
+    <p>Thank you for continuing to make Genemedics your partner in Health and Wellness.</p>
+    <p>Have a great day!</p>
+</div>
+            ]]></field>
+        </record>
+
+        <!--Phone Consultation Email template -->
+        <record id="email_template_appoinment_reminder" model="mail.template">
+            <field name="name">APPOINTMENT REMINDER – Phone Consultation
+            </field>
+            <field name="email_from">m.saleh.serpentcs@gmail.com</field>
+            <field name="subject">APPOINTMENT REMINDER – Phone Consultation
+            </field>
+            <field name="email_to">m.saleh.serpentcs@gmail.com</field>
+            <field name="model_id" ref="crm.model_crm_lead" />
+            <field name="auto_delete" eval="True" />
+            <field name="lang">${object.partner_id.lang}</field>
+            <field name="body_html"><![CDATA[
+<div style="font-family: 'Lucida Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; ">
+    <p>Hello,</p>
+    <p>This is Genemedics Health Institute calling to remind you of your phone consultation appointment with ${object.partner_id.name} for tomorrow at 10.00 am. ${object.partner_id.name} will call you at this number at 11.00 am..</p>
+    <p>If you would like to cancel or reschedule your appointment, please press one to be connected to a clinic representative.</p>
+    <p>Thank you for choosing Genemedics Health Institute!</p>
+    <p>Have a great day!</p>
+</div>
+            ]]></field>
+        </record>
+
+        <!--Office Consultation Email template -->
+        <record id="email_template_appoinment_reminder_off_con" model="mail.template">
+            <field name="name">APPOINTMENT REMINDER – Office Consultation
+            </field>
+            <field name="email_from">m.saleh.serpentcs@gmail.com</field>
+            <field name="subject">APPOINTMENT REMINDER – Office Consultation
+            </field>
+            <field name="email_to">m.saleh.serpentcs@gmail.com</field>
+            <field name="model_id" ref="crm.model_crm_lead" />
+            <field name="auto_delete" eval="True" />
+            <field name="lang">${object.partner_id.lang}</field>
+            <field name="body_html"><![CDATA[
+<div style="font-family: 'Lucida Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; ">
+    <p>Hello,</p>
+    <p>This is Genemedics Health Institute calling to remind you of your consultation appointment with ${object.partner_id.name} for tomorrow at 10.00 am. at our ${object.partner_id.stree},${object.partner_id.stree2},${object.partner_id.city},${object.partner_id.state_id.name},${object.partner_id.country_id.name},${object.partner_id.zip} location.</p>
+    <p>If you would like to cancel or reschedule your appointment, please press one to be connected to a clinic representative.</p>
+    <p>Thank you for choosing Genemedics Health Institute.  We look forward to seeing you tomorrow!</p>
+    <p>Have a great day!</p>
+</div>
+            ]]></field>
+        </record>
+
+        <!--Medical Consultation Email template -->
+        <record id="email_template_appoinment_reminder_med_con" model="mail.template">
+            <field name="name">APPOINTMENT REMINDER – Medical Consultation
+            </field>
+            <field name="email_from">m.saleh.serpentcs@gmail.com</field>
+            <field name="subject">APPOINTMENT REMINDER – Medical Consultation
+            </field>
+            <field name="email_to">m.saleh.serpentcs@gmail.com</field>
+            <field name="model_id" ref="crm.model_crm_lead" />
+            <field name="auto_delete" eval="True" />
+            <field name="lang">${object.partner_id.lang}</field>
+            <field name="body_html"><![CDATA[
+<div style="font-family: 'Lucida Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; ">
+    <p>Hello,</p>
+    <p>This is Genemedics Health Institute calling to remind you of your appointment for a medical consultation with ${object.partner_id.name} for tomorrow at 12:00 pm at our ${object.partner_id.stree},${object.partner_id.stree2},${object.partner_id.city},${object.partner_id.state_id.name},${object.partner_id.country_id.name},${object.partner_id.zip} location.</p>
+    <p>If you would like to cancel or reschedule your appointment, please press one to be connected to a clinic representative.</p>
+    <p>Thank you for choosing Genemedics Health Institute, We look forward to seeing you tomorrow.</p>
+    <p>Have a great day!</p>
+</div>
+            ]]></field>
+        </record>
+
+        <!--Lab Work Email template -->
+        <record id="email_template_appoinment_reminder_lab_work" model="mail.template">
+            <field name="name">APPOINTMENT REMINDER – Lab Work</field>
+            <field name="email_from">m.saleh.serpentcs@gmail.com</field>
+            <field name="subject">APPOINTMENT REMINDER – Lab Work</field>
+            <field name="email_to">m.saleh.serpentcs@gmail.com</field>
+            <field name="model_id" ref="crm.model_crm_lead" />
+            <field name="auto_delete" eval="True" />
+            <field name="lang">${object.partner_id.lang}</field>
+            <field name="body_html"><![CDATA[
+<div style="font-family: 'Lucida Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; ">
+    <p>Hello,</p>
+    <p>This is Genemedics Health Institute calling to remind you of your appointment for lab work, tomorrow at 2:00 pm at our ${object.partner_id.stree},${object.partner_id.stree2},${object.partner_id.city},${object.partner_id.state_id.name},${object.partner_id.country_id.name},${object.partner_id.zip} location.</p>
+    <p>Please do not eat or drink anything except water 8 hours prior to your appointment.</p>
+    <p>If you would like to cancel or reschedule your appointment, please press one to be connected to a clinic representative.</p>
+    <p>Thank you for choosing Genemedics Health Institute, We look forward to seeing you tomorrow.</p>
+    <p>Have a great day!</p>
+</div>
+            ]]></field>
+        </record>
+        
+        <!--Billing Information Email template -->
+        <record id="email_template_billing_information" model="mail.template">
+            <field name="name">Billing Information</field>
+            <field name="email_from">m.saleh.serpentcs@gmail.com</field>
+            <field name="subject">Billing Information</field>
+            <field name="email_to">m.saleh.serpentcs@gmail.com</field>
+            <field name="model_id" ref="crm.model_crm_lead" />
+            <field name="auto_delete" eval="True" />
+            <field name="lang">${object.partner_id.lang}</field>
+            <field name="body_html"><![CDATA[
+<div style="font-family: 'Lucida Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; ">
+    <p>Hello,</p>
+    <p>This is Billing Information for you.</p>
+    <p>Have a great day!</p>
+</div>
+            ]]></field>
+        </record>
+        
+        <!--Lab Result Email template -->
+        <record id="email_template_lab_result" model="mail.template">
+            <field name="name">Lab Result</field>
+            <field name="email_from">m.saleh.serpentcs@gmail.com</field>
+            <field name="subject">Lab Result</field>
+            <field name="email_to">m.saleh.serpentcs@gmail.com</field>
+            <field name="model_id" ref="crm.model_crm_lead" />
+            <field name="auto_delete" eval="True" />
+            <field name="lang">${object.partner_id.lang}</field>
+            <field name="body_html"><![CDATA[
+<div style="font-family: 'Lucida Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; ">
+    <p>Hello,</p>
+    <p>This is Lab Result of you.</p>
+    <p>Have a great day!</p>
+</div>
+            ]]></field>
+        </record>
+        
+        <!--Lab Test Email template -->
+        <record id="email_template_lab_test" model="mail.template">
+            <field name="name">Lab Test</field>
+            <field name="email_from">m.saleh.serpentcs@gmail.com</field>
+            <field name="subject">Lab results received</field>
+            <field name="email_to">m.saleh.serpentcs@gmail.com</field>
+            <field name="model_id" ref="crm.model_crm_lead" />
+            <field name="auto_delete" eval="True" />
+            <field name="lang">${object.partner_id.lang}</field>
+            <field name="body_html"><![CDATA[
+<div style="font-family: 'Lucida Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; ">
+    <p>Dear Daniel Thomas Gomez,</p>
+    <p>Your most recent lab results are final and have been received.  Please contact our office to schedule your medical consultation appointment at (800) 277-4041 during our normal business hours of Monday-Friday, between the hours of 9am to 5pm EST.</p>
+    <p>You may also schedule your appointment online by clicking the following button: </p>
+    <p>Thank you for making Genemedics your partner in Health and Wellness!</p>
+    <p>Sincerely,</p>
+    <p>John Dzahristos, B.S. Sports Medicine</p>
+    <p>Clinic Specialist</p>
+</div>
+            ]]></field>
+        </record>
+        
+        <!--Support Team Email template -->
+        <record id="email_template_support_team" model="mail.template">
+            <field name="name">Support Team</field>
+            <field name="email_from">m.saleh.serpentcs@gmail.com</field>
+            <field name="subject">Medical Consultation needed for Daniel Thomas Gomez</field>
+            <field name="email_to">m.saleh.serpentcs@gmail.com</field>
+            <field name="model_id" ref="crm.model_crm_lead" />
+            <field name="auto_delete" eval="True" />
+            <field name="lang">${object.partner_id.lang}</field>
+            <field name="body_html"><![CDATA[
+<div style="font-family: 'Lucida Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; ">
+    <p>Hello,</p>
+    <p>Please contact Daniel Thomas Gomez to schedule medical consultation for lab results that were received on 10/02/2016.</p>
+    <p>E-mails have been sent to the patient with no response.</p>
+    <p>Thank you!</p>
+</div>
+            ]]></field>
+        </record>
+
+        <!--appoinment scheduled Email template -->
+        <record id="email_template_app_scheduled" model="mail.template">
+            <field name="name">Appoinment Scheduled</field>
+            <field name="email_from">m.saleh.serpentcs@gmail.com</field>
+            <field name="subject">Appoinment Scheduled</field>
+            <field name="email_to">m.saleh.serpentcs@gmail.com</field>
+            <field name="model_id" ref="crm.model_crm_lead" />
+            <field name="auto_delete" eval="True" />
+            <field name="lang">${object.partner_id.lang}</field>
+            <field name="body_html"><![CDATA[
+<div style="font-family: 'Lucida Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; ">
+    <p>Hello,</p>
+    <p>Your appoinment has been scheduled.</p>
+    <p>Have a great day!</p>
+</div>
+            ]]></field>
+        </record>
+
+        <!-- Patient Care team Email template -->
+        <record id="email_template_patient_care" model="mail.template">
+            <field name="name">Follow up or processing</field>
+            <field name="email_from">m.saleh.serpentcs@gmail.com</field>
+            <field name="subject">Medication Refill alert</field>
+            <field name="email_to">m.saleh.serpentcs@gmail.com</field>
+            <field name="model_id" ref="crm.model_crm_lead" />
+            <field name="auto_delete" eval="True" />
+            <field name="lang">${object.partner_id.lang}</field>
+            <field name="body_html"><![CDATA[
+<div style="font-family: 'Lucida Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; ">
+    <p>Hello,</p>
+    <p>Please contact Daniel Thomas Gomezss.</p>
+    <p>Thank you!</p>
+</div>
+            ]]></field>
+        </record>
+        
+        <!-- Patient Care team Email template -->
+        <record id="email_template_email_confirmation" model="mail.template">
+            <field name="name">E-mail confirmation</field>
+            <field name="email_from">m.saleh.serpentcs@gmail.com</field>
+            <field name="subject">E-mail confirmation</field>
+            <field name="email_to">m.saleh.serpentcs@gmail.com</field>
+            <field name="model_id" ref="crm.model_crm_lead" />
+            <field name="auto_delete" eval="True" />
+            <field name="lang">${object.partner_id.lang}</field>
+            <field name="body_html"><![CDATA[
+<div style="font-family: 'Lucida Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; ">
+    <p>Hello,</p>
+    <p>Your tracking number is 78966253656.</p>
+    <p>Have a great day!</p>
+</div>
+            ]]></field>
+        </record>
+        
+        <!-- Patient Care team Email template -->
+        <record id="email_template_reach_out_patient" model="mail.template">
+            <field name="name">Reach out to the patient</field>
+            <field name="email_from">m.saleh.serpentcs@gmail.com</field>
+            <field name="subject">Reach out to the patient</field>
+            <field name="email_to">m.saleh.serpentcs@gmail.com</field>
+            <field name="model_id" ref="crm.model_crm_lead" />
+            <field name="auto_delete" eval="True" />
+            <field name="lang">${object.partner_id.lang}</field>
+            <field name="body_html"><![CDATA[
+<div style="font-family: 'Lucida Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; ">
+    <p>Hello,</p>
+    <p>To reach out to the patient and/or cancel their program</p>
+    <p>Have a great day!</p>
+</div>
+            ]]></field>
+        </record>
+        
+        <!-- Ticket closed Email template -->
+        <record id="email_template_reach_ticket_closed" model="mail.template">
+            <field name="name">Ticket is closed</field>
+            <field name="email_from">m.saleh.serpentcs@gmail.com</field>
+            <field name="subject">Ticket is closed</field>
+            <field name="email_to">m.saleh.serpentcs@gmail.com</field>
+            <field name="model_id" ref="crm.model_crm_lead" />
+            <field name="auto_delete" eval="True" />
+            <field name="lang">${object.partner_id.lang}</field>
+            <field name="body_html"><![CDATA[
+<div style="font-family: 'Lucida Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; ">
+    <p>Hello,</p>
+    <p>Your Ticket is closed.</p>
+    <p>Have a great day!</p>
+</div>
+            ]]></field>
+        </record>
+        
+        <!-- Ticket/Email Submitted Email template -->
+        <record id="email_template_reach_ticket_submtted" model="mail.template">
+            <field name="name">Ticket/Email Submitted</field>
+            <field name="email_from">m.saleh.serpentcs@gmail.com</field>
+            <field name="subject">Ticket/Email Submitted</field>
+            <field name="email_to">m.saleh.serpentcs@gmail.com</field>
+            <field name="model_id" ref="crm.model_crm_lead" />
+            <field name="auto_delete" eval="True" />
+            <field name="lang">${object.partner_id.lang}</field>
+            <field name="body_html"><![CDATA[
+<div style="font-family: 'Lucida Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; ">
+    <p>Hello,</p>
+    <p>Your Ticket/Email is submitted.</p>
+    <p>Have a great day!</p>
+</div>
+            ]]></field>
+        </record>
+        
+        <!-- Reminder Inactivity Email template -->
+        <record id="email_template_reminder_inactivity" model="mail.template">
+            <field name="name">Reminder Inactivity</field>
+            <field name="email_from">m.saleh.serpentcs@gmail.com</field>
+            <field name="subject">Alert Tim savas Help Desk Issue needs to be updated.</field>
+            <field name="email_to">m.saleh.serpentcs@gmail.com</field>
+            <field name="model_id" ref="crm.model_crm_lead" />
+            <field name="auto_delete" eval="True" />
+            <field name="lang">${object.partner_id.lang}</field>
+            <field name="body_html"><![CDATA[
+<div style="font-family: 'Lucida Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; ">
+    <p>Hello,</p>
+    <p>Please update the following Help Desk Issue.</p>
+    <p>Katrina Parriss</p>
+    <p>Doctor</p>
+    <p>Thank you!</p>
+</div>
+            ]]></field>
+        </record>
+
+    </data>
+</odoo>

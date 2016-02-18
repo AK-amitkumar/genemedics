@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_popup_reminder,popup.reminder,model_popup_reminder,base.group_user,1,1,1,0
+access_notification_msg_manager,notification_msg_manager,model_notification_msg,project.group_project_manager,1,1,1,0
+access_notification_msg_user,notification_msg_user,model_notification_msg,project.group_project_user,1,1,1,0

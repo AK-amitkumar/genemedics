@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+
+        <record id="inherited_crm_lead_view" model="ir.ui.view">
+            <field name="name">inherited.crm.lead.view</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm_genemedics.crm_case_form_view_oppor_genemedic"/>
+            <field name="arch" type="xml">
+               <xpath expr="//form/header/button[2]" position="after">
+                    <button name="send_mail" type="object" string="Send Mail" class="oe_highlight"/>
+                </xpath>
+            </field>
+        </record> 
+
+        <record model="ir.ui.view" id="view_schedule_meeting_form">
+	        <field name="name">Online Schedule Meeting Form</field>
+	        <field name="model">calendar.event</field>
+	        <field name="arch" type="xml">
+	            <form string="Meetings">
+	                <sheet>
+                        <field name="state" widget="statusbar" clickable="True"/>
+                        <div class="oe_title">
+	                        <div class="oe_edit_only">
+	                            <label for="name"/>
+	                        </div>
+	                        <h1>
+	                            <field name="name"/>
+	                        </h1>
+	                        <group colspan="4" col="4">
+	                           <field name="start_datetime" string="Starting at" on_change="onchange_employee_id(employee_id, start_datetime)"/>
+	                           <label string="Please select proper time, it will add 30 mins for consultancy time."/>
+	                           <field name="stop_datetime" string="Ending at" invisible="1"/>
+                            </group>
+	                        <group>
+	                            <field name="employee_id" string="Consultant" required="1" on_change="onchange_employee_id(employee_id, start_datetime)"/>
+	                        </group>
+	                    </div>
+	                    <group colspan="4">
+	                        <button name="do_confirm" type="object" string="Confirm"/>
+	                    </group>
+	                </sheet>
+	            </form>
+	        </field>
+        </record>
+        
+        <record id="action_schedule_meeting" model="ir.actions.act_window">
+	        <field name="name">Online Schedule Meetings</field>
+	        <field name="res_model">calendar.event</field>
+            <field name="view_type">form</field>
+	        <field name="view_mode">form</field>
+	        <field name="view_id" ref="view_schedule_meeting_form"/>
+        </record>
+	    <record model="ir.actions.act_window.view" id="action_view_schedule_meeting">
+	        <field name="act_window_id" ref="action_schedule_meeting"/>
+	        <field name="sequence" eval="4"/>
+	        <field name="view_mode">form</field>
+	        <field name="view_id" ref="view_schedule_meeting_form"/>
+	    </record>
+
+    </data>
+</openerp>

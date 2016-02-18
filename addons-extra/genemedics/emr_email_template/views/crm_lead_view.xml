@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+        
+        <record id="inherited_crm_lead_view_template" model="ir.ui.view">
+            <field name="name">inherited.crm.lead.view.template</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm_genemedics.crm_case_form_view_oppor_genemedic"/>
+            <field name="arch" type="xml">
+               <xpath expr="//page[@name='lead']" position="after">
+                   <page string="Labs Due Dates and Information">
+                       <separator string="Lab Information" colspan="4"/>
+                       <group colspan="4" col="4">
+                           <field name="labs_due_date"/>
+                           <field name="lab_panel_type"/>
+                           <field name="refill_date"/>
+                           <field name="medication"/>
+                           <field name="sig"/>
+                       </group>
+                       <separator string="Follow Up Due Date" colspan="4"/>
+                       <group colspan="4">
+                           <field name="folloup_office_con_due_date"/>
+                           <field name="folloup_phone_con_due_date"/>
+                       </group>
+                       <separator string="Lab Result" colspan="4"/>
+                       <group colspan="4">
+                           <field name="lab_result" nolabel="1"/>
+                       </group>
+                   </page>
+               </xpath>
+               <xpath expr="//form/header/button[1]" position="after">
+                    <button name="send_sms" type="object" string="Send Sms" class="oe_highlight"/>
+                    <button name="do_process" type="object" string="Send Labs Due Sms" class="oe_highlight"/>
+                </xpath>
+            </field>
+        </record>
+        
+        <record id="inherited_res_partner_view_template" model="ir.ui.view">
+            <field name="name">inherited.res.partner.view.template</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="crm.view_partners_form_crm1"/>
+            <field name="arch" type="xml">
+               <xpath expr="//field[@name='meeting_count']" position="attributes">
+                   <attribute name="string">Appointment</attribute>
+                </xpath>
+            </field>
+        </record>
+        
+    </data>
+</openerp>

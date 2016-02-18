@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+		<record id="meeting_request_template" model="mail.template">
+            <field name="name">Meeting Schedule</field>
+            <field name="subject">Schedule Meeting</field>
+            <field name="email_from">${(user.login or '')|safe}</field>
+            <field name="email_to">${(object.email_from or '')|safe}</field>
+            <field name="model_id" ref="model_crm_lead"/>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html">
+                <![CDATA[
+					<div style="font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 15px; color: #000; background-color: #FFF; ">
+	    				<p>Hello</p>
+                        <% set signup_url = object.get_signup_url() %>
+                        % if signup_url:
+                        <p>
+                        You can access this document and pay online via our Customer Portal:
+                        </p>
+                            <a style="display:block; width: 150px; height:20px; margin-left: 120px; color: #DDD; font-family: 'Lucida Grande', Helvetica, Arial, sans-serif; font-size: 13px; font-weight: bold; text-align: center; text-decoration: none !important; line-height: 1; padding: 5px 0px 0px 0px; background-color: #8E0000; border-radius: 5px 5px; background-repeat: repeat no-repeat;"
+                               href="${signup_url}">View</a>
+                        % endif
+					</div>
+                ]]>
+         	</field>
+       </record>
+	</data>
+</openerp>
