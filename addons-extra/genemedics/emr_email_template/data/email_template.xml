@@ -5,9 +5,9 @@
         <!--Medication Email template -->
         <record id="email_template_medication" model="mail.template">
             <field name="name">MEDICATION MANAGEMENT / PRESCRIPTION REFILLS</field>
-            <field name="email_from">m.saleh.serpentcs@gmail.com</field>
+            <field name="email_from">${object.user_id.email}</field>
             <field name="subject">MEDICATION MANAGEMENT / PRESCRIPTION REFILLS</field>
-            <field name="email_to">m.saleh.serpentcs@gmail.com</field>
+            <field name="email_to">${object.email_from}</field>
             <field name="model_id" ref="crm.model_crm_lead" />
             <field name="auto_delete" eval="True" />
             <field name="lang">${object.partner_id.lang}</field>
@@ -24,7 +24,7 @@
         <!--LABS DUE Email template -->
         <record id="email_template_labs_due" model="mail.template">
             <field name="name">LABS DUE</field>
-            <field name="email_from">${object.email_from}</field>
+            <field name="email_from">${object.user_id.email}</field>
             <field name="subject">LABS DUE</field>
             <field name="email_to">${object.email_from}</field>
             <field name="model_id" ref="crm.model_crm_lead" />
@@ -45,10 +45,10 @@
         <record id="email_template_appoinment_reminder" model="mail.template">
             <field name="name">APPOINTMENT REMINDER – Phone Consultation
             </field>
-            <field name="email_from">m.saleh.serpentcs@gmail.com</field>
+            <field name="email_from">${object.user_id.email}</field>
             <field name="subject">APPOINTMENT REMINDER – Phone Consultation
             </field>
-            <field name="email_to">m.saleh.serpentcs@gmail.com</field>
+            <field name="email_to">${object.email_from}</field>
             <field name="model_id" ref="crm.model_crm_lead" />
             <field name="auto_delete" eval="True" />
             <field name="lang">${object.partner_id.lang}</field>
@@ -67,10 +67,10 @@
         <record id="email_template_appoinment_reminder_off_con" model="mail.template">
             <field name="name">APPOINTMENT REMINDER – Office Consultation
             </field>
-            <field name="email_from">m.saleh.serpentcs@gmail.com</field>
+            <field name="email_from">${object.user_id.email}</field>
             <field name="subject">APPOINTMENT REMINDER – Office Consultation
             </field>
-            <field name="email_to">m.saleh.serpentcs@gmail.com</field>
+            <field name="email_to">${object.email_from}</field>
             <field name="model_id" ref="crm.model_crm_lead" />
             <field name="auto_delete" eval="True" />
             <field name="lang">${object.partner_id.lang}</field>
@@ -89,10 +89,10 @@
         <record id="email_template_appoinment_reminder_med_con" model="mail.template">
             <field name="name">APPOINTMENT REMINDER – Medical Consultation
             </field>
-            <field name="email_from">m.saleh.serpentcs@gmail.com</field>
+            <field name="email_from">${object.user_id.email}</field>
             <field name="subject">APPOINTMENT REMINDER – Medical Consultation
             </field>
-            <field name="email_to">m.saleh.serpentcs@gmail.com</field>
+            <field name="email_to">${object.email_from}</field>
             <field name="model_id" ref="crm.model_crm_lead" />
             <field name="auto_delete" eval="True" />
             <field name="lang">${object.partner_id.lang}</field>
@@ -110,9 +110,9 @@
         <!--Lab Work Email template -->
         <record id="email_template_appoinment_reminder_lab_work" model="mail.template">
             <field name="name">APPOINTMENT REMINDER – Lab Work</field>
-            <field name="email_from">m.saleh.serpentcs@gmail.com</field>
+            <field name="email_from">${object.user_id.email}</field>
             <field name="subject">APPOINTMENT REMINDER – Lab Work</field>
-            <field name="email_to">m.saleh.serpentcs@gmail.com</field>
+            <field name="email_to">${object.email_from}</field>
             <field name="model_id" ref="crm.model_crm_lead" />
             <field name="auto_delete" eval="True" />
             <field name="lang">${object.partner_id.lang}</field>
@@ -131,9 +131,9 @@
         <!--Billing Information Email template -->
         <record id="email_template_billing_information" model="mail.template">
             <field name="name">Billing Information</field>
-            <field name="email_from">m.saleh.serpentcs@gmail.com</field>
+            <field name="email_from">${object.user_id.email}</field>
             <field name="subject">Billing Information</field>
-            <field name="email_to">m.saleh.serpentcs@gmail.com</field>
+            <field name="email_to">${object.email_from}</field>
             <field name="model_id" ref="crm.model_crm_lead" />
             <field name="auto_delete" eval="True" />
             <field name="lang">${object.partner_id.lang}</field>
@@ -149,9 +149,9 @@
         <!--Lab Result Email template -->
         <record id="email_template_lab_result" model="mail.template">
             <field name="name">Lab Result</field>
-            <field name="email_from">m.saleh.serpentcs@gmail.com</field>
+            <field name="email_from">${object.user_id.email}</field>
             <field name="subject">Lab Result</field>
-            <field name="email_to">m.saleh.serpentcs@gmail.com</field>
+            <field name="email_to">${object.email_from}</field>
             <field name="model_id" ref="crm.model_crm_lead" />
             <field name="auto_delete" eval="True" />
             <field name="lang">${object.partner_id.lang}</field>
@@ -167,9 +167,9 @@
         <!--Lab Test Email template -->
         <record id="email_template_lab_test" model="mail.template">
             <field name="name">Lab Test</field>
-            <field name="email_from">m.saleh.serpentcs@gmail.com</field>
+            <field name="email_from">${object.user_id.email}</field>
             <field name="subject">Lab results received</field>
-            <field name="email_to">m.saleh.serpentcs@gmail.com</field>
+            <field name="email_to">${object.email_from}</field>
             <field name="model_id" ref="crm.model_crm_lead" />
             <field name="auto_delete" eval="True" />
             <field name="lang">${object.partner_id.lang}</field>
@@ -189,9 +189,9 @@
         <!--Support Team Email template -->
         <record id="email_template_support_team" model="mail.template">
             <field name="name">Support Team</field>
-            <field name="email_from">m.saleh.serpentcs@gmail.com</field>
+            <field name="email_from">${object.user_id.email}</field>
             <field name="subject">Medical Consultation needed for Daniel Thomas Gomez</field>
-            <field name="email_to">m.saleh.serpentcs@gmail.com</field>
+            <field name="email_to">${object.email_from}</field>
             <field name="model_id" ref="crm.model_crm_lead" />
             <field name="auto_delete" eval="True" />
             <field name="lang">${object.partner_id.lang}</field>
@@ -208,9 +208,9 @@
         <!--appoinment scheduled Email template -->
         <record id="email_template_app_scheduled" model="mail.template">
             <field name="name">Appoinment Scheduled</field>
-            <field name="email_from">m.saleh.serpentcs@gmail.com</field>
+            <field name="email_from">${object.user_id.email}</field>
             <field name="subject">Appoinment Scheduled</field>
-            <field name="email_to">m.saleh.serpentcs@gmail.com</field>
+            <field name="email_to">${object.email_from}</field>
             <field name="model_id" ref="crm.model_crm_lead" />
             <field name="auto_delete" eval="True" />
             <field name="lang">${object.partner_id.lang}</field>
@@ -226,9 +226,9 @@
         <!-- Patient Care team Email template -->
         <record id="email_template_patient_care" model="mail.template">
             <field name="name">Follow up or processing</field>
-            <field name="email_from">m.saleh.serpentcs@gmail.com</field>
+            <field name="email_from">${object.user_id.email}</field>
             <field name="subject">Medication Refill alert</field>
-            <field name="email_to">m.saleh.serpentcs@gmail.com</field>
+            <field name="email_to">${object.email_from}</field>
             <field name="model_id" ref="crm.model_crm_lead" />
             <field name="auto_delete" eval="True" />
             <field name="lang">${object.partner_id.lang}</field>
@@ -244,9 +244,9 @@
         <!-- Patient Care team Email template -->
         <record id="email_template_email_confirmation" model="mail.template">
             <field name="name">E-mail confirmation</field>
-            <field name="email_from">m.saleh.serpentcs@gmail.com</field>
+            <field name="email_from">${object.user_id.email}</field>
             <field name="subject">E-mail confirmation</field>
-            <field name="email_to">m.saleh.serpentcs@gmail.com</field>
+            <field name="email_to">${object.email_from}</field>
             <field name="model_id" ref="crm.model_crm_lead" />
             <field name="auto_delete" eval="True" />
             <field name="lang">${object.partner_id.lang}</field>
@@ -262,9 +262,9 @@
         <!-- Patient Care team Email template -->
         <record id="email_template_reach_out_patient" model="mail.template">
             <field name="name">Reach out to the patient</field>
-            <field name="email_from">m.saleh.serpentcs@gmail.com</field>
+            <field name="email_from">${object.user_id.email}</field>
             <field name="subject">Reach out to the patient</field>
-            <field name="email_to">m.saleh.serpentcs@gmail.com</field>
+            <field name="email_to">${object.email_from}</field>
             <field name="model_id" ref="crm.model_crm_lead" />
             <field name="auto_delete" eval="True" />
             <field name="lang">${object.partner_id.lang}</field>
@@ -280,9 +280,9 @@
         <!-- Ticket closed Email template -->
         <record id="email_template_reach_ticket_closed" model="mail.template">
             <field name="name">Ticket is closed</field>
-            <field name="email_from">m.saleh.serpentcs@gmail.com</field>
+            <field name="email_from">${object.user_id.email}</field>
             <field name="subject">Ticket is closed</field>
-            <field name="email_to">m.saleh.serpentcs@gmail.com</field>
+            <field name="email_to">${object.email_from}</field>
             <field name="model_id" ref="crm.model_crm_lead" />
             <field name="auto_delete" eval="True" />
             <field name="lang">${object.partner_id.lang}</field>
@@ -298,9 +298,9 @@
         <!-- Ticket/Email Submitted Email template -->
         <record id="email_template_reach_ticket_submtted" model="mail.template">
             <field name="name">Ticket/Email Submitted</field>
-            <field name="email_from">m.saleh.serpentcs@gmail.com</field>
+            <field name="email_from">${object.user_id.email}</field>
             <field name="subject">Ticket/Email Submitted</field>
-            <field name="email_to">m.saleh.serpentcs@gmail.com</field>
+            <field name="email_to">${object.email_from}</field>
             <field name="model_id" ref="crm.model_crm_lead" />
             <field name="auto_delete" eval="True" />
             <field name="lang">${object.partner_id.lang}</field>
@@ -316,9 +316,9 @@
         <!-- Reminder Inactivity Email template -->
         <record id="email_template_reminder_inactivity" model="mail.template">
             <field name="name">Reminder Inactivity</field>
-            <field name="email_from">m.saleh.serpentcs@gmail.com</field>
+            <field name="email_from">${object.user_id.email}</field>
             <field name="subject">Alert Tim savas Help Desk Issue needs to be updated.</field>
-            <field name="email_to">m.saleh.serpentcs@gmail.com</field>
+            <field name="email_to">${object.email_from}</field>
             <field name="model_id" ref="crm.model_crm_lead" />
             <field name="auto_delete" eval="True" />
             <field name="lang">${object.partner_id.lang}</field>
@@ -329,6 +329,57 @@
     <p>Katrina Parriss</p>
     <p>Doctor</p>
     <p>Thank you!</p>
+</div>
+            ]]></field>
+        </record>
+        
+        
+        <record id="email_template_new_patient_not_schedule" model="mail.template">
+            <field name="name">Reminder New Patient For Medical Consultation</field>
+            <field name="email_from">${object.user_id.email}</field>
+            <field name="subject">Medical Consultation Reminder</field>
+            <field name="email_to">${object.email_from}</field>
+            <field name="model_id" ref="model_crm_lead" />
+            <field name="auto_delete" eval="True" />
+            <field name="lang">${object.partner_id.lang}</field>
+            <field name="body_html"><![CDATA[
+<div style="font-family: 'Lucida Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; ">
+    <p>Hello,</p>
+    <p>Just a reminder... You are scheduled for your Medical Consultation with Dr. Shanlikian at our ${object.street},${object.street2},${object.city},${object.state_id.name},${object.country_id.name},${object.zip}  at ${object.labs_due_date}.</p>
+    <p>Our doctors are currently building a customized plan to help you reach your specific health and fitness goals. I have no doubt that you are going to love what we come up with and start seeing results soon!</p>
+    <p>If you have any questions, please do not hesitate to call me at 800-277-4041.</p>
+    <p>Regards,</p>
+    <p>Genemedics Health Institute</p>
+</div>
+            ]]></field>
+        </record>
+        
+        
+        <record id="email_template_non_critical_not_received_lab_result" model="mail.template">
+            <field name="name">Non Critical Not Received Lab Result</field>
+            <field name="email_from">${object.user_id.email}</field>
+            <field name="subject">Non Critical Not Received Lab Result</field>
+            <field name="email_to">${object.email_from}</field>
+            <field name="model_id" ref="model_crm_lead" />
+            <field name="auto_delete" eval="True" />
+            <field name="lang">${object.partner_id.lang}</field>
+            <field name="body_html"><![CDATA[
+<div style="font-family: 'Lucida Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; ">
+    <p>Dear ${object.partner_id.name},</p>
+    <p>Our records indicate that you are due for follow-up labs on ${object.labs_due_date}. Lab testing is a critical part of our continued process in maintaining a customized plan that works for you.</p>
+    <p>For your convenience, you can obtain your lab prescription by clicking the following button and logging into your patient portal: www.genemedics.com/patientportalsignforms</p>
+    <p>If you are using insurance click here for our preferred lab information: www.genemedics.com/patientportalsignforms </p>
+    <p>If you are paying our discounted out of pocket rate, click here: www.genemedics.com/patientportalsignforms</p>
+    <p><u>Blood Draw Instructions:</u></p>
+    <p><ul>Do not eat or drink anything (except water) 8 hours prior to your blood draw.</ul></p>
+    <p><ul>Have your blood drawn 3 days after your last testosterone injection. For example, if you inject on Monday and Thursday, inject the testosterone (and HCG if it is part of your regimen) on Monday morning and have your blood drawn on Thursday morning prior to your Thursday injection(s)</ul></p>
+    <p><ul>If you use creams, troches, oral medications (i.e. tabs, caps) please administer the medication one hour before you have your blood drawn.</ul></p>
+    <p>Your health is our priority and we ask that you please let us know what day you will be having your blood drawn. This information enables us to track your results more efficiently and schedule your follow-up in a timely manner.</p>
+    <p>It typically takes 7-10 days to receive lab results. At this time, our office will contact you to schedule a follow up appointment to go over your results and make any necessary adjustments to ensure optimal results.</p>
+    <p>Thank you for continuing to make Genemedics your partner in Health and Wellness! Please do not hesitate to contact us if you have any questions or concerns.</p>
+    <p>Sincerely,</p>
+    <p>John Dzahristos, B.S. Sports Medicine</p>
+    <p>Clinic Specialist</p>
 </div>
             ]]></field>
         </record>
