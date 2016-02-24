@@ -4,7 +4,7 @@
 
     <record id="lead_user" model="res.groups">
         <field name="name">Lead User</field>
-        <field name="category_id" ref="base.module_category_human_resources"/>
+        <field name="category_id" ref="base.module_category_usability"/>
         <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
     </record>
 

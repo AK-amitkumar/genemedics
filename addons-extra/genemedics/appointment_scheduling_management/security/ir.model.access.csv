@@ -1,2 +1,3 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 mail.access_mail_message_subtype_all,mail.message.subtype.all,mail.model_mail_message_subtype,,1,1,1,1
+slot_access_user,slot.slot.all,model_slot_slot,,1,1,1,1

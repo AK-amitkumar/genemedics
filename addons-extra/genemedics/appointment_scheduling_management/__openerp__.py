@@ -30,7 +30,7 @@
     'depends': ['crm_genemedics', 'calendar'],
     'data': [
         'security/ir.model.access.csv',
-#        'security/appointment_scheduling_management_security.xml',
+        'security/appointment_scheduling_management_security.xml',
         'views/templates.xml',
         'views/appointment_scheduling_management_view.xml',
         'views/appointment_scheduling_management_email_template.xml',

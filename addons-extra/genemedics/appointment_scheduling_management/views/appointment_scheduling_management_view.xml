@@ -27,14 +27,17 @@
 	                        <h1>
 	                            <field name="name"/>
 	                        </h1>
+	                        <group>
+                                <field name="employee_id" string="Consultant" required="1" on_change="onchange_employee_id(employee_id, start_datetime)"/>
+                            </group>
 	                        <group colspan="4" col="4">
-	                           <field name="start_datetime" string="Starting at" on_change="onchange_employee_id(employee_id, start_datetime)"/>
-	                           <label string="Please select proper time, it will add 30 mins for consultancy time."/>
+	                           <field invisible="1" name="start_datetime" string="Starting at" on_change="onchange_employee_id(employee_id, start_datetime)"/>
+	                           <label string="Please select Available, it will be 30 mins for consultancy time."/>
+	                           <newline/>
+	                           <field name="start_date" on_change="onchange_start_date(start_date, employee_id)"/>
+	                           <field name="slot_id" on_change="onchange_slot_id(slot_id, start_datetime)"/>
 	                           <field name="stop_datetime" string="Ending at" invisible="1"/>
                             </group>
-	                        <group>
-	                            <field name="employee_id" string="Consultant" required="1" on_change="onchange_employee_id(employee_id, start_datetime)"/>
-	                        </group>
 	                    </div>
 	                    <group colspan="4">
 	                        <button name="do_confirm" type="object" string="Confirm"/>
@@ -57,6 +60,43 @@
 	        <field name="view_mode">form</field>
 	        <field name="view_id" ref="view_schedule_meeting_form"/>
 	    </record>
-
+	    
+	    <!-- Slot View -->
+	    <record model="ir.ui.view" id="view_slot_form">
+            <field name="name">Slot Form</field>
+            <field name="model">slot.slot</field>
+            <field name="arch" type="xml">
+                <form string="Slot">
+                    <sheet>
+                        <group colspan="4">
+                            <field name="sname"/>
+                            <field name="ename"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+	    <record model="ir.ui.view" id="view_slot_tree">
+            <field name="name">Slot Tree</field>
+            <field name="model">slot.slot</field>
+            <field name="arch" type="xml">
+                <tree string="Slot">
+	                <field name="sname"/>
+	                <field name="ename"/>
+                </tree>
+            </field>
+        </record>
+        
+        <record id="action_slot" model="ir.actions.act_window">
+            <field name="name">Slot</field>
+            <field name="res_model">slot.slot</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        
+        <menuitem action="action_slot"
+            id="menu_slot" parent="base.menu_sale_config"
+            sequence="12"/>
     </data>
 </openerp>
