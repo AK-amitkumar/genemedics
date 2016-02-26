@@ -403,51 +403,76 @@ class crm_lead(models.Model):
 #        self.send_labs_due_message('Prakash', 'Gandhinagar', 'n.mehta.serpentcs@gmail.com', '06-02-2016', 'aa', 'aa')
         return True
 
-    def send_labs_due_message(self, cr, uid, patient_name, address, patient_email, lab_due_date, panel_type, reason):
-        lab_due_date = datetime.strptime(lab_due_date, '%d-%m-%Y')
-        new_lab_due_date = lab_due_date.strftime('%m-%d-%Y')
-        auth_id = "MAMZLJZMZMMZLKMZE3NZ"
-        auth_token = "NDRhZmZlZTUyOWJkYzBjNDY4N2VlYzY4YTQwNDdi"
-        sms_content = u"Genemedics Health Institute: Our records indicate that you are due for lab work on %s.  Please call our office or log into your patient portal to obtain your lab order and schedule an appointment. www.genemedics.com/patientportalsignforms" % (new_lab_due_date)
-        to_number = '+917405906757'
-        from_number = '+13306807835'
-        self.send_sms(auth_id, auth_token, sms_content, to_number, from_number)
+    def send_labs_due_message(self, cr, uid, patient_name, address, patient_email, lab_due_date, panel_type, reason, context=None):
+        partner_obj = self.pool.get('res.partner')
+        partner_id = partner_obj.search(cr, uid, [('email', '=', patient_email)], context=context)
+        if partner_id:
+            partner_rec = partner_obj.browse(cr, uid, partner_id[0], context=context)
+            if partner_rec.mobile:
+                lab_due_date = datetime.strptime(lab_due_date, '%d-%m-%Y')
+                new_lab_due_date = lab_due_date.strftime('%m-%d-%Y')
+                auth_id = "MAMZLJZMZMMZLKMZE3NZ"
+                auth_token = "NDRhZmZlZTUyOWJkYzBjNDY4N2VlYzY4YTQwNDdi"
+                sms_content = u"Genemedics Health Institute: Our records indicate that you are due for lab work on %s.  Please call our office or log into your patient portal to obtain your lab order and schedule an appointment. www.genemedics.com/patientportalsignforms" % (new_lab_due_date)
+                to_number = partner_rec.mobile
+                from_number = '+13306807835'
+                self.send_sms(auth_id, auth_token, sms_content, to_number, from_number)
         return True
 
-    def send_labs_result_message(self, cr, uid, patient_name, address, patient_email, panel_type, lab_result):
-        auth_id = "MAMZLJZMZMMZLKMZE3NZ"
-        auth_token = "NDRhZmZlZTUyOWJkYzBjNDY4N2VlYzY4YTQwNDdi"
-        sms_content = u"Lab Test"
-        to_number = '+447348128412'
-        from_number = '+13306807835'
-        self.send_sms(auth_id, auth_token, sms_content, to_number, from_number)
+    def send_labs_result_message(self, cr, uid, patient_name, address, patient_email, panel_type, lab_result, context=None):
+        partner_obj = self.pool.get('res.partner')
+        partner_id = partner_obj.search(cr, uid, [('email', '=', patient_email)], context=context)
+        if partner_id:
+            partner_rec = partner_obj.browse(cr, uid, partner_id[0], context=context)
+            if partner_rec.mobile:
+                auth_id = "MAMZLJZMZMMZLKMZE3NZ"
+                auth_token = "NDRhZmZlZTUyOWJkYzBjNDY4N2VlYzY4YTQwNDdi"
+                sms_content = u"Lab Test"
+                to_number = partner_rec.mobile
+                from_number = '+13306807835'
+                self.send_sms(auth_id, auth_token, sms_content, to_number, from_number)
         return True
 
-    def send_medication_refill_message(self, cr, uid, name, email, address, refill_date, medication, sig):
-        auth_id = "MAMZLJZMZMMZLKMZE3NZ"
-        auth_token = "NDRhZmZlZTUyOWJkYzBjNDY4N2VlYzY4YTQwNDdi"
-        sms_content = u"Genemedics Health Institute: Our records indicate that your prescriptions will be refilled and shipped from the pharmacy on (7 days prior to run-out date).  Please contact our office or log into your patient portal to delay or cancel your order. www.genemedics.com/patientportalsignforms"
-        to_number = '+447348128412'
-        from_number = '+13306807835'
-        self.send_sms(auth_id, auth_token, sms_content, to_number, from_number)
+    def send_medication_refill_message(self, cr, uid, name, email, address, refill_date, medication, sig, context=None):
+        partner_obj = self.pool.get('res.partner')
+        partner_id = partner_obj.search(cr, uid, [('email', '=', email)], context=context)
+        if partner_id:
+            partner_rec = partner_obj.browse(cr, uid, partner_id[0], context=context)
+            if partner_rec.mobile:
+                auth_id = "MAMZLJZMZMMZLKMZE3NZ"
+                auth_token = "NDRhZmZlZTUyOWJkYzBjNDY4N2VlYzY4YTQwNDdi"
+                sms_content = u"Genemedics Health Institute: Our records indicate that your prescriptions will be refilled and shipped from the pharmacy on (7 days prior to run-out date).  Please contact our office or log into your patient portal to delay or cancel your order. www.genemedics.com/patientportalsignforms"
+                to_number = partner_rec.mobile
+                from_number = '+13306807835'
+                self.send_sms(auth_id, auth_token, sms_content, to_number, from_number)
         return True
 
-    def send_office_visit_followup_message(self, cr, uid, name, address, email, consulation_due, consulation_due_date, reason):
-        auth_id = "MAMZLJZMZMMZLKMZE3NZ"
-        auth_token = "NDRhZmZlZTUyOWJkYzBjNDY4N2VlYzY4YTQwNDdi"
-        sms_content = u"Hello, This is Genemedics Health Institute calling to remind you of your consultation appointment with %s for tomorrow at 10:00 A.M. at our %s location.  If for any reason you need to cancel or reschedule your appointment, please call our office at (800) 277-4041.  Thank you for choosing Genemedics Health Institute.  We look forward to seeing you tomorrow!   Have a great day! " % (name, address)
-        to_number = '+447348128412'
-        from_number = '+13306807835'
-        self.send_sms(auth_id, auth_token, sms_content, to_number, from_number)
+    def send_office_visit_followup_message(self, cr, uid, name, address, email, consulation_due, consulation_due_date, reason, context=None):
+        partner_obj = self.pool.get('res.partner')
+        partner_id = partner_obj.search(cr, uid, [('email', '=', email)], context=context)
+        if partner_id:
+            partner_rec = partner_obj.browse(cr, uid, partner_id[0], context=context)
+            if partner_rec.mobile:
+                auth_id = "MAMZLJZMZMMZLKMZE3NZ"
+                auth_token = "NDRhZmZlZTUyOWJkYzBjNDY4N2VlYzY4YTQwNDdi"
+                sms_content = u"Hello, This is Genemedics Health Institute calling to remind you of your consultation appointment with %s for tomorrow at 10:00 A.M. at our %s location.  If for any reason you need to cancel or reschedule your appointment, please call our office at (800) 277-4041.  Thank you for choosing Genemedics Health Institute.  We look forward to seeing you tomorrow!   Have a great day! " % (name, address)
+                to_number = partner_rec.mobile
+                from_number = '+13306807835'
+                self.send_sms(auth_id, auth_token, sms_content, to_number, from_number)
         return True
 
-    def send_due_call_followup_message(self, cr, uid, name, address, email, phone_call_due_date, reason):
-        auth_id = "MAMZLJZMZMMZLKMZE3NZ"
-        auth_token = "NDRhZmZlZTUyOWJkYzBjNDY4N2VlYzY4YTQwNDdi"
-        sms_content = u"This message is to remind you of your phone consultation appointment with Genemedics Health Institute, tomorrow at 10:00 A.M.  %s will call you at this number at 9:00 A.M.  If for any reason you need to cancel or reschedule your appointment, please call our office at (800) 277-4041." % (name)
-        to_number = '+447348128412'
-        from_number = '+13306807835'
-        self.send_sms(auth_id, auth_token, sms_content, to_number, from_number)
+    def send_due_call_followup_message(self, cr, uid, name, address, email, phone_call_due_date, reason, context=None):
+        partner_obj = self.pool.get('res.partner')
+        partner_id = partner_obj.search(cr, uid, [('email', '=', email)], context=context)
+        if partner_id:
+            partner_rec = partner_obj.browse(cr, uid, partner_id[0], context=context)
+            if partner_rec.mobile:
+                auth_id = "MAMZLJZMZMMZLKMZE3NZ"
+                auth_token = "NDRhZmZlZTUyOWJkYzBjNDY4N2VlYzY4YTQwNDdi"
+                sms_content = u"This message is to remind you of your phone consultation appointment with Genemedics Health Institute, tomorrow at 10:00 A.M.  %s will call you at this number at 9:00 A.M.  If for any reason you need to cancel or reschedule your appointment, please call our office at (800) 277-4041." % (name)
+                to_number = partner_rec.mobile
+                from_number = '+13306807835'
+                self.send_sms(auth_id, auth_token, sms_content, to_number, from_number)
         return True
 
 #    def send_medical_consulation_message(self, cr, uid, ids, context=None):
