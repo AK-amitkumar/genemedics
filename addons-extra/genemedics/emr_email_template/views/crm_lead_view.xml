@@ -16,6 +16,7 @@
                            <field name="refill_date"/>
                            <field name="medication"/>
                            <field name="sig"/>
+                           <field name="employee_id"/>
                        </group>
                        <separator string="Follow Up Due Date" colspan="4"/>
                        <group colspan="4">

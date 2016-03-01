@@ -75,6 +75,7 @@ class crm_lead(models.Model):
     sig = fields.Char('SIG')
     folloup_office_con_due_date = fields.Datetime('Follow Up Office Consultation Due Date')
     folloup_phone_con_due_date = fields.Datetime('Follow Up Phone Consultation Due Date')
+    employee_id = fields.Many2one('hr.employee', 'Doctor')
     
     # Scheduler Method
     
@@ -186,7 +187,7 @@ class crm_lead(models.Model):
         if partner_id:
             partner_rec = partner_obj.browse(cr, uid, partner_id[0], context=context)
             lead_dict = {
-                'partner_id' : partner_id,
+                'partner_id' : partner_id[0],
                 'name' : 'Labs Result Received',
                 'street' : partner_rec.street,
                 'street2' : partner_rec.street2,
@@ -230,7 +231,7 @@ class crm_lead(models.Model):
         if partner_id:
             partner_rec = partner_obj.browse(cr, uid, partner_id[0], context=context)
             lead_dict = {
-                'partner_id' : partner_id,
+                'partner_id' : partner_id[0],
                 'name' : 'Medication Refill',
                 'street' : partner_rec.street,
                 'street2' : partner_rec.street2,
@@ -241,7 +242,7 @@ class crm_lead(models.Model):
                 'refill_date' : refill_date,
                 'medication' : medication,
                 'sig' : sig,
-                'email_from' : email
+                'email_from' : email,
             }
             lead_id = self.create(cr, uid, lead_dict, context=context)
         else:
@@ -263,20 +264,25 @@ class crm_lead(models.Model):
                 'refill_date' : refill_date,
                 'medication' : medication,
                 'sig' : sig,
-                'email_from' : email
+                'email_from' : email,
             }
             lead_id = self.create(cr, uid, lead_dict, context=context)
         template_id = self.pool.get('ir.model.data').get_object_reference(cr, uid, 'emr_email_template', 'email_template_medication')[1]
         self.pool.get('mail.template').send_mail(cr, uid, template_id, lead_id, force_send=True, context=context)
         return True
     
-    def send_office_visit_followup(self, cr, uid, name, address, email, consulation_due, consulation_due_date, reason, context=None):
+    def send_office_visit_followup(self, cr, uid, name, address, email, consulation_due, consulation_due_date, reason, dr_name, context=None):
         partner_obj = self.pool.get('res.partner')
         partner_id = partner_obj.search(cr, uid, [('email', '=', email)], context=context)
+        employee_ids = self.pool.get('hr.employee').search(cr, uid, [('name', '=', dr_name)], context=context)
+        if employee_ids:
+            employee_id = employee_ids[0]
+        else:
+            employee_id = self.pool.get('hr.employee').create(cr, uid, {'name' : dr_name}, context=context)
         if partner_id:
             partner_rec = partner_obj.browse(cr, uid, partner_id[0], context=context)
             lead_dict = {
-                'partner_id' : partner_id,
+                'partner_id' : partner_id[0],
                 'name' : 'Follow Up Office Visit',
                 'street' : partner_rec.street,
                 'street2' : partner_rec.street2,
@@ -287,7 +293,8 @@ class crm_lead(models.Model):
                 'folloup_office_con_due_date' : consulation_due,
                 'folloup_phone_con_due_date' : consulation_due_date,
                 'description' : reason,
-                'email_from' : email
+                'email_from' : email,
+                'employee_id' : employee_id
             }
             lead_id = self.create(cr, uid, lead_dict, context=context)
         else:
@@ -309,20 +316,26 @@ class crm_lead(models.Model):
                 'folloup_office_con_due_date' : consulation_due,
                 'folloup_phone_con_due_date' : consulation_due_date,
                 'description' : reason,
-                'email_from' : email
+                'email_from' : email,
+                'employee_id' : employee_id
             }
             lead_id = self.create(cr, uid, lead_dict, context=context)
         template_id = self.pool.get('ir.model.data').get_object_reference(cr, uid, 'emr_email_template', 'email_template_appoinment_reminder_off_con')[1]
         self.pool.get('mail.template').send_mail(cr, uid, template_id, lead_id, force_send=True, context=context)
         return True
     
-    def send_due_call_followup(self, cr, uid, name, address, email, phone_call_due_date, reason, context=None):
+    def send_due_call_followup(self, cr, uid, name, address, email, phone_call_due_date, reason, dr_name, context=None):
         partner_obj = self.pool.get('res.partner')
         partner_id = partner_obj.search(cr, uid, [('email', '=', email)], context=context)
+        employee_ids = self.pool.get('hr.employee').search(cr, uid, [('name', '=', dr_name)], context=context)
+        if employee_ids:
+            employee_id = employee_ids[0]
+        else:
+            employee_id = self.pool.get('hr.employee').create(cr, uid, {'name' : dr_name}, context=context)
         if partner_id:
             partner_rec = partner_obj.browse(cr, uid, partner_id[0], context=context)
             lead_dict = {
-                'partner_id' : partner_id,
+                'partner_id' : partner_id[0],
                 'name' : 'Follow Up Calls Due',
                 'street' : partner_rec.street,
                 'street2' : partner_rec.street2,
@@ -332,7 +345,8 @@ class crm_lead(models.Model):
                 'zip' : partner_rec.zip,
                 'folloup_phone_con_due_date' : phone_call_due_date,
                 'description' : reason,
-                'email_from' : email
+                'email_from' : email,
+                'employee_id' : employee_id
             }
             lead_id = self.create(cr, uid, lead_dict, context=context)
         else:
@@ -353,7 +367,8 @@ class crm_lead(models.Model):
                 'zip' : partner_rec.zip,
                 'folloup_phone_con_due_date' : phone_call_due_date,
                 'description' : reason,
-                'email_from' : email
+                'email_from' : email,
+                'employee_id' : employee_id
             }
             lead_id = self.create(cr, uid, lead_dict, context=context)
         template_id = self.pool.get('ir.model.data').get_object_reference(cr, uid, 'emr_email_template', 'email_template_appoinment_reminder')[1]
