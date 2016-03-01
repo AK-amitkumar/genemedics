@@ -34,6 +34,7 @@
         'views/templates.xml',
         'views/appointment_scheduling_management_view.xml',
         'views/appointment_scheduling_management_email_template.xml',
+        'views/website_appointment_scheduling.xml'
     ],
     'installable': True,
     'application': True,

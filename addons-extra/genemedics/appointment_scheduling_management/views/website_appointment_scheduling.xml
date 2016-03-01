@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <!-- Layout add nav and footer -->
+        <template id="header_footer_custom" inherit_id="website.footer_default" name="Footer Appointment Scheduling Link">
+            <xpath expr="//ul[@id='products']" position="inside">
+                <li><a href="/appointment">Appointment Scheduling</a></li>
+            </xpath>
+        </template>
+
+        <!-- Page -->
+        <template id="appointment_scheduling" name="Medical/Free Consultation">
+            <t t-call="website.layout">
+                <div id="wrap">
+                    <div class="container">
+                        <div class="row mt8">
+                            <div class="col-sm-6">
+                                <form action="/appointment" id="id_form" class="form-horizontal mt32" method="post">
+                                    <ol class="breadcrumb mb0">
+                                        <h1>Medical/Free Consultation</h1>
+                                    </ol>
+                                    <table itemprop="offers" class="table table-striped">
+                                        <tbody>
+                                            <tr>
+                                                <td>Meeting Type</td>
+                                                <td>
+                                                    <select class="form-control" name="meeting_type">
+                                                        <option selected="Selected" disabled='disabled'>Select a Meeting Type</option>
+                                                        <t t-foreach="meeting_name" t-as="type_name">
+                                                            <option t-att-value="type_name.id">
+                                                                <t t-esc="type_name.name"/>
+                                                            </option>
+                                                        </t>
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Location</td>
+                                                <td>
+                                                    <select class="form-control" name="location_id">
+                                                        <option selected="Selected" disabled='disabled'>Select a Location</option>
+                                                        <t t-foreach="loc_name" t-as="loc">
+                                                            <option t-att-value="loc.id">
+                                                                <t t-esc="loc.name"/>
+                                                            </option>
+                                                        </t>
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Consultation</td>
+                                                <td>
+                                                    <select id='employee_id' class="form-control" name="employee_id">
+                                                        <option selected="Selected" disabled='disabled'>Select a Consultant</option>
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Appointment Date</td>
+                                                <td>
+                                                    <input id="id_start_date" type="text" class="form-control" name="adate"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Available Slot</td>
+                                                <td>
+                                                    <input type="text" id="slot_select" class="form-control" name="slot"/>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <button type="button" id='submit_botton' class="btn btn-primary">Confirm Appointment</button>
+                                </form>
+                            </div>
+                            <div class="col-sm-6 time-slots"/>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+    </data>
+</openerp>

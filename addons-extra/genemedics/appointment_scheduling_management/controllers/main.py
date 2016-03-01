@@ -25,6 +25,145 @@ from openerp import SUPERUSER_ID
 from openerp.exceptions import AccessError
 from openerp.http import request
 from openerp.tools.translate import _
+from datetime import datetime, timedelta
+import pytz
+from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
+
+class website_appointment_scheduling(http.Controller):
+    
+#    @http.route('/appointment', type='json', auth="public", website=True)
+#    def fetch_employee(self, **kw):
+#        cr, uid, context, pool = request.cr, request.uid, request.context, request.registry
+#        employee_obj = pool['hr.employee']
+#        state_obj = pool['res.country.state']
+#        partner_title = pool['res.partner.title']
+#        emp_ids = employee_obj.search(cr, uid, [], context=context)
+#        state_ids = state_obj.search(cr, uid, [('country_id', 'in', country_ids)], context=context)
+#        title_ids = partner_title.search(cr, uid, [], context=context)
+#        data = {
+#            'name': employee_obj.browse(cr, uid, emp_ids, context=context),
+#            'partner_title': partner_title.browse(cr, uid, title_ids, context=context),
+#            'state': state_obj.browse(cr, SUPERUSER_ID, state_ids, context=context),
+#        }
+#        return data
+    
+    @http.route('/search_slot', type='json', method='post', website=True)
+    def search_slot(self, **kw):
+        cr, uid, context, pool = request.cr, request.uid, request.context, request.registry
+        slot_obj = pool['slot.slot']
+        event_obj = pool['calendar.event']
+        tz = context and pytz.timezone(context.get('tz', False))
+        slot_ids = slot_obj.search(cr, uid, [], context=context)
+        avail_slots = []
+        slot = []
+        for slot_rec in slot_obj.browse(cr, uid, slot_ids, context=context):
+            new_sdate = datetime.strptime(kw.get('adate'), '%d/%m/%Y')
+            new_stdate = new_sdate.strftime('%Y-%m-%d')
+#            st_date = tz.localize(start_final_date, is_dst=None).astimezone(pytz.utc).strftime(DEFAULT_SERVER_DATETIME_FORMAT)
+#            et_date = tz.localize(end_final_date, is_dst=None).astimezone(pytz.utc).strftime(DEFAULT_SERVER_DATETIME_FORMAT)
+            events = event_obj.search(cr, uid, [
+                ('employee_id', '=', int(kw.get('employee_id'))),
+                ('start_datetime', '>=', datetime.strptime(new_stdate + ' ' + slot_rec.sname, '%Y-%m-%d %H:%M:%S').strftime(DEFAULT_SERVER_DATETIME_FORMAT)),
+                ('start_datetime', '<=', datetime.strptime(new_stdate + ' ' + slot_rec.ename, '%Y-%m-%d %H:%M:%S').strftime(DEFAULT_SERVER_DATETIME_FORMAT)),
+                ('meeting_type', '=', int(kw.get('meeting_type'))),
+                ('location_id', '=', int(kw.get('location_id'))),
+            ])
+            
+            if len(events) == 0:
+#                avail_slots.append(slot_rec.id)
+                slot.append({'avail': False, 'name': slot_rec.sname})
+            else:
+                slot.append({'avail': True, 'name': slot_rec.sname})
+#        for rec in slot_obj.browse(cr, uid, avail_slots, context=context):
+#            slot.append(rec.sname)
+        return request.website._render('appointment_scheduling_management.display_time_slot', {'slot': slot})
+    
+    
+    @http.route('/meeting_type_onchange', type='json', method='post', website=True)
+    def meeting_type_onchange(self, **kw):
+        emp = []
+        cr, uid, context, pool = request.cr, request.uid, request.context, request.registry
+        vals = pool['calendar.event'].onchange_meeting_type(cr, SUPERUSER_ID, [], int(kw.get('meeting_type')), context=context)
+        for employee in pool['hr.employee'].browse(cr, SUPERUSER_ID, vals.get('value').get('employee_ids')[0][2], context=context):
+            emp.append([employee.id, str(employee.name)])
+        return {
+            'employee_ids': emp,
+            'slot_id': vals.get('domain').get('slot_id')[0][2],
+            'location_id': int(vals.get('value').get('location_id')),
+            'list_employee_ids': vals.get('value').get('employee_ids')[0][2]
+        }
+
+    @http.route('/create_appointment', type='json', method='post', website=True)
+    def create_appointment(self, **kwargs):
+        cr, uid, context, pool = request.cr, request.uid, request.context, request.registry
+        event_obj = request.registry['calendar.event']
+        event_type_obj = request.registry['calendar.event.type']
+        tz = context and pytz.timezone(context.get('tz', False))
+        start_datetime = datetime.strptime(kwargs.get('date') + ' ' + kwargs.get('time_slot'), '%d/%m/%Y %H:%M:%S').strftime(DEFAULT_SERVER_DATETIME_FORMAT)
+        duration = event_type_obj.browse(cr, SUPERUSER_ID, int(kwargs.get('meeting_type')), context=context).duration
+        vals = {
+            'name': 'Appointment Event',
+            'employee_id': int(kwargs.get('employee_id')),
+            'location_id': int(kwargs.get('location_id')),
+            'meeting_type': int(kwargs.get('meeting_type')),
+            'start_datetime': start_datetime,
+            'duration': duration,
+        }
+        onchange_vals = event_obj.onchange_duration(cr, SUPERUSER_ID, [], start_datetime, duration, context=context)
+        vals.update(onchange_vals.get('value'))
+        event_obj.create(cr, SUPERUSER_ID, vals, context=context)
+        return True
+
+    @http.route('/check_user_group', type='json', method='post', website=True)
+    def check_user_group(self, **kwargs):
+        return request.registry['res.users'].has_group(request.cr, request.uid, 'appointment_scheduling_management.lead_user')
+
+
+    @http.route('/appointment', type='http', auth="public", website=True, csrf=False)
+    def appointment(self, **kwargs):
+        cr, uid, context, pool = request.cr, request.uid, request.context, request.registry
+        event_obj = request.registry['calendar.event']
+        slot_obj = request.registry['slot.slot']
+        location_obj = pool['res.country.state']
+        employee_obj = pool['hr.employee']
+        meeting_obj = pool['calendar.event.type']
+        emp_ids = employee_obj.search(cr, SUPERUSER_ID, [], context=context)
+        loc_ids = location_obj.search(cr, SUPERUSER_ID, [], context=context)
+        type_ids = meeting_obj.search(cr, SUPERUSER_ID, [], context=context)
+        data = {
+            'name': employee_obj.browse(cr, SUPERUSER_ID, emp_ids, context=context),
+            'loc_name' : location_obj.browse(cr, SUPERUSER_ID, loc_ids, context=context),
+            'meeting_name' : meeting_obj.browse(cr, SUPERUSER_ID, type_ids, context=context),
+        }
+#        slot_ids = slot_obj.search(cr, uid, [('sname', '=', kwargs.get('slot'))], context=context)
+#        slot_rec = slot_obj.browse(cr, uid, slot_ids[0], context=context)
+#        new_sdate = datetime.strptime(kwargs.get('adate'), '%d/%m/%Y')
+#        start_date = new_sdate.strftime('%Y-%m-%d')
+#        stdate = start_date + ' ' + slot_rec.sname
+#        endate = start_date + ' ' + slot_rec.ename
+#        start_final_date = datetime.strptime(stdate, '%Y-%m-%d %H:%M:%S')
+##        end_final_date = datetime.strptime(endate, '%Y-%m-%d %H:%M:%S')
+#        new_start_date = datetime.strptime(endate, '%Y-%m-%d %H:%M:%S')
+#        new_time = new_start_date + timedelta(minutes = 30)
+#        even_dict = {
+#            'name' : 'Medical/Free Consultation',
+#            'employee_id' : int(kwargs.get('employee_id')),
+#            'slot_id' : slot_ids and slot_ids[0],
+#            'start_date' : start_date,
+#            'start_datetime' : start_final_date,
+#            'stop_datetime' : start_date
+#        }
+#        event_id = event_obj.create(cr, uid, even_dict, context=context)
+#        slot_rec = slot_obj.browse(cr, uid, slot_id, context=context)
+#        new_date = datetime.strptime(start_datetime, '%Y-%m-%d %H:%M:%S')
+#        new_server_datetime = new_date.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
+#        new_date = new_server_datetime.split(' ')
+#        date = new_date[0] + ' ' + slot_rec.sname
+#        final_date = datetime.strptime(date, '%Y-%m-%d %H:%M:%S')
+#        new_time = final_date - timedelta(hours=5,minutes = 30)
+
+        return request.website.render("appointment_scheduling_management.appointment_scheduling", data)
+
 
 
 class LeadController(http.Controller):
@@ -40,7 +179,7 @@ class LeadController(http.Controller):
         uid = request.session.authenticate(request.session.db, 'naitik.mehta@serpentcs.com', 'a')
         action_id = pool['ir.model.data'].get_object_reference(cr, SUPERUSER_ID, 'appointment_scheduling_management', 'action_schedule_meeting')[1]
         if uid is not False:
-            return http.redirect_with_hash('/web#id=%s&view_type=calendar&model=calendar.event&action=%s' % (meeting_id, action_id))
+            return http.redirect_with_hash('/appointment')
         raise AccessError(_("Failed"))
     
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

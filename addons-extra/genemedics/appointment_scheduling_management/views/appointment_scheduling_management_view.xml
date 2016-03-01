@@ -2,6 +2,36 @@
 <openerp>
     <data>
 
+        
+        <record id="calendar_event_type_form_view" model="ir.ui.view">
+            <field name="name">calendar.event.type.form.view</field>
+            <field name="model">calendar.event.type</field>
+            <field name="arch" type="xml">
+                <form string="Meeting Type">
+	                <group>
+	                    <field name="name"/>
+	                </group>
+	                <group colspan="4" col="4">
+	                    <field name="country_id" on_change='onchange_country_id(country_id)'/>
+	                    <field name="state_id"/>
+	                    <field name="duration" widget='float_time'/>
+	                    <field name="loc"/>
+	                </group>
+	                <group colspan="4">
+	                    <field name="employee_ids"/>
+	                </group>
+	            </form>
+            </field>
+        </record>
+        
+        <record id="calendar.action_calendar_event_type" model="ir.actions.act_window">
+	        <field name="name">Meeting Types</field>
+	        <field name="res_model">calendar.event.type</field>
+	        <field name="view_type">form</field>
+	        <field name="view_mode">tree,form</field>
+	        <field name="view_id" ref="calendar_event_type_form_view"/>
+	    </record>
+        
         <record id="inherited_crm_lead_view" model="ir.ui.view">
             <field name="name">inherited.crm.lead.view</field>
             <field name="model">crm.lead</field>
@@ -27,14 +57,19 @@
 	                        <h1>
 	                            <field name="name"/>
 	                        </h1>
+	                        <group colspan="4" col="4">
+	                            <field name="location_id"/>
+	                            <field name="meeting_type" on_change="onchange_meeting_type(meeting_type)"/>
+	                        </group>
 	                        <group>
-                                <field name="employee_id" string="Consultant" required="1" on_change="onchange_employee_id(employee_id, start_datetime)"/>
+                                <field name="employee_id" string="Consultant" on_change="onchange_employee_id(employee_id, start_datetime)"/>
+                                <field name="employee_ids" string="Consultants" widget="many2many_tags"/>
                             </group>
 	                        <group colspan="4" col="4">
 	                           <field invisible="1" name="start_datetime" string="Starting at" on_change="onchange_employee_id(employee_id, start_datetime)"/>
 	                           <label string="Please select Available, it will be 30 mins for consultancy time."/>
 	                           <newline/>
-	                           <field name="start_date" on_change="onchange_start_date(start_date, employee_id)"/>
+	                           <field name="start_date" on_change="onchange_start_date(start_date, employee_id, meeting_type)"/>
 	                           <field name="slot_id" on_change="onchange_slot_id(slot_id, start_datetime)"/>
 	                           <field name="stop_datetime" string="Ending at" invisible="1"/>
                             </group>
@@ -71,6 +106,9 @@
                         <group colspan="4">
                             <field name="sname"/>
                             <field name="ename"/>
+                            <field name="30_duration"/>
+		                    <field name="2_duration"/>
+		                    <field name="1_duration"/>
                         </group>
                     </sheet>
                 </form>
@@ -84,6 +122,9 @@
                 <tree string="Slot">
 	                <field name="sname"/>
 	                <field name="ename"/>
+	                <field name="30_duration"/>
+	                <field name="2_duration"/>
+	                <field name="1_duration"/>
                 </tree>
             </field>
         </record>
@@ -98,5 +139,6 @@
         <menuitem action="action_slot"
             id="menu_slot" parent="base.menu_sale_config"
             sequence="12"/>
+        
     </data>
 </openerp>
