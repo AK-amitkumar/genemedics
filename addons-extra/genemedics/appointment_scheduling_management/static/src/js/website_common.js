@@ -35,6 +35,44 @@ var odoo = require('web.ajax');
             }
         });
 
+        $(document).on('change', 'select[name="location_id"]', function() {
+            $('#city-label').text($('select[name="location_id"] option:selected').data('city'));
+            var select = $('select[name="meeting_type"]');
+            if ($(this).val()){
+                odoo.jsonRpc('/meeting_type', 'call', {'state_id': $(this).val()}).then(function (data) {
+                  $('option', select).remove();
+//                  $(option).attr("disabled", "disabled");
+//                  $(option).attr("selected", "selected");
+//                  select.append($(option));
+                  $.each(data, function(key,value) {
+                      option = new Option(value[1],value[0]);
+                      select.append($(option));
+                  });
+              }).then(function(){
+                  select.change();
+              })
+            }
+            
+        });
+        
+        $(document).on('change', 'select[name="meeting_type"]', function() {
+            var select = $('select[name="employee_id"]');
+            if($(this).val()){
+                odoo.jsonRpc('/employees', 'call', {'meeting_type': $(this).val()}).then(function (data) {
+                  $('option', select).remove();
+//                  $(option).attr("disabled", "disabled");
+//                  $(option).attr("selected", "selected");
+//                  select.append($(option));
+                  $.each(data, function(key,value) {
+                      option = new Option(value[1],value[0]);
+                      select.append($(option));
+                  });
+              }).then(function(){
+                  select.change();
+              })
+            }
+        })
+        
         $(document).on('click', '.time button', function() {
             if ($(this).hasClass('btn btn-success')){
                 $('#slot_select').val($(this).text())
@@ -50,26 +88,26 @@ var odoo = require('web.ajax');
                 'time_slot': $('#slot_select').val()
                 }).then(function (data) {
                     alert('Appointment has been successfully scheduled.');
-                    location.reload();
+                    document.location.reload(true);
             })
         })
 
-        $(document).on('change', 'select[name="meeting_type"]', function() {
-            odoo.jsonRpc('/meeting_type_onchange', 'call', {'meeting_type': $(this).val()}).then(function (data) {
-                $('select[name="location_id"]').val(data['location_id']);
-                
-                var select = $('#employee_id');
-                $('option', select).remove();
-                var option = new Option('Select a Consultant','');
-                $(option).attr("disabled", "disabled");
-                $(option).attr("selected", "selected");
-                select.append($(option));
-                $.each(data['employee_ids'], function(key,value) {
-                    option = new Option(value[1],value[0]);
-                    select.append($(option));
-                });
-            })
-        });
+//        $(document).on('change', 'select[name="meeting_type"]', function() {
+//            odoo.jsonRpc('/meeting_type_onchange', 'call', {'meeting_type': $(this).val()}).then(function (data) {
+//                $('select[name="location_id"]').val(data['location_id']);
+//                
+//                var select = $('#employee_id');
+//                $('option', select).remove();
+//                var option = new Option('Select a Consultant','');
+//                $(option).attr("disabled", "disabled");
+//                $(option).attr("selected", "selected");
+//                select.append($(option));
+//                $.each(data['employee_ids'], function(key,value) {
+//                    option = new Option(value[1],value[0]);
+//                    select.append($(option));
+//                });
+//            })
+//        });
 
     });
 

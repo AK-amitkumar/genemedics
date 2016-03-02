@@ -23,28 +23,32 @@
                                     <table itemprop="offers" class="table table-striped">
                                         <tbody>
                                             <tr>
+                                                <td>Location</td>
+                                                <td>
+                                                    <table>
+                                                        <tr>
+                                                            <td>
+                                                                <select class="form-control" name="location_id">
+                                                                    <option selected="Selected" disabled='disabled'>Select a Location</option>
+                                                                    <t t-foreach="loc_name" t-as="loc">
+                                                                        <option t-att-data-city='loc.city' t-att-value="loc.id">
+                                                                            <t t-esc="loc.name"/>
+                                                                        </option>
+                                                                    </t>
+                                                                </select>
+                                                            </td>
+                                                            <td>
+                                                                &amp;nbsp;<lable id='city-label'/>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <tr>
                                                 <td>Meeting Type</td>
                                                 <td>
                                                     <select class="form-control" name="meeting_type">
                                                         <option selected="Selected" disabled='disabled'>Select a Meeting Type</option>
-                                                        <t t-foreach="meeting_name" t-as="type_name">
-                                                            <option t-att-value="type_name.id">
-                                                                <t t-esc="type_name.name"/>
-                                                            </option>
-                                                        </t>
-                                                    </select>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Location</td>
-                                                <td>
-                                                    <select class="form-control" name="location_id">
-                                                        <option selected="Selected" disabled='disabled'>Select a Location</option>
-                                                        <t t-foreach="loc_name" t-as="loc">
-                                                            <option t-att-value="loc.id">
-                                                                <t t-esc="loc.name"/>
-                                                            </option>
-                                                        </t>
                                                     </select>
                                                 </td>
                                             </tr>
