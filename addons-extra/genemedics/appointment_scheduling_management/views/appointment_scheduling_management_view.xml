@@ -3,6 +3,17 @@
     <data>
 
         
+        <record id="inherited_country_state_form_view" model="ir.ui.view">
+            <field name="name">inherited.country.state.form.view</field>
+            <field name="model">res.country.state</field>
+            <field name="inherit_id" ref="base.view_country_state_form"/>
+            <field name="arch" type="xml">
+               <xpath expr="//field[@name='country_id']" position="after">
+                    <field name="city"/>
+                </xpath>
+            </field>
+        </record>
+        
         <record id="calendar_event_type_form_view" model="ir.ui.view">
             <field name="name">calendar.event.type.form.view</field>
             <field name="model">calendar.event.type</field>
