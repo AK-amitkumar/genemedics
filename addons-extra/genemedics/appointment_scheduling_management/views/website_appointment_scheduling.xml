@@ -10,74 +10,68 @@
         </template>
 
         <!-- Page -->
-        <template id="appointment_scheduling" name="Medical/Free Consultation">
+        <template id="appointment_scheduling" name="Free Consultation">
             <t t-call="website.layout">
                 <div id="wrap">
                     <div class="container">
                         <div class="row mt8">
                             <div class="col-sm-6">
-                                <form action="/appointment" id="id_form" class="form-horizontal mt32" method="post">
-                                    <ol class="breadcrumb mb0">
-                                        <h1>Medical/Free Consultation</h1>
-                                    </ol>
-                                    <table itemprop="offers" class="table table-striped">
-                                        <tbody>
-                                            <tr>
-                                                <td>Location</td>
-                                                <td>
-                                                    <table>
-                                                        <tr>
-                                                            <td>
-                                                                <select class="form-control" name="location_id">
-                                                                    <option selected="Selected" disabled='disabled'>Select a Location</option>
-                                                                    <t t-foreach="loc_name" t-as="loc">
-                                                                        <option t-att-data-city='loc.city' t-att-value="loc.id">
-                                                                            <t t-esc="loc.name"/>
-                                                                        </option>
-                                                                    </t>
-                                                                </select>
-                                                            </td>
-                                                            <td>
-                                                                &amp;nbsp;<lable id='city-label'/>
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Meeting Type</td>
-                                                <td>
-                                                    <select class="form-control" name="meeting_type">
-                                                        <option selected="Selected" disabled='disabled'>Select a Meeting Type</option>
-                                                    </select>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Consultation</td>
-                                                <td>
-                                                    <select id='employee_id' class="form-control" name="employee_id">
-                                                        <option selected="Selected" disabled='disabled'>Select a Consultant</option>
-                                                    </select>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Appointment Date</td>
-                                                <td>
-                                                    <input id="id_start_date" type="text" class="form-control" name="adate"/>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Available Slot</td>
-                                                <td>
-                                                    <input type="text" id="slot_select" class="form-control" name="slot"/>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                    <button type="button" id='submit_botton' class="btn btn-primary">Confirm Appointment</button>
-                                </form>
+                                <ol class="breadcrumb mb0 text-center">
+                                    <h1>Free Consultation</h1>
+                                </ol>
+                                <table itemprop="offers" class="table table-striped">
+                                    <tbody>
+                                        <tr>
+                                            <td>Location</td>
+                                            <td>
+                                                <select class="form-control" name="location_id">
+                                                    <option selected="Selected" disabled='disabled'>Select a Location</option>
+                                                    <t t-foreach="loc_name" t-as="loc">
+                                                        <option t-att-value="loc.id">
+                                                            <t t-esc="loc.name"/>
+                                                        </option>
+                                                    </t>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Meeting Type</td>
+                                            <td>
+                                                <select class="form-control" name="meeting_type">
+                                                    <option disabled='disabled'>Select a Meeting Type</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Appointment Date</td>
+                                            <td>
+                                                <input id="id_start_date" type="text" class="form-control" name="adate"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Available Slot</td>
+                                            <td>
+                                                <input type="text" id="slot_select" class="form-control" name="slot"/>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
-                            <div class="col-sm-6 time-slots"/>
+                            <div class="col-sm-6">
+                                <ol class="breadcrumb mb8 text-center">
+                                    <h1>Available Slots</h1>
+                                </ol>
+                                <div class='row'>
+                                    <div class='col-md-12 text-center'>
+                                        <div class='time-slots'><span style='color:grey;'>Oops! You have not selected anything.</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class='row mb16 mt16'>
+                            <div class='col-md-12'>
+                                <button type="button" id='submit_botton' class="btn btn-primary">Confirm Appointment</button>
+                            </div>
                         </div>
                     </div>
                 </div>

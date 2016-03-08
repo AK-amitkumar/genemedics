@@ -24,5 +24,116 @@
                 ]]>
          	</field>
        </record>
+       
+
+        <record id="consultant_notification_template" model="mail.template">
+            <field name="name">Notification for Scheduled Appointment</field>
+            <field name="subject">Free Consultation</field>
+            <field name="email_from">${(user.login or '')|safe}</field>
+            <field name="email_to">${(object.employee_id.work_email or '')|safe}</field>
+            <field name="model_id" ref="model_calendar_event"/>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html">
+                <![CDATA[
+                <style> 
+                    span.oe_mail_footer_access {
+                        display:block;    
+                        text-align:center;
+                        color:grey;                                
+                    }
+                </style>
+                <div style="border-radius: 2px; max-width: 1200px; height: auto;margin-left: auto;margin-right: auto;background-color:#f9f9f9;">
+                    <div style="height:auto;text-align: center;font-size : 30px;color: #8A89BA;">
+                        <strong>${object.employee_id.name}</strong>
+                    </div>
+                    <div style="height: auto;margin-left:12px;margin-top:30px;">
+                        <table>
+                            <tr>
+                                <td>
+                                    <div style="border-top-left-radius:3px;border-top-right-radius:3px;font-size:12px;border-collapse:separate;text-align:center;font-weight:bold;color:#ffffff;width:130px;min-height: 18px;border-color:#ffffff;background:#8a89ba;padding-top: 4px;">${object.get_interval(object.start, 'dayname')}</div>
+                                    <div style="font-size:48px;min-height:auto;font-weight:bold;text-align:center;color: #5F5F5F;background-color: #E1E2F8;width: 130px;">
+                                      ${object.get_interval(object.start,'day')}
+                                    </div>
+                                    <div style='font-size:12px;text-align:center;font-weight:bold;color:#ffffff;background-color:#8a89ba'>${object.get_interval(object.start, 'month')}</div>
+                                    <div style="border-collapse:separate;color:#8a89ba;text-align:center;width: 128px;font-size:12px;border-bottom-right-radius:3px;font-weight:bold;border:1px solid;border-bottom-left-radius:3px;">${not object.allday and object.get_interval(object.start, 'time') or ''}</div>
+                                </td>
+                                <td>
+                                    <table cellspacing="0" cellpadding="0" border="0" style="margin-top: 15px; margin-left: 10px;font-size: 16px;">
+                                            <tr>
+                                                <td style="vertical-align:top;">
+                                                    % if object.meeting_type:
+                                                        <div style="width: 120px; background : #CCCCCC; font-family: Lucida Grande', Ubuntu, Arial, Verdana, sans-serif;">
+                                                            Meeting Type
+                                                        </div>
+                                                    % endif
+                                                </td>
+                                                <td  style="vertical-align:top;">
+                                                    % if object.meeting_type:
+                                                        <div style = "font-family: Lucida Grande', Ubuntu, Arial, Verdana, sans-serif;   font-size: 14px" >
+                                                            : ${object.meeting_type.name}
+                                                        </div>
+                                                    % endif
+                                                </td>                                                        
+                                            </tr> 
+                                            <tr>
+                                                <td style="vertical-align:top;">
+                                                    % if object.location_id:
+                                                        <div style="width: 120px; background : #CCCCCC; font-family: Lucida Grande', Ubuntu, Arial, Verdana, sans-serif;">
+                                                            Where
+                                                        </div>
+                                                    % endif
+                                                </td>
+                                                <td  style="vertical-align:top;">
+                                                    % if object.location_id:
+                                                        <div style = "font-family: Lucida Grande', Ubuntu, Arial, Verdana, sans-serif;   font-size: 14px" >
+                                                            : ${object.location_id.name}
+                                                            <span style= "color:#A9A9A9; ">(<a href="http://maps.google.com/maps?oi=map&q=${object.location_id.name}">View Map</a>)
+                                                                </span>
+                                                        </div>
+                                                    % endif
+                                                </td>                                                        
+                                            </tr> 
+                                            <tr>
+                                                <td style="vertical-align:top;">
+                                                    % if object.meeting_type.loc == 'physical_loc':
+                                                        <div style="width: 120px; background : #CCCCCC; font-family: Lucida Grande', Ubuntu, Arial, Verdana, sans-serif;">
+                                                            City
+                                                        </div>
+                                                    % endif
+                                                </td>
+                                                <td  style="vertical-align:top;">
+                                                    % if object.meeting_type.loc == 'physical_loc':
+                                                        <div style = "font-family: Lucida Grande', Ubuntu, Arial, Verdana, sans-serif;   font-size: 14px" >
+                                                            : ${object.location_id.city} 
+                                                        </div>
+                                                    % endif
+                                                </td>                                                        
+                                            </tr> 
+                                            <tr>
+                                                <td style="vertical-align:top;">
+                                                    % if not object.allday and object.duration:
+                                                        <div style="height:auto; width: 120px; background : #CCCCCC; font-family: Lucida Grande', Ubuntu, Arial, Verdana, sans-serif;">
+                                                            Duration
+                                                        </div>
+                                                    % endif
+                                                </td>
+                                                <td colspan="3" style="vertical-align:text-top;">
+                                                    % if not object.allday and object.duration:
+                                                        <div style="font-family: Lucida Grande', Ubuntu, Arial, Verdana, sans-serif;">
+                                                            : ${('%dH%02d' % (object.duration,(object.duration*60)%60))}
+                                                        </div>
+                                                    % endif
+                                                </td>
+                                            </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                ]]>
+            </field>
+       </record>
+
 	</data>
 </openerp>
