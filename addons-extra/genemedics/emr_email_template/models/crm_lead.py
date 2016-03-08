@@ -22,6 +22,8 @@
 from openerp import models,fields, api, _
 from datetime import datetime, timedelta
 import plivo
+import urllib 
+import urllib2
 from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
 from openerp.tools import DEFAULT_SERVER_DATE_FORMAT as DF
 from dateutil.relativedelta import relativedelta
@@ -130,6 +132,26 @@ class crm_lead(models.Model):
         due_date = rdate + timedelta(days=-1)
         return due_date
     
+    def get_ivr_call(self, cr, uid, lead_id, ivr_code, context=None):
+        lead_data = self.browse(cr, uid, lead_id, context=context)
+        mobile = lead_data.partner_id and lead_data.partner_id.mobile
+        if not mobile:
+            pass
+        data = {
+            'phonenumber': str(mobile),
+            'message': ivr_code,
+            'retry': '3',
+            'keypress': {"1":"YES","2":"NO"},
+            'callbackurl': 'http://odoo.genemedics.com/get_input_value',
+            'jobid': str(lead_id)
+        }
+        
+        data = urllib.urlencode(data) 
+        req = urllib2.Request('http://54.173.195.179/makecall/make_call.php', data) 
+        response = urllib2.urlopen(req)
+        the_page = response.read()
+        return the_page
+    
     def send_billing_information(self, cr, uid, ids, name, address, email, due_fees, refill_due, context=None):
         template_id = self.pool.get('ir.model.data').get_object_reference(cr, uid, 'emr_email_template', 'email_template_billing_information')[1]
         self.pool.get('mail.template').send_mail(cr, uid, template_id, ids[0], force_send=True, context=context)
@@ -179,6 +201,7 @@ class crm_lead(models.Model):
             lead_id = self.create(cr, uid, lead_dict, context=context)
         template_id = self.pool.get('ir.model.data').get_object_reference(cr, uid, 'emr_email_template', 'email_template_labs_due')[1]
         self.pool.get('mail.template').send_mail(cr, uid, template_id, lead_id, force_send=True, context=context)
+        self.get_ivr_call(cr, uid, lead_id, 'LBDUE', context)
         return True
 
     def send_labs_result(self, cr, uid, patient_name, address, patient_email, panel_type, lab_result, context=None):
@@ -223,6 +246,7 @@ class crm_lead(models.Model):
             lead_id = self.create(cr, uid, lead_dict, context=context)
         template_id = self.pool.get('ir.model.data').get_object_reference(cr, uid, 'emr_email_template', 'email_template_lab_result')[1]
         self.pool.get('mail.template').send_mail(cr, uid, template_id, lead_id, force_send=True, context=context)
+        self.get_ivr_call(cr, uid, lead_id, 'LBRES', context)
         return True
     
     def send_medication_refill(self, cr, uid, name, email, address, refill_date, medication, sig, context=None):
@@ -269,6 +293,7 @@ class crm_lead(models.Model):
             lead_id = self.create(cr, uid, lead_dict, context=context)
         template_id = self.pool.get('ir.model.data').get_object_reference(cr, uid, 'emr_email_template', 'email_template_medication')[1]
         self.pool.get('mail.template').send_mail(cr, uid, template_id, lead_id, force_send=True, context=context)
+        self.get_ivr_call(cr, uid, lead_id, 'PRD01', context)
         return True
     
     def send_office_visit_followup(self, cr, uid, name, address, email, consulation_due, consulation_due_date, reason, dr_name, context=None):
@@ -322,6 +347,7 @@ class crm_lead(models.Model):
             lead_id = self.create(cr, uid, lead_dict, context=context)
         template_id = self.pool.get('ir.model.data').get_object_reference(cr, uid, 'emr_email_template', 'email_template_appoinment_reminder_off_con')[1]
         self.pool.get('mail.template').send_mail(cr, uid, template_id, lead_id, force_send=True, context=context)
+        self.get_ivr_call(cr, uid, lead_id, 'OFCOA', context)
         return True
     
     def send_due_call_followup(self, cr, uid, name, address, email, phone_call_due_date, reason, dr_name, context=None):
@@ -373,6 +399,7 @@ class crm_lead(models.Model):
             lead_id = self.create(cr, uid, lead_dict, context=context)
         template_id = self.pool.get('ir.model.data').get_object_reference(cr, uid, 'emr_email_template', 'email_template_appoinment_reminder')[1]
         self.pool.get('mail.template').send_mail(cr, uid, template_id, lead_id, force_send=True, context=context)
+        self.get_ivr_call(cr, uid, lead_id, 'PHCOA', context)
         return True
    
     def send_medical_consulation(self, cr, uid, ids, context=None):
@@ -507,3 +534,10 @@ class crm_lead(models.Model):
 #        from_number = '+13306807835'
 #        self.send_sms(auth_id, auth_token, sms_content, to_number, from_number)
 #        return True
+
+
+class project_issue(models.Model):
+    
+    _inherit = 'project.issue'
+    
+    lead_id = fields.Many2one('crm.lead', 'Lead')

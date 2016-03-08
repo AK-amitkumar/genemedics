@@ -25,10 +25,11 @@ from openerp.exceptions import AccessError
 from openerp.http import request
 from openerp.tools.translate import _
 from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
+from werkzeug.wrappers import BaseResponse as Response
 
 class website_input_value(http.Controller):
     
-    @http.route('/get_input_value', type='http', method='post', website=True)
+    @http.route('/get_input_value', type='http', method='post', auth='public',website=True)
     def input_value(self, **kw):
         cr, uid, context, pool = request.cr, request.uid, request.context, request.registry
         lead_obj = pool['crm.lead']
@@ -49,5 +50,5 @@ class website_input_value(http.Controller):
                     'lead_id' : int(kw.get('jobid')),
                 }
                 pool['project.issue'].create(cr, uid, issue_dict, context=context)
-        return True
+        return Response("OK", status=200)
 

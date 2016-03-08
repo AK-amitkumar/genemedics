@@ -31,6 +31,7 @@
     'data': [
         'views/crm_lead_view.xml',
         'data/email_template.xml',
+        'views/project_issue_view.xml'
     ],
     'installable': True,
     'application': True,
