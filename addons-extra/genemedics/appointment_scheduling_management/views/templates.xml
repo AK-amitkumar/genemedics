@@ -6,25 +6,21 @@
                 <script type="text/javascript" src="/appointment_scheduling_management/static/src/js/appointment_scheduling_management.js"></script>
             </xpath>
         </template>
+
         <template id="assets_frontend" name="lead assets" inherit_id="website.assets_frontend">
-            <xpath expr="." position="inside">
+            <xpath expr="." position="inside"> 
+                <link rel='stylesheet' href='/appointment_scheduling_management/static/src/css/sweet-alert.css'></link>
+                <script type="text/javascript" src="/appointment_scheduling_management/static/src/js/sweet-alert.min.js"></script>
                 <script type="text/javascript" src="/appointment_scheduling_management/static/src/js/website_common.js"></script>
             </xpath>
         </template>
         
         <template id="display_time_slot" name="Display Time Slots">
-            <ol class="breadcrumb mb8 mt32">
-                <h1>Available Slots</h1>
-            </ol>
-            <div class='row'>
-                <div class='col-md-12'>
-                <t t-foreach='slot' t-as='rec'>
-                    <div class="col-md-2 col-sm-3 col-xs-3 time text-center mb8">
-                        <button t-att-class="'btn btn-danger' if rec['avail'] else 'btn btn-success'"><t t-esc='rec["name"]'/></button>
-                    </div>
-                </t>
+            <t t-foreach='slot' t-as='rec'>
+                <div class="col-md-2 col-sm-3 col-xs-3 time text-center mb8">
+                    <button t-att-class="'btn btn-danger' if rec['avail'] else 'btn btn-success'" t-att-data-employee='rec["employee"]'><t t-esc='rec["name"]'/></button>
                 </div>
-            </div>
+            </t>
         </template>
         
     </data>

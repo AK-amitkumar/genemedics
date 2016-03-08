@@ -1,8 +1,22 @@
 <?xml version="1.0"?>
 <openerp>
     <data>
-
         
+        <!-- Employee View -->
+<!--
+        <record id="inherited_hr_employee_form_view" model="ir.ui.view">
+            <field name="name">inherited.hr.employee.form.view</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+               <xpath expr="//field[@name='work_phone']" position="after">
+                    <field name="sequence"/>
+                </xpath>
+            </field>
+        </record>
+
+-->        
+        <!--  State View -->
         <record id="inherited_country_state_form_view" model="ir.ui.view">
             <field name="name">inherited.country.state.form.view</field>
             <field name="model">res.country.state</field>
@@ -14,6 +28,7 @@
             </field>
         </record>
         
+        <!--  Meeting Type View -->
         <record id="calendar_event_type_form_view" model="ir.ui.view">
             <field name="name">calendar.event.type.form.view</field>
             <field name="model">calendar.event.type</field>
@@ -28,9 +43,15 @@
 	                    <field name="duration" widget='float_time'/>
 	                    <field name="loc"/>
 	                </group>
-	                <group colspan="4">
-	                    <field name="employee_ids"/>
-	                </group>
+	                <group colspan="4"> 
+                        <field name="consultant_ids">
+                            <tree editable="bottom">
+                            <field name="employee_id"/>
+                            <field name="email"/>
+                            <field name="sequence"/>
+                            </tree>
+                        </field>
+                    </group>
 	            </form>
             </field>
         </record>
@@ -53,7 +74,9 @@
                 </xpath>
             </field>
         </record> 
-
+        
+        
+        <!--  Meeting View -->
         <record model="ir.ui.view" id="view_schedule_meeting_form">
 	        <field name="name">Online Schedule Meeting Form</field>
 	        <field name="model">calendar.event</field>
@@ -74,7 +97,7 @@
 	                        </group>
 	                        <group>
                                 <field name="employee_id" string="Consultant" on_change="onchange_employee_id(employee_id, start_datetime)"/>
-                                <field name="employee_ids" string="Consultants" widget="many2many_tags"/>
+<!--                                <field name="employee_ids" string="Consultants" widget="many2many_tags"/-->
                             </group>
 	                        <group colspan="4" col="4">
 	                           <field invisible="1" name="start_datetime" string="Starting at" on_change="onchange_employee_id(employee_id, start_datetime)"/>

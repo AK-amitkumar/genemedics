@@ -43,15 +43,28 @@ class crm_lead(osv.osv):
         self.pool.get('mail.template').send_mail(cr, uid, template_id, ids[0], force_send=True, context=context)
         return True
 
+class consultant_consultant(osv.osv):
+
+    _name = 'consultant.consultant'
+    _order= 'sequence'
+
+    _columns = {
+        'employee_id' : fields.many2one('hr.employee', 'Employee'),
+        'email': fields.related('employee_id', 'work_email', string='Email', type='char', relation='hr.employee'),
+        'sequence' : fields.integer('Sequence'),
+        'event_id' : fields.many2one('calendar.event.type', 'Event Type'),
+    }
+
 class calendar_event_type(osv.osv):
     
     _inherit = 'calendar.event.type'
     
     
     _columns = {
+        'consultant_ids': fields.one2many('consultant.consultant', 'event_id', 'Consultant'),
         'country_id' : fields.many2one('res.country', 'Country'),
         'state_id' : fields.many2one('res.country.state', 'State'),
-        'employee_ids': fields.many2many('hr.employee', 'calendar_event_meeting_rel', string='Attendees'),
+#        'employee_ids': fields.many2many('hr.employee', 'calendar_event_meeting_rel', string='Attendees'),
 #        'employee_ids' : fields.many2many('hr.employee', 'event_meeting_rel', string='Consultant'),
         'duration' : fields.float('Duration'),
         'loc' : fields.selection([('physical_loc', 'Physical Location'), ('phone_loc', 'Phone Location')], 'Location'),
@@ -69,7 +82,7 @@ class calendar_event(osv.osv):
     
     _columns = {
         'employee_id' : fields.many2one('hr.employee', 'Employee'),
-        'employee_ids': fields.many2many('hr.employee', 'calendar_event_hr_rel', string='Attendees'),
+#        'employee_ids': fields.many2many('hr.employee', 'calendar_event_hr_rel', string='Attendees'),
 #        'employee_ids' : fields.many2many('hr.employee', 'event_emp_rel', string='Consultant'),
         'slot_id' : fields.many2one('slot.slot', 'Available Slot'),
         'start_date' : fields.date('Appointment Date'),
@@ -157,4 +170,14 @@ class CountryState(osv.osv):
     _columns = {
         'city' : fields.char('City', size=64)
     }
+    
+#class hr_employee(osv.osv):
+#    
+#    _inherit = 'hr.employee'
+#    _order = "sequence"
+#    
+#    
+#    _columns = {
+#        'sequence' : fields.integer('Sequence')
+#    }
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
