@@ -81,7 +81,8 @@ class calendar_event(osv.osv):
     _inherit = 'calendar.event'
     
     _columns = {
-        'employee_id' : fields.many2one('hr.employee', 'Employee'),
+        'employee_id' : fields.many2one('hr.employee', 'Consultant'),
+        'patient_id': fields.many2one('res.partner', 'Patient'),
 #        'employee_ids': fields.many2many('hr.employee', 'calendar_event_hr_rel', string='Attendees'),
 #        'employee_ids' : fields.many2many('hr.employee', 'event_emp_rel', string='Consultant'),
         'slot_id' : fields.many2one('slot.slot', 'Available Slot'),

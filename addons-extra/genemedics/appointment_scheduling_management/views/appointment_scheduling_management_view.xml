@@ -3,19 +3,81 @@
     <data>
         
         <!-- Employee View -->
-<!--
-        <record id="inherited_hr_employee_form_view" model="ir.ui.view">
-            <field name="name">inherited.hr.employee.form.view</field>
-            <field name="model">hr.employee</field>
-            <field name="inherit_id" ref="hr.view_employee_form"/>
+
+        <record id="inherited_view_calendar_event_form" model="ir.ui.view">
+            <field name="name">inherited.view.calendar.event.form</field>
+            <field name="model">calendar.event</field>
+            <field name="inherit_id" ref="calendar.view_calendar_event_form"/>
             <field name="arch" type="xml">
-               <xpath expr="//field[@name='work_phone']" position="after">
-                    <field name="sequence"/>
+               <xpath expr="//field[@name='alarm_ids']" position="after">
+                    <field name="employee_id"/>
+                    <field name="location_id"/>
+                    <field name="meeting_type"/>
+                    <field name="patient_id"/>
+                </xpath>
+                 <xpath expr="//field[@name='location']" position="attributes">
+	                <attribute name="invisible">1</attribute>
+	            </xpath>
+	            <xpath expr="//field[@name='categ_ids']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='partner_ids']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+            </field>
+        </record>
+        
+        <record id="inherited_meeting_dialog_form" model="ir.ui.view">
+            <field name="name">inherited.view.meeting.dialog.form</field>
+            <field name="model">calendar.event</field>
+            <field name="inherit_id" ref="calendar.view_calendar_event_form_popup"/>
+            <field name="arch" type="xml">
+                 <xpath expr="//field[@name='location']" position="replace">
+                    <field name="location_id"/>
+                </xpath>
+                <xpath expr="//field[@name='categ_ids']" position="replace">
+                    <field name="meeting_type"/>
+                </xpath>
+                <xpath expr="//field[@name='partner_ids']" position="replace">
+                    <field name="patient_id"/>
                 </xpath>
             </field>
         </record>
 
--->        
+        <record id="inherited_event_tree_view" model="ir.ui.view">
+            <field name="name">inherited.event.tree.view</field>
+            <field name="model">calendar.event</field>
+            <field name="inherit_id" ref="calendar.view_calendar_event_tree"/>
+            <field name="arch" type="xml">
+                 <xpath expr="//field[@name='location']" position="replace">
+                    <field name="location_id"/>
+                </xpath>
+                <xpath expr="//field[@name='partner_ids']" position="replace">
+                    <field name="patient_id"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="calendar.view_calendar_event_calendar">
+        <field name="name">Meeting</field>
+        <field name="model">calendar.event</field>
+        <field name="priority" eval="2"/>
+        <field name="arch" type="xml">
+            <calendar string="Meetings" date_start="start" date_stop="stop" date_delay="duration" all_day="allday" 
+                         color="color_partner_id" attendee="partner_ids" avatar_model="res.partner"
+                         use_contacts="True" event_open_popup="%(calendar.view_calendar_event_form_popup)s">
+<!--                <field name="name"/-->
+                <field name="patient_id"/>
+                <field name="meeting_type"/>
+<!--
+                <field name="user_id"/>
+                <field name="color_partner_id"/>
+                <field name="partner_ids"/>
+-->
+            </calendar>
+        </field>
+    </record>
+
         <!--  State View -->
         <record id="inherited_country_state_form_view" model="ir.ui.view">
             <field name="name">inherited.country.state.form.view</field>

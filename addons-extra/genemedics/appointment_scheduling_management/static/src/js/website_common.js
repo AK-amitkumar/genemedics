@@ -2,6 +2,23 @@ odoo.define('appointment_scheduling_management.appointment_scheduling_management
 var odoo = require('web.ajax');
 
     $(document).ready(function() {
+        
+        
+        $('#email').change(function(){
+            var self = this;
+            odoo.jsonRpc('/check_patient', 'call', {'email': $(this).val()}).then(function (data) {
+                if (data){
+                    $(self).val('');
+                    swal({
+                        title: "Oops! User Already Exist.",
+                        type: "error",
+                        confirmButtonClass: 'btn-danger',
+                        confirmButtonText: 'Cancel'
+                    });
+                }
+            })
+        })
+        
         var employee = false;
         if (window.location.pathname == '/appointment'){
             odoo.jsonRpc('/check_user_group', 'call', {}).then(function (data) {
@@ -70,12 +87,13 @@ var odoo = require('web.ajax');
             }
         });
 
-        $('#submit_botton').click(function(){
+        $('#submit_button').click(function(){
             if (employee){
                 odoo.jsonRpc('/create_appointment', 'call', {
                     'meeting_type': $('select[name="meeting_type"]').val(),
                     'location_id': $('select[name="location_id"]').val(),
                     'employee_id': employee,
+                    'patient_id': $(this).data('patient_id'),
                     'date': $('#id_start_date').val(),
                     'time_slot': $('#slot_select').val()
                     }).then(function (data) {
