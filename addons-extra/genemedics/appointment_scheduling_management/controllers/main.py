@@ -21,34 +21,18 @@
 import time
 import httplib 
 import urllib 
-import urllib2 
+import urllib2
+import pytz
+from datetime import datetime, timedelta
 import openerp
 from openerp import http
 from openerp import SUPERUSER_ID
 from openerp.exceptions import AccessError
 from openerp.http import request
 from openerp.tools.translate import _
-from datetime import datetime, timedelta
-import pytz
 from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
 
 class website_appointment_scheduling(http.Controller):
-    
-#    @http.route('/appointment', type='json', auth="public", website=True)
-#    def fetch_employee(self, **kw):
-#        cr, uid, context, pool = request.cr, request.uid, request.context, request.registry
-#        employee_obj = pool['hr.employee']
-#        state_obj = pool['res.country.state']
-#        partner_title = pool['res.partner.title']
-#        emp_ids = employee_obj.search(cr, uid, [], context=context)
-#        state_ids = state_obj.search(cr, uid, [('country_id', 'in', country_ids)], context=context)
-#        title_ids = partner_title.search(cr, uid, [], context=context)
-#        data = {
-#            'name': employee_obj.browse(cr, uid, emp_ids, context=context),
-#            'partner_title': partner_title.browse(cr, uid, title_ids, context=context),
-#            'state': state_obj.browse(cr, SUPERUSER_ID, state_ids, context=context),
-#        }
-#        return data
     
     @http.route('/check_patient', type='json', auth="public", method='post', website=True)
     def check_patient(self, **kwargs):
@@ -135,6 +119,7 @@ class website_appointment_scheduling(http.Controller):
         duration = event_type_obj.browse(cr, SUPERUSER_ID, int(kwargs.get('meeting_type')), context=context).duration
         emp_rec = request.registry['hr.employee'].browse(cr, SUPERUSER_ID, int(kwargs.get('employee_id')), context=context)
         user_ids = request.registry['res.users'].search(cr, uid, [('name', '=', emp_rec.name)], context=context)
+        patient_rec = request.registry['res.partner'].browse(cr, uid, int(kwargs.get('patient_id')), context=context)
         vals = {
             'name': 'Appointment Event',
             'employee_id': int(kwargs.get('employee_id')),
@@ -145,15 +130,17 @@ class website_appointment_scheduling(http.Controller):
             'duration': duration,
             'patient_id': int(kwargs.get('patient_id')),
             'user_id' : user_ids and user_ids[0],
+            'email' : patient_rec.email,
+            'ph_number' : patient_rec.phone
         }
         onchange_vals = event_obj.onchange_duration(cr, SUPERUSER_ID, [], start_datetime, duration, context=context)
         vals.update(onchange_vals.get('value'))
         event_id = event_obj.create(cr, SUPERUSER_ID, vals, context=context)
         
-        template_id = pool['ir.model.data'].get_object_reference(cr, uid, 'appointment_scheduling_management', 'consultant_notification_template')[1]
-        msg_id = pool['mail.template'].send_mail(cr, uid, template_id, event_id, force_send=False, context=context)
-        if msg_id:
-            pool['mail.mail'].send(cr, uid, [msg_id], context=context)
+#        template_id = pool['ir.model.data'].get_object_reference(cr, SUPERUSER_ID, 'appointment_scheduling_management', 'consultant_notification_template')[1]
+#        msg_id = pool['m    ail.template'].send_mail(cr, SUPERUSER_ID, template_id, event_id, force_send=False, context=context)
+#        if msg_id:
+#            pool['mail.mail'].send(cr, SUPERUSER_ID, [msg_id], context=context)
         return True
 
     @http.route('/check_user_group', type='json', auth="public", method='post', website=True)
@@ -171,37 +158,35 @@ class website_appointment_scheduling(http.Controller):
         res_partner_obj = pool['res.partner']
         patient_id = False
         if kwargs and kwargs.get('phone') and kwargs.get('first_name') and kwargs.get('last_name') and kwargs.get('email') and kwargs.get('address'):
-#            if res_partner_obj.search(cr, SUPERUSER_ID, [('email', '=', str(kwargs.get('email')))]):
-#                kwargs.update({
-#                    'init': "alert('User Already Exist')"
-#                })
-#                return request.website.render("appointment_scheduling_management.registration", kwargs)
-            patient_id = pool['res.partner'].create(cr, SUPERUSER_ID, {
-                'name': kwargs.get('first_name') + ' ' + kwargs.get('last_name'),
-                'phone': kwargs.get('phone'),
-                'email': kwargs.get('email'),
-                'street': kwargs.get('address'),
-            }, context=context)
-#            data = {
-#                'firstname': kwargs.get('first_name'),
-#                'lastname': kwargs.get('last_name'),
-#                'email': kwargs.get('email'),
-#                'password': kwargs.get('password'),
-#                'confirmation': kwargs.get('confirmation')
-#            }
-#            data = urllib.urlencode(data)
-#            opener = urllib2.build_opener()
-#            opener.addheaders.append(('Cookie', 'cookiename=test'))
-#            f = opener.open('https://genemedicsnutrition.com/customer/account/createpost/', data)
-            onchange_vals = pool['crm.lead'].on_change_partner_id(cr, SUPERUSER_ID, [], patient_id, context=context)
-            lead_vals = {}
-            lead_vals.update(onchange_vals.get('value'))
-            lead_vals.update({
-                'name': 'Lead from registration form',
-                'partner_id': patient_id,
-                'type': 'lead',
-            })
-            pool['crm.lead'].create(cr, SUPERUSER_ID, lead_vals, context=context)
+            if not res_partner_obj.search(cr, SUPERUSER_ID, [('email', '=', str(kwargs.get('email')))]):
+                patient_id = pool['res.partner'].create(cr, SUPERUSER_ID, {
+                    'name': kwargs.get('first_name') + ' ' + kwargs.get('last_name'),
+                    'phone': kwargs.get('phone'),
+                    'email': kwargs.get('email'),
+                    'street': kwargs.get('address'),
+                }, context=context)
+    #            data = {
+    #                'firstname': kwargs.get('first_name'),
+    #                'lastname': kwargs.get('last_name'),
+    #                'email': kwargs.get('email'),
+    #                'password': kwargs.get('password'),
+    #                'confirmation': kwargs.get('confirmation')
+    #            }
+    #            data = urllib.urlencode(data)
+    #            opener = urllib2.build_opener()
+    #            opener.addheaders.append(('Cookie', 'cookiename=test'))
+    #            f = opener.open('https://genemedicsnutrition.com/customer/account/createpost/', data)
+                onchange_vals = pool['crm.lead'].on_change_partner_id(cr, SUPERUSER_ID, [], patient_id, context=context)
+                lead_vals = {}
+                lead_vals.update(onchange_vals.get('value'))
+                lead_vals.update({
+                    'name': 'Lead from registration form',
+                    'partner_id': patient_id,
+                    'type': 'lead',
+                })
+                pool['crm.lead'].create(cr, SUPERUSER_ID, lead_vals, context=context)
+            else:
+                return request.website.render("appointment_scheduling_management.registration")
         event_obj = request.registry['calendar.event']
         slot_obj = request.registry['slot.slot']
         location_obj = pool['res.country.state']
@@ -218,33 +203,6 @@ class website_appointment_scheduling(http.Controller):
             'patient_id': patient_id
 #            'meeting_name' : meeting_obj.browse(cr, SUPERUSER_ID, type_ids, context=context),
         }
-#        slot_ids = slot_obj.search(cr, uid, [('sname', '=', kwargs.get('slot'))], context=context)
-#        slot_rec = slot_obj.browse(cr, uid, slot_ids[0], context=context)
-#        new_sdate = datetime.strptime(kwargs.get('adate'), '%d/%m/%Y')
-#        start_date = new_sdate.strftime('%Y-%m-%d')
-#        stdate = start_date + ' ' + slot_rec.sname
-#        endate = start_date + ' ' + slot_rec.ename
-#        start_final_date = datetime.strptime(stdate, '%Y-%m-%d %H:%M:%S')
-##        end_final_date = datetime.strptime(endate, '%Y-%m-%d %H:%M:%S')
-#        new_start_date = datetime.strptime(endate, '%Y-%m-%d %H:%M:%S')
-#        new_time = new_start_date + timedelta(minutes = 30)
-#        even_dict = {
-#            'name' : 'Medical/Free Consultation',
-#            'employee_id' : int(kwargs.get('employee_id')),
-#            'slot_id' : slot_ids and slot_ids[0],
-#            'start_date' : start_date,
-#            'start_datetime' : start_final_date,
-#            'stop_datetime' : start_date
-#        }
-#        event_id = event_obj.create(cr, uid, even_dict, context=context)
-#        slot_rec = slot_obj.browse(cr, uid, slot_id, context=context)
-#        new_date = datetime.strptime(start_datetime, '%Y-%m-%d %H:%M:%S')
-#        new_server_datetime = new_date.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
-#        new_date = new_server_datetime.split(' ')
-#        date = new_date[0] + ' ' + slot_rec.sname
-#        final_date = datetime.strptime(date, '%Y-%m-%d %H:%M:%S')
-#        new_time = final_date - timedelta(hours=5,minutes = 30)
-
         return request.website.render("appointment_scheduling_management.appointment_scheduling", data)
 
 

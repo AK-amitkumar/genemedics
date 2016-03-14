@@ -55,6 +55,10 @@
                 <xpath expr="//field[@name='partner_ids']" position="replace">
                     <field name="patient_id"/>
                 </xpath>
+                <field name="patient_id" position="after">
+                    <field name="email"/>
+                    <field name="ph_number"/>
+                </field>
             </field>
         </record>
 

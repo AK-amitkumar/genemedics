@@ -29,18 +29,18 @@ from werkzeug.wrappers import BaseResponse as Response
 
 class website_input_value(http.Controller):
     
-    @http.route('/get_input_value', type='http', method='post', auth='public',website=True)
+    @http.route('/get_input_value', type='http', method=['post', 'get'], auth='public',website=True)
     def input_value(self, **kw):
         cr, uid, context, pool = request.cr, request.uid, request.context, request.registry
         lead_obj = pool['crm.lead']
-        if kw.get('keypress') == 'YES':
-            crm_act_ids = pool['crm.activity'].search(cr, uid, [('name', '=', 'Schedule Medical Consultation')], context=context)
+        if str(kw.get('keypress')) == '1':
+            crm_act_ids = pool['crm.activity'].search(cr, SUPERUSER_ID, [('name', '=', 'Schedule Medical Consultation')], context=context)
             if crm_act_ids:
-                lead_obj.write(cr, uid, [int(kw.get('jobid'))], {'next_activity_id' : crm_act_ids[0]}, context=context)
-        if kw.get('keypress') == 'NO' or kw.get('keypress') == 'RESCHEDULE':
-            lead_ids = lead_obj.search(cr, uid, [('id', '=', int(kw.get('jobid')))], context=context)
-            prj_ids = pool['project.project'].search(cr, uid, [('name', '=', 'Helpdesk')], context=context)
-            for lead in lead_obj.browse(cr, uid, lead_ids, context=context):
+                lead_obj.write(cr, SUPERUSER_ID, [int(kw.get('jobid'))], {'next_activity_id' : crm_act_ids[0]}, context=context)
+        if str(kw.get('keypress')) == '2':
+            lead_ids = lead_obj.search(cr, SUPERUSER_ID, [('id', '=', int(kw.get('jobid')))], context=context)
+            prj_ids = pool['project.project'].search(cr, SUPERUSER_ID, [('name', '=', 'Helpdesk')], context=context)
+            for lead in lead_obj.browse(cr, SUPERUSER_ID, lead_ids, context=context):
                 issue_dict = {
                     'name' : lead.name,
                     'user_id' : lead.user_id and lead.user_id.id,
@@ -49,6 +49,6 @@ class website_input_value(http.Controller):
                     'email_from' : lead.email_from,
                     'lead_id' : int(kw.get('jobid')),
                 }
-                pool['project.issue'].create(cr, uid, issue_dict, context=context)
+                pool['project.issue'].create(cr, SUPERUSER_ID, issue_dict, context=context)
         return Response("OK", status=200)
 

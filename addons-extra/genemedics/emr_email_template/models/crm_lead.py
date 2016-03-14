@@ -19,14 +19,14 @@
 #
 ##############################################################################
 
-from openerp import models,fields, api, _
 from datetime import datetime, timedelta
+from dateutil.relativedelta import relativedelta
 import plivo
 import urllib 
 import urllib2
+from openerp import models,fields, api, _
 from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
 from openerp.tools import DEFAULT_SERVER_DATE_FORMAT as DF
-from dateutil.relativedelta import relativedelta
 
 DATE_RANGE_FUNCTION = {
     'minutes': lambda interval: relativedelta(minutes=interval),
@@ -86,7 +86,7 @@ class crm_lead(models.Model):
         for rec in self.browse(cr, uid, ids, context=context):
             if rec.labs_due_date and rec.next_activity_id.name == 'Final new patient not schedule consultation':
                 today = datetime.today()
-                wdate = datetime.strptime(rec.write_date, '%Y-%m-%d %H:%M:%S')
+#                wdate = datetime.strptime(rec.write_date, '%Y-%m-%d %H:%M:%S')
                 self.write(cr, uid, [rec.id], {'write_date' : today}, context=context)
                 template_id = self.pool.get('ir.model.data').get_object_reference(cr, uid, 'emr_email_template', 'email_template_new_patient_not_schedule')[1]
                 self.pool.get('mail.template').send_mail(cr, uid, template_id, rec.id, force_send=True, context=context)
@@ -97,17 +97,11 @@ class crm_lead(models.Model):
         for rec in self.browse(cr, uid, ids, context=context):
             if rec.labs_due_date and rec.next_activity_id.name == 'N-C Not receive lab results':
                 today = datetime.today()
-                wdate = datetime.strptime(rec.write_date, '%Y-%m-%d %H:%M:%S')
+#                wdate = datetime.strptime(rec.write_date, '%Y-%m-%d %H:%M:%S')
                 self.write(cr, uid, [rec.id], {'write_date' : today}, context=context)
                 template_id = self.pool.get('ir.model.data').get_object_reference(cr, uid, 'emr_email_template', 'email_template_non_critical_not_received_lab_result')[1]
                 self.pool.get('mail.template').send_mail(cr, uid, template_id, rec.id, force_send=True, context=context)
         return True
-
-#    @api.multi
-#    def send_labs_due(self, patient_name, address, patient_email, lab_due_date, panel_type, reason):
-#        template_id = self.env['ir.model.data'].get_object_reference('emr_email_template', 'labs_due_template')[1]
-#        self.env['mail.template'].browse(template_id).send_mail(self.ids[0], force_send=False, raise_exception=False)
-
 
     # Send Mail Process
     
@@ -132,18 +126,82 @@ class crm_lead(models.Model):
         due_date = rdate + timedelta(days=-1)
         return due_date
     
+    def get_state_phnumber(self, cr, uid, state, city, context=None):
+        if state == False or state == '' or city == False or city == '':
+            state_phnumber = '12486863329'
+        if state == 'Arizona' and city == 'Tucson':
+            state_phnumber = '15203574341'
+        if state == 'Arizona' and city == 'Scottsdale':
+            state_phnumber = '14809393082'
+        if state == 'California' and city == 'Irvine':
+            state_phnumber = '19495351690'
+        if state == 'California' and city == 'Pointreyes':
+            state_phnumber = '14157874959'
+        if state == 'California' and city == 'W Angeles':
+            state_phnumber = '14242738711'
+        if state == 'California' and city == 'Beverly Hills':
+            state_phnumber = '14242855657'
+        if state == 'California' and city == 'La Jolla':
+            state_phnumber = '18585003637'
+        if state == 'California' and city == 'Lsan Da 14':
+            state_phnumber = '13233912949'
+        if state == 'California' and city == 'Los Angeles':
+            state_phnumber = '13239995117'
+        if state == 'Georgia' and city == 'Atlanta':
+            state_phnumber = '14046001362'
+        if state == 'Florida' and city == 'Jacksonville':
+            state_phnumber = '19045152566'
+        if state == 'Florida' and city == 'Orlando':
+            state_phnumber = '14079017422'
+        if state == 'Florida' and city == 'Jupiter':
+            state_phnumber = '15613662929'
+        if state == 'Florida' and city == 'Fortpierce':
+            state_phnumber = '17726723545'
+        if state == 'Florida' and city == 'Miami':
+            state_phnumber = '17863691188'
+        if state == 'Florida' and city == 'Tampa':
+            state_phnumber = '18134454322'
+        if state == 'Florida' and city == 'Fort Lauderdale':
+            state_phnumber = '19548280232'
+        if state == 'Illinois' and city == 'Chicgozn02':
+            state_phnumber = '17737965277'
+        if state == 'Illinois' and city == 'Elk Grove':
+            state_phnumber = '12242654846'
+        if state == 'Michigan' and city == 'Wayne':
+            state_phnumber = '17343771982'
+        if state == 'Michigan' and city == 'Birmingham':
+            state_phnumber = '12486863391'
+        if state == 'Michigan' and city == 'Grand Rapids':
+            state_phnumber = '16167190177'
+        if state == 'Texas' and city == 'Dallas':
+            state_phnumber = '19728952400'
+        if state == 'Texas' and city == 'Houston':
+            state_phnumber = '12817838111'
+        if state == 'Texas' and city == 'San Antonio':
+            state_phnumber = '12108024045'
+        if state == 'Texas' and city == 'Austin':
+            state_phnumber = '15126498181'
+        return state_phnumber
+    
     def get_ivr_call(self, cr, uid, lead_id, ivr_code, context=None):
         lead_data = self.browse(cr, uid, lead_id, context=context)
         mobile = lead_data.partner_id and lead_data.partner_id.mobile
         if not mobile:
             pass
+        if not lead_data.partner_id:
+            pass
+        
+        state = lead_data.partner_id.state_id.name
+        city = lead_data.partner_id.city
+        state_phnumber = self.get_state_phnumber(cr, uid, state, city, context=context)
         data = {
             'phonenumber': str(mobile),
             'message': ivr_code,
             'retry': '3',
             'keypress': {"1":"YES","2":"NO"},
             'callbackurl': 'http://odoo.genemedics.com/get_input_value',
-            'jobid': str(lead_id)
+            'jobid': str(lead_id),
+            'state_phnumber' : state_phnumber
         }
         
         data = urllib.urlencode(data) 
@@ -160,22 +218,24 @@ class crm_lead(models.Model):
     def send_labs_due(self, cr, uid, patient_name, address, patient_email, lab_due_date, panel_type, reason, context=None):
         partner_obj = self.pool.get('res.partner')
         partner_id = partner_obj.search(cr, uid, [('email', '=', patient_email)], context=context)
+        lead_dict = {
+            'name' : 'Labs Due Date Reminder',
+            'labs_due_date' : lab_due_date,
+            'lab_panel_type' : panel_type,
+            'description' : reason,
+            'email_from' : patient_email
+        }
         if partner_id:
             partner_rec = partner_obj.browse(cr, uid, partner_id[0], context=context)
-            lead_dict = {
+            lead_dict.update({
                 'partner_id' : partner_id[0],
-                'name' : 'Labs Due Date Reminder',
                 'street' : partner_rec.street,
                 'street2' : partner_rec.street2,
                 'city' : partner_rec.city,
                 'state_id' : partner_rec.state_id and partner_rec.state_id.id,
                 'country_id' : partner_rec.country_id and partner_rec.country_id.id,
                 'zip' : partner_rec.zip,
-                'labs_due_date' : lab_due_date,
-                'lab_panel_type' : panel_type,
-                'description' : reason,
-                'email_from' : patient_email
-            }
+            })
             lead_id = self.create(cr, uid, lead_dict, context=context)
         else:
             partner_dict = {
@@ -184,20 +244,15 @@ class crm_lead(models.Model):
             }
             partner_id = partner_obj.create(cr, uid, partner_dict, context=context)
             partner_rec = partner_obj.browse(cr, uid, partner_id, context=context)
-            lead_dict = {
+            lead_dict.update({
                 'partner_id' : partner_id,
-                'name' : 'Labs Due Date Reminder',
                 'street' : partner_rec.street,
                 'street2' : partner_rec.street2,
                 'city' : partner_rec.city,
                 'state_id' : partner_rec.state_id and partner_rec.state_id.id,
                 'country_id' : partner_rec.country_id and partner_rec.country_id.id,
                 'zip' : partner_rec.zip,
-                'labs_due_date' : lab_due_date,
-                'lab_panel_type' : panel_type,
-                'description' : reason,
-                'email_from' : patient_email
-            }
+            })
             lead_id = self.create(cr, uid, lead_dict, context=context)
         template_id = self.pool.get('ir.model.data').get_object_reference(cr, uid, 'emr_email_template', 'email_template_labs_due')[1]
         self.pool.get('mail.template').send_mail(cr, uid, template_id, lead_id, force_send=True, context=context)
@@ -207,21 +262,23 @@ class crm_lead(models.Model):
     def send_labs_result(self, cr, uid, patient_name, address, patient_email, panel_type, lab_result, context=None):
         partner_obj = self.pool.get('res.partner')
         partner_id = partner_obj.search(cr, uid, [('email', '=', patient_email)], context=context)
+        lead_dict = {
+            'name' : 'Labs Result Received',
+            'lab_result' : lab_result,
+            'lab_panel_type' : panel_type,
+            'email_from' : patient_email
+        }
         if partner_id:
             partner_rec = partner_obj.browse(cr, uid, partner_id[0], context=context)
-            lead_dict = {
+            lead_dict.update({
                 'partner_id' : partner_id[0],
-                'name' : 'Labs Result Received',
                 'street' : partner_rec.street,
                 'street2' : partner_rec.street2,
                 'city' : partner_rec.city,
                 'state_id' : partner_rec.state_id and partner_rec.state_id.id,
                 'country_id' : partner_rec.country_id and partner_rec.country_id.id,
                 'zip' : partner_rec.zip,
-                'lab_result' : lab_result,
-                'lab_panel_type' : panel_type,
-                'email_from' : patient_email
-            }
+            })
             lead_id = self.create(cr, uid, lead_dict, context=context)
         else:
             partner_dict = {
@@ -230,19 +287,15 @@ class crm_lead(models.Model):
             }
             partner_id = partner_obj.create(cr, uid, partner_dict, context=context)
             partner_rec = partner_obj.browse(cr, uid, partner_id, context=context)
-            lead_dict = {
+            lead_dict.update({
                 'partner_id' : partner_id,
-                'name' : 'Labs Result Received',
                 'street' : partner_rec.street,
                 'street2' : partner_rec.street2,
                 'city' : partner_rec.city,
                 'state_id' : partner_rec.state_id and partner_rec.state_id.id,
                 'country_id' : partner_rec.country_id and partner_rec.country_id.id,
                 'zip' : partner_rec.zip,
-                'lab_result' : lab_result,
-                'lab_panel_type' : panel_type,
-                'email_from' : patient_email
-            }
+            })
             lead_id = self.create(cr, uid, lead_dict, context=context)
         template_id = self.pool.get('ir.model.data').get_object_reference(cr, uid, 'emr_email_template', 'email_template_lab_result')[1]
         self.pool.get('mail.template').send_mail(cr, uid, template_id, lead_id, force_send=True, context=context)
@@ -252,22 +305,25 @@ class crm_lead(models.Model):
     def send_medication_refill(self, cr, uid, name, email, address, refill_date, medication, sig, context=None):
         partner_obj = self.pool.get('res.partner')
         partner_id = partner_obj.search(cr, uid, [('email', '=', email)], context=context)
+        lead_dict = {
+            'name' : 'Medication Refill',
+            'refill_date' : refill_date,
+            'medication' : medication,
+            'sig' : sig,
+            'email_from' : email,
+            
+        }
         if partner_id:
             partner_rec = partner_obj.browse(cr, uid, partner_id[0], context=context)
-            lead_dict = {
+            lead_dict.update({
                 'partner_id' : partner_id[0],
-                'name' : 'Medication Refill',
                 'street' : partner_rec.street,
                 'street2' : partner_rec.street2,
                 'city' : partner_rec.city,
                 'state_id' : partner_rec.state_id and partner_rec.state_id.id,
                 'country_id' : partner_rec.country_id and partner_rec.country_id.id,
                 'zip' : partner_rec.zip,
-                'refill_date' : refill_date,
-                'medication' : medication,
-                'sig' : sig,
-                'email_from' : email,
-            }
+            })
             lead_id = self.create(cr, uid, lead_dict, context=context)
         else:
             partner_dict = {
@@ -276,20 +332,15 @@ class crm_lead(models.Model):
             }
             partner_id = partner_obj.create(cr, uid, partner_dict, context=context)
             partner_rec = partner_obj.browse(cr, uid, partner_id, context=context)
-            lead_dict = {
+            lead_dict.update({
                 'partner_id' : partner_id,
-                'name' : 'Medication Refill',
                 'street' : partner_rec.street,
                 'street2' : partner_rec.street2,
                 'city' : partner_rec.city,
                 'state_id' : partner_rec.state_id and partner_rec.state_id.id,
                 'country_id' : partner_rec.country_id and partner_rec.country_id.id,
                 'zip' : partner_rec.zip,
-                'refill_date' : refill_date,
-                'medication' : medication,
-                'sig' : sig,
-                'email_from' : email,
-            }
+            })
             lead_id = self.create(cr, uid, lead_dict, context=context)
         template_id = self.pool.get('ir.model.data').get_object_reference(cr, uid, 'emr_email_template', 'email_template_medication')[1]
         self.pool.get('mail.template').send_mail(cr, uid, template_id, lead_id, force_send=True, context=context)
@@ -299,6 +350,13 @@ class crm_lead(models.Model):
     def send_office_visit_followup(self, cr, uid, name, address, email, consulation_due, consulation_due_date, reason, dr_name, context=None):
         partner_obj = self.pool.get('res.partner')
         partner_id = partner_obj.search(cr, uid, [('email', '=', email)], context=context)
+        lead_dict = {
+            'name' : 'Follow Up Office Visit',
+            'folloup_office_con_due_date' : consulation_due,
+            'folloup_phone_con_due_date' : consulation_due_date,
+            'description' : reason,
+            'email_from' : email,
+        }
         employee_ids = self.pool.get('hr.employee').search(cr, uid, [('name', '=', dr_name)], context=context)
         if employee_ids:
             employee_id = employee_ids[0]
@@ -306,21 +364,16 @@ class crm_lead(models.Model):
             employee_id = self.pool.get('hr.employee').create(cr, uid, {'name' : dr_name}, context=context)
         if partner_id:
             partner_rec = partner_obj.browse(cr, uid, partner_id[0], context=context)
-            lead_dict = {
+            lead_dict.update({
                 'partner_id' : partner_id[0],
-                'name' : 'Follow Up Office Visit',
                 'street' : partner_rec.street,
                 'street2' : partner_rec.street2,
                 'city' : partner_rec.city,
                 'state_id' : partner_rec.state_id and partner_rec.state_id.id,
                 'country_id' : partner_rec.country_id and partner_rec.country_id.id,
                 'zip' : partner_rec.zip,
-                'folloup_office_con_due_date' : consulation_due,
-                'folloup_phone_con_due_date' : consulation_due_date,
-                'description' : reason,
-                'email_from' : email,
                 'employee_id' : employee_id
-            }
+            })
             lead_id = self.create(cr, uid, lead_dict, context=context)
         else:
             partner_dict = {
@@ -329,21 +382,16 @@ class crm_lead(models.Model):
             }
             partner_id = partner_obj.create(cr, uid, partner_dict, context=context)
             partner_rec = partner_obj.browse(cr, uid, partner_id, context=context)
-            lead_dict = {
+            lead_dict.update({
                 'partner_id' : partner_id,
-                'name' : 'Follow Up Office Visit',
                 'street' : partner_rec.street,
                 'street2' : partner_rec.street2,
                 'city' : partner_rec.city,
                 'state_id' : partner_rec.state_id and partner_rec.state_id.id,
                 'country_id' : partner_rec.country_id and partner_rec.country_id.id,
                 'zip' : partner_rec.zip,
-                'folloup_office_con_due_date' : consulation_due,
-                'folloup_phone_con_due_date' : consulation_due_date,
-                'description' : reason,
-                'email_from' : email,
                 'employee_id' : employee_id
-            }
+            })
             lead_id = self.create(cr, uid, lead_dict, context=context)
         template_id = self.pool.get('ir.model.data').get_object_reference(cr, uid, 'emr_email_template', 'email_template_appoinment_reminder_off_con')[1]
         self.pool.get('mail.template').send_mail(cr, uid, template_id, lead_id, force_send=True, context=context)
@@ -353,6 +401,12 @@ class crm_lead(models.Model):
     def send_due_call_followup(self, cr, uid, name, address, email, phone_call_due_date, reason, dr_name, context=None):
         partner_obj = self.pool.get('res.partner')
         partner_id = partner_obj.search(cr, uid, [('email', '=', email)], context=context)
+        lead_dict = {
+            'name' : 'Follow Up Calls Due',
+            'folloup_phone_con_due_date' : phone_call_due_date,
+            'description' : reason,
+            'email_from' : email,
+        }
         employee_ids = self.pool.get('hr.employee').search(cr, uid, [('name', '=', dr_name)], context=context)
         if employee_ids:
             employee_id = employee_ids[0]
@@ -360,20 +414,16 @@ class crm_lead(models.Model):
             employee_id = self.pool.get('hr.employee').create(cr, uid, {'name' : dr_name}, context=context)
         if partner_id:
             partner_rec = partner_obj.browse(cr, uid, partner_id[0], context=context)
-            lead_dict = {
+            lead_dict.update({
                 'partner_id' : partner_id[0],
-                'name' : 'Follow Up Calls Due',
                 'street' : partner_rec.street,
                 'street2' : partner_rec.street2,
                 'city' : partner_rec.city,
                 'state_id' : partner_rec.state_id and partner_rec.state_id.id,
                 'country_id' : partner_rec.country_id and partner_rec.country_id.id,
                 'zip' : partner_rec.zip,
-                'folloup_phone_con_due_date' : phone_call_due_date,
-                'description' : reason,
-                'email_from' : email,
                 'employee_id' : employee_id
-            }
+            })
             lead_id = self.create(cr, uid, lead_dict, context=context)
         else:
             partner_dict = {
@@ -382,20 +432,16 @@ class crm_lead(models.Model):
             }
             partner_id = partner_obj.create(cr, uid, partner_dict, context=context)
             partner_rec = partner_obj.browse(cr, uid, partner_id, context=context)
-            lead_dict = {
+            lead_dict.update({
                 'partner_id' : partner_id,
-                'name' : 'Follow Up Calls Due',
                 'street' : partner_rec.street,
                 'street2' : partner_rec.street2,
                 'city' : partner_rec.city,
                 'state_id' : partner_rec.state_id and partner_rec.state_id.id,
                 'country_id' : partner_rec.country_id and partner_rec.country_id.id,
                 'zip' : partner_rec.zip,
-                'folloup_phone_con_due_date' : phone_call_due_date,
-                'description' : reason,
-                'email_from' : email,
                 'employee_id' : employee_id
-            }
+            })
             lead_id = self.create(cr, uid, lead_dict, context=context)
         template_id = self.pool.get('ir.model.data').get_object_reference(cr, uid, 'emr_email_template', 'email_template_appoinment_reminder')[1]
         self.pool.get('mail.template').send_mail(cr, uid, template_id, lead_id, force_send=True, context=context)

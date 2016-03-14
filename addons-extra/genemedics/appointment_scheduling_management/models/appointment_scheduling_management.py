@@ -88,7 +88,9 @@ class calendar_event(osv.osv):
         'slot_id' : fields.many2one('slot.slot', 'Available Slot'),
         'start_date' : fields.date('Appointment Date'),
         'location_id' : fields.many2one('res.country.state', 'Location'),
-        'meeting_type' : fields.many2one('calendar.event.type', 'Meeting Type')
+        'meeting_type' : fields.many2one('calendar.event.type', 'Meeting Type'),
+        'email' : fields.char('Email', size=64),
+        'ph_number' : fields.char('Phone Number', size=64)
     }
     
     

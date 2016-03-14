@@ -55,7 +55,7 @@
             <field name="body_html"><![CDATA[
 <div style="font-family: 'Lucida Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; ">
     <p>Hello,</p>
-    <p>This is Genemedics Health Institute calling to remind you of your phone consultation appointment with ${object.employee_id.name} for tomorrow at 10.00 am. ${object.employee_id.name} will call you at this number at 11.00 am..</p>
+    <p>This is Genemedics Health Institute calling to remind you of your phone consultation appointment with ${object.employee_id.name} for tomorrow at ${object.folloup_phone_con_due_date} am. ${object.employee_id.name} will call you at this number at ${object.folloup_phone_con_due_date} am..</p>
     <p>If you would like to cancel or reschedule your appointment, please press one to be connected to a clinic representative.</p>
     <p>Thank you for choosing Genemedics Health Institute!</p>
     <p>Have a great day!</p>
@@ -77,7 +77,7 @@
             <field name="body_html"><![CDATA[
 <div style="font-family: 'Lucida Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; ">
     <p>Hello,</p>
-    <p>This is Genemedics Health Institute calling to remind you of your consultation appointment with ${object.employee_id.name} for tomorrow at 10.00 am. at our ${object.user_id.company_id.street or ''},${object.user_id.company_id.street2 or ''},${object.user_id.company_id.city or ''},${object.user_id.company_id.state_id.name or ''},${object.user_id.company_id.country_id.name or ''},${object.user_id.company_id.zip or ''} location.</p>
+    <p>This is Genemedics Health Institute calling to remind you of your consultation appointment with ${object.employee_id.name} for tomorrow at ${object.folloup_office_con_due_date} am. at our ${object.user_id.company_id.street or ''},${object.user_id.company_id.street2 or ''},${object.user_id.company_id.city or ''},${object.user_id.company_id.state_id.name or ''},${object.user_id.company_id.country_id.name or ''},${object.user_id.company_id.zip or ''} location.</p>
     <p>If you would like to cancel or reschedule your appointment, please press one to be connected to a clinic representative.</p>
     <p>Thank you for choosing Genemedics Health Institute.  We look forward to seeing you tomorrow!</p>
     <p>Have a great day!</p>
@@ -99,7 +99,7 @@
             <field name="body_html"><![CDATA[
 <div style="font-family: 'Lucida Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; ">
     <p>Hello,</p>
-    <p>This is Genemedics Health Institute calling to remind you of your appointment for a medical consultation with ${object.employee_id.name} for tomorrow at 12:00 pm at our ${user.street or ''},${user.stree2 or ''},${user.city or ''},${user.state_id.name or ''},${user.country_id.name or ''},${user.zip or ''} location.</p>
+    <p>This is Genemedics Health Institute calling to remind you of your appointment for a medical consultation with ${object.employee_id.name} for tomorrow at ${object.folloup_office_con_due_date} pm at our ${user.street or ''},${user.stree2 or ''},${user.city or ''},${user.state_id.name or ''},${user.country_id.name or ''},${user.zip or ''} location.</p>
     <p>If you would like to cancel or reschedule your appointment, please press one to be connected to a clinic representative.</p>
     <p>Thank you for choosing Genemedics Health Institute, We look forward to seeing you tomorrow.</p>
     <p>Have a great day!</p>
