@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="0">
+
+        <record id="action_help_desk" model="ir.actions.act_url">
+            <field name="name">Help Desk</field>
+            <field name="url">/helpDesk</field>
+            <field name="target">self</field>
+        </record>
+
+        <record id="menu_website_action_help_desk" model="ir.ui.menu">
+            <field name="name">Help Desk</field>
+            <field name="sequence" eval="1"/>
+            <field name="action" ref="action_help_desk"/>
+            <field name="groups_id" eval="[(6,0, [ref('help_desk_admin'), ref('help_desk_employee')])]"/>
+        </record>
+
+    </data>
+</openerp>

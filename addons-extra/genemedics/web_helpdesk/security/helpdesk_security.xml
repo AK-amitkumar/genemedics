@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="0">
+
+        <record id="help_desk_admin" model="res.groups">
+            <field name="name">Help Desk Admin</field>
+            <field name="category_id" ref="base.module_category_usability"/>
+        </record>
+
+        <record id="help_desk_employee" model="res.groups">
+            <field name="name">Help Desk Employee</field>
+            <field name="category_id" ref="base.module_category_usability"/>
+        </record>
+
+    </data>
+</openerp>
